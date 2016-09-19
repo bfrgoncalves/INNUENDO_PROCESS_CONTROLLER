@@ -7,4 +7,4 @@ from resources.users import UserResource
 api = Api(app)
 
 #CREATE USER CONTROLLER
-api.add_resource(UserResource, '/api/v1.0/controller/users', endpoint = 'controller_users')
+api.add_resource(UserResource, '/controller/v1.0/users', endpoint = 'controller_users')
