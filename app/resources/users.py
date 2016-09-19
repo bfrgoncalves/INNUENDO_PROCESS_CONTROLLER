@@ -1,4 +1,4 @@
-from app import app, db
+from app import app
 from flask.ext.restful import Api, Resource, reqparse, abort, fields, marshal_with #filters data according to some fields
 from flask import jsonify
 
