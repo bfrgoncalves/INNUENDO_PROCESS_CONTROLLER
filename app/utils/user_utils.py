@@ -1,6 +1,8 @@
 import os
 import subprocess
 import config
+import random
+import string
 
 def create_user(username, upload_folder):
 	os.putenv('INNUENDO_PASS', config.ADMIN_PASS)
