@@ -32,10 +32,10 @@ class UserResource(Resource):
 				with open(cred_file, 'r') as myfile:
 					for line in myfile:
 						user_line = line.split(SEPARATOR)
-						user = line[0]
-						token = line[1]
+						user = user_line[0]
+						token = user_line[1]
+
 						if user == args.username:
-							print 'AQUI'
 							new_user_line = user + SEPARATOR + args.token + '\n'
 							tempfile.write(new_user_line)
 						else:
