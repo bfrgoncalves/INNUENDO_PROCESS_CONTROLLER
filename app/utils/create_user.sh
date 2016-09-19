@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo useradd -m $1 -g ftpaccess -s /usr/sbin/nologin
+echo $INNUENDO_PASS | sudo -S useradd -m $1 -g ftpaccess -s /usr/sbin/nologin

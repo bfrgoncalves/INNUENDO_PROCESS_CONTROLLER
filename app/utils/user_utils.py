@@ -1,5 +1,7 @@
 import os
 import subprocess
+from config import ADMIN_PASS
 
 def create_user(username):
-	subprocess.call('create_user.sh')
+	os.putenv('INNUENDO_PASS', ADMIN_PASS)
+	subprocess.call('create_user.sh', shell=True)
