@@ -6,7 +6,7 @@ from flask.ext.security import current_user, login_required, roles_required
 import datetime
 import subprocess
 import os
-from config import ROOT_FILES_FOLDER
+from config import ROOT_FILES_FOLDER, SEPARATOR
 
 post_parser = reqparse.RequestParser()
 post_parser.add_argument('token', dest='token', type=str, required=True, help="User token")
@@ -21,13 +21,31 @@ class UserResource(Resource):
 
 		#Add token to text file
 		cred_file = os.path.join(ROOT_FILES_FOLDER, "credentials.txt")
-		
-		if os.path.isfile(cred_file): 
-			with open(cred_file, 'a') as myfile:
-				myfile.write(args.username + " " + args.token + "\n")
+		new_file = os.path.join(ROOT_FILES_FOLDER, 'temp_cred.txt')
+		if os.path.isfile(cred_file):
+			new_token = ""
+			new_user_line = ""
+			new_file = 'temp_cred.txt'
+			with open(new_file, 'w') as tempfile:
+			
+				with open(cred_file, 'r') as myfile:
+					for line in myfile:
+						user_line = line.split(SEPARATOR)
+						user = line[0]
+						token = line[1]
+						if user == args.username:
+							new_user_line = user + SEPARATOR + token + '\n'
+							tempfile.write(new_user_line)
+						else:
+							tempfile.write(line)
+			
+			os.remove(cred_file)
+			os.rename(new_file, cred_file)
 		else:
 			with open(cred_file, 'w') as myfile:
-				myfile.write(args.username + " " + args.token + "\n")
+				myfile.write(args.username + SEPARATOR + args.token + "\n")
+
+		return { "status": "OK" }
 
 	def get(self):
 		print 'AQUI'
