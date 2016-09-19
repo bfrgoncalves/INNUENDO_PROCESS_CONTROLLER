@@ -22,6 +22,7 @@ class UserResource(Resource):
 		#Add token to text file
 		cred_file = os.path.join(ROOT_FILES_FOLDER, "credentials.txt")
 		new_file = os.path.join(ROOT_FILES_FOLDER, 'temp_cred.txt')
+		
 		if os.path.isfile(cred_file):
 			new_token = ""
 			new_user_line = ""
@@ -34,7 +35,7 @@ class UserResource(Resource):
 						user = line[0]
 						token = line[1]
 						if user == args.username:
-							new_user_line = user + SEPARATOR + token + '\n'
+							new_user_line = user + SEPARATOR + args.token + '\n'
 							tempfile.write(new_user_line)
 						else:
 							tempfile.write(line)
