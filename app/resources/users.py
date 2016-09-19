@@ -7,19 +7,16 @@ import datetime
 import subprocess
 import os
 from config import ROOT_CREDENTIALS_FOLDER, SEPARATOR
-from app.utils.user_utils import create_user
+from app.utils.user_utils import create_user, random_letters
 
 post_parser = reqparse.RequestParser()
-post_parser.add_argument('token', dest='token', type=str, required=True, help="User token")
 post_parser.add_argument('username', dest='username', type=str, required=True, help="Username")
 
 class UserResource(Resource):
 
 	def post(self):
 		args = post_parser.parse_args()
-
-		#Create user
-
+		rl = random_letters(20)
 		#Add token to text file
 		cred_file = os.path.join(ROOT_CREDENTIALS_FOLDER, "credentials.txt")
 		new_file = os.path.join(ROOT_CREDENTIALS_FOLDER, 'temp_cred.txt')
@@ -38,27 +35,26 @@ class UserResource(Resource):
 						token = user_line[1]
 
 						if user == args.username:
-							new_user_line = user + SEPARATOR + args.token + '\n'
+							new_user_line = user + SEPARATOR + rl + '\n'
 							tempfile.write(new_user_line)
 							added = True
 						else:
 							tempfile.write(line)
 			if not added:
 				with open(new_file, 'a') as tempfile:
-					tempfile.write(args.username + SEPARATOR + args.token + "\n")
-					create_user(args.username)
+					tempfile.write(args.username + SEPARATOR + rl + "\n")
+					create_user(args.username, rl)
 
 			
 			os.remove(cred_file)
 			os.rename(new_file, cred_file)
 		else:
 			with open(cred_file, 'w') as myfile:
-				myfile.write(args.username + SEPARATOR + args.token + "\n")
-				create_user(args.username)
+				myfile.write(args.username + SEPARATOR + rl + "\n")
+				create_user(args.username, rl)
 
 		return { "status": "OK" }
 
 	def get(self):
-		print 'AQUI'
 		return { "status": "OK" }
 
