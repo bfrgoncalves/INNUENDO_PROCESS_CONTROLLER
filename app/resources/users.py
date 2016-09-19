@@ -7,6 +7,7 @@ import datetime
 import subprocess
 import os
 from config import ROOT_FILES_FOLDER, SEPARATOR
+from app.utils.user_utils import create_user
 
 post_parser = reqparse.RequestParser()
 post_parser.add_argument('token', dest='token', type=str, required=True, help="User token")
@@ -40,11 +41,13 @@ class UserResource(Resource):
 							new_user_line = user + SEPARATOR + args.token + '\n'
 							tempfile.write(new_user_line)
 							added = True
+							create_user(args.username)
 						else:
 							tempfile.write(line)
 			if not added:
 				with open(new_file, 'a') as tempfile:
 					tempfile.write(args.username + SEPARATOR + args.token + "\n")
+
 			
 			os.remove(cred_file)
 			os.rename(new_file, cred_file)
