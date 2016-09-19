@@ -23,3 +23,7 @@ class UserResource(Resource):
 		with open(os.path.join(ROOT_FILES_FOLDER, "credentials.txt")) as myfile:
 			myfile.write(args.username + " " + args.token + "\n")
 
+	def get(self):
+		print 'AQUI'
+		return { "status": "OK" }
+
