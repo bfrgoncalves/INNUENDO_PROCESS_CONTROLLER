@@ -20,8 +20,14 @@ class UserResource(Resource):
 		#Create user
 
 		#Add token to text file
-		with open(os.path.join(ROOT_FILES_FOLDER, "credentials.txt")) as myfile:
-			myfile.write(args.username + " " + args.token + "\n")
+		cred_file = os.path.join(ROOT_FILES_FOLDER, args.username, "credentials.txt")
+		
+		if os.path.isfile(cred_file): 
+			with open(cred_file, 'a') as myfile:
+				myfile.write(args.username + " " + args.token + "\n")
+		else:
+			with open(cred_file, 'w') as myfile:
+				myfile.write(args.username + " " + args.token + "\n")
 
 	def get(self):
 		print 'AQUI'
