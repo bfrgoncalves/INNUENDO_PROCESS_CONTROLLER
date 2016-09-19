@@ -27,6 +27,7 @@ class UserResource(Resource):
 			new_token = ""
 			new_user_line = ""
 			new_file = 'temp_cred.txt'
+			added = False
 			with open(new_file, 'w') as tempfile:
 			
 				with open(cred_file, 'r') as myfile:
@@ -38,8 +39,12 @@ class UserResource(Resource):
 						if user == args.username:
 							new_user_line = user + SEPARATOR + args.token + '\n'
 							tempfile.write(new_user_line)
-						else:
+							added = True
+						elif:
 							tempfile.write(line)
+			if added:
+				with open(new_file, 'a') as tempfile:
+					tempfile.write(args.username + SEPARATOR + args.token + "\n")
 			
 			os.remove(cred_file)
 			os.rename(new_file, cred_file)
