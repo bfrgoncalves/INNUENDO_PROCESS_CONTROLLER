@@ -40,7 +40,7 @@ class UserResource(Resource):
 							new_user_line = user + SEPARATOR + args.token + '\n'
 							tempfile.write(new_user_line)
 							added = True
-						elif:
+						else:
 							tempfile.write(line)
 			if added:
 				with open(new_file, 'a') as tempfile:
