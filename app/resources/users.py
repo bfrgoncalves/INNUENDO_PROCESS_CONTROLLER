@@ -20,6 +20,6 @@ class UserResource(Resource):
 		#Create user
 
 		#Add token to text file
-		with open(os.path.join(ROOT_FILES_FOLDER, "credentials.txt") as myfile:
+		with open(os.path.join(ROOT_FILES_FOLDER, "credentials.txt")) as myfile:
 			myfile.write(args.username + " " + args.token + "\n")
 
