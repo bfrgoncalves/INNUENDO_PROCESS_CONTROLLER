@@ -6,7 +6,7 @@ from flask.ext.security import current_user, login_required, roles_required
 import datetime
 import subprocess
 import os
-from config import ROOT_FILES_FOLDER, SEPARATOR
+from config import ROOT_CREDENTIALS_FOLDER, SEPARATOR
 from app.utils.user_utils import create_user
 
 post_parser = reqparse.RequestParser()
@@ -21,8 +21,8 @@ class UserResource(Resource):
 		#Create user
 
 		#Add token to text file
-		cred_file = os.path.join(ROOT_FILES_FOLDER, "credentials.txt")
-		new_file = os.path.join(ROOT_FILES_FOLDER, 'temp_cred.txt')
+		cred_file = os.path.join(ROOT_CREDENTIALS_FOLDER, "credentials.txt")
+		new_file = os.path.join(ROOT_CREDENTIALS_FOLDER, 'temp_cred.txt')
 		
 		if os.path.isfile(cred_file):
 			new_token = ""
