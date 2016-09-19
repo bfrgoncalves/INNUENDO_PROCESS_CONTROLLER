@@ -35,6 +35,7 @@ class UserResource(Resource):
 						user = line[0]
 						token = line[1]
 						if user == args.username:
+							print 'AQUI'
 							new_user_line = user + SEPARATOR + args.token + '\n'
 							tempfile.write(new_user_line)
 						else:
