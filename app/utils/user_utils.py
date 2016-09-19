@@ -1,12 +1,12 @@
 import os
 import subprocess
-from config import ADMIN_PASS
+import config
 
 def create_user(username):
-	os.putenv('INNUENDO_PASS', ADMIN_PASS)
-	print ADMIN_PASS
-	proc = subprocess.Popen(['create_user.sh', username], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-	print ADMIN_PASS
+	os.putenv('INNUENDO_PASS', config.ADMIN_PASS)
+	print config.ADMIN_PASS
+	proc = subprocess.Popen([os.path.join(os.getcwd(),'app/utils/create_user.sh'), username], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+	print config.ADMIN_PASS
 	if proc.returncode != 0:
 		print 'STDOUT'
 		print stdout.decode("utf-8")
