@@ -20,7 +20,7 @@ class UserResource(Resource):
 		#Create user
 
 		#Add token to text file
-		cred_file = os.path.join(ROOT_FILES_FOLDER, args.username, "credentials.txt")
+		cred_file = os.path.join(ROOT_FILES_FOLDER, "credentials.txt")
 		
 		if os.path.isfile(cred_file): 
 			with open(cred_file, 'a') as myfile:
