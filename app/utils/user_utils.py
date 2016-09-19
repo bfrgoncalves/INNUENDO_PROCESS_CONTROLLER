@@ -7,7 +7,9 @@ def create_user(username):
 	print config.ADMIN_PASS
 	print os.path.join(os.getcwd(),'app/utils/create_user.sh')
 	proc = subprocess.Popen(['sh', os.path.join(os.getcwd(),'app/utils/create_user.sh'), username], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+	stdout, stderr = proc.communicate()
 	print config.ADMIN_PASS
+	
 	if proc.returncode != 0:
 		print 'STDOUT'
 		print stdout.decode("utf-8")
