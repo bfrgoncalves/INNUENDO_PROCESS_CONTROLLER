@@ -1,1 +1,1 @@
-ROOT_FILES_FOLDER = '/home/INNUENDO/'
+ROOT_FILES_FOLDER = '/home/'
