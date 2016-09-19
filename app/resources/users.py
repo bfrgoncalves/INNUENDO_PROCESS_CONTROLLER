@@ -42,7 +42,7 @@ class UserResource(Resource):
 							added = True
 						else:
 							tempfile.write(line)
-			if added:
+			if not added:
 				with open(new_file, 'a') as tempfile:
 					tempfile.write(args.username + SEPARATOR + args.token + "\n")
 			
