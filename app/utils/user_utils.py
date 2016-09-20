@@ -26,7 +26,7 @@ def changepass(username):
 	passw = random_letters(7)
 	proc = subprocess.Popen(['sh', os.path.join(os.getcwd(),'app/utils/changepass.sh'), username, passw], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	
-	if proc.returncode == 0:
+	if proc.returncode != 0:
 		print 'STDOUT'
 		print stdout.decode("utf-8")
 		print 'STDERR'
