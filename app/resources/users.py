@@ -39,7 +39,7 @@ class UserResource(Resource):
 
 						if user == args.username:
 							upload_pass = changepass(new_username)
-							new_user_line = user + SEPARATOR + folder_name + upload_pass + '\n'
+							new_user_line = user + SEPARATOR + folder_name + SEPARATOR + upload_pass + '\n'
 							tempfile.write(new_user_line)
 							added = True
 						else:
@@ -54,7 +54,8 @@ class UserResource(Resource):
 			os.rename(new_file, cred_file)
 		else:
 			with open(cred_file, 'w') as myfile:
-				myfile.write(new_username + SEPARATOR + rl + "\n")
+				upload_pass = create_user(new_username, rl)
+				myfile.write(new_username + SEPARATOR + rl + SEPARATOR + upload_pass + "\n")
 				create_user(new_username, rl)
 
 		return { "upload_pass": upload_pass }
