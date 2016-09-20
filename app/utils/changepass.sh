@@ -8,4 +8,4 @@ echo "$newpass\n$newpass\n$INNUENDO_PASS"
 echo -e "$newpass\n$newpass\n$INNUENDO_PASS"
 echo $(echo -e "$newpass\n$newpass\n$INNUENDO_PASS")
 echo $(echo "$newpass\n$newpass\n$INNUENDO_PASS")
-echo -e "$newpass\n$newpass\n$INNUENDO_PASS" | sudo -S passwd $1
+echo "$newpass\n$newpass\n$INNUENDO_PASS" | sudo -S passwd $1
