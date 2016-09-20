@@ -1,3 +1,4 @@
+#!/bin/bash
 newpass=$2
 echo $newpass
 echo $INNUENDO_PASS
