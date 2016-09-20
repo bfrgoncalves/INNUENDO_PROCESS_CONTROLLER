@@ -61,5 +61,19 @@ class UserResource(Resource):
 		return { "upload_pass": upload_pass }
 
 	def get(self):
-		return { "status": "OK" }
+		args = post_parser.parse_args()
+		new_username = args.username.split('@')[0]
+		upload_pass = ""
+		cred_file = os.path.join(ROOT_CREDENTIALS_FOLDER, "credentials.txt")
+		with open(cred_file, 'r') as myfile:
+			for line in myfile:
+				user_line = line.split(SEPARATOR)
+				user = user_line[0]
+				folder_name = user_line[1]
+				passw = user_line[2]
+				if user == new_username:
+					upload_pass = passw
+					break
+		
+		return { "upload_pass": upload_pass }
 
