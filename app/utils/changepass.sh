@@ -1,1 +1,1 @@
-echo $INNUENDO_PASS | sudo -S (echo $2 | passwd --stdin $1)
+echo $INNUENDO_PASS | sudo -S $(echo $2 | passwd --stdin $1)
