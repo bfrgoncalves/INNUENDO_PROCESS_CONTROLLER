@@ -22,6 +22,14 @@ def create_user(username, upload_folder):
 	return passw
 
 def changepass(username):
+	os.putenv('INNUENDO_PASS', config.ADMIN_PASS)
 	passw = random_letters(7)
 	proc = subprocess.Popen(['sh', os.path.join(os.getcwd(),'app/utils/changepass.sh'), username, passw], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+	
+	if proc.returncode == 0:
+		print 'STDOUT'
+		print stdout.decode("utf-8")
+		print 'STDERR'
+		print stderr.decode("utf-8")
+
 	return passw

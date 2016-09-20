@@ -1,1 +1,2 @@
-echo -e "$2\n$2\n$INNUENDO_PASS" | sudo -S passwd $1
+newpass=$2
+echo -e "$newpass\n$newpass\n$INNUENDO_PASS" | sudo -S passwd $1
