@@ -37,7 +37,7 @@ class UserResource(Resource):
 						user = user_line[0]
 						folder_name = user_line[1]
 
-						if user == args.username:
+						if user == new_username:
 							upload_pass = changepass(new_username)
 							new_user_line = user + SEPARATOR + folder_name + SEPARATOR + upload_pass + '\n'
 							tempfile.write(new_user_line)
