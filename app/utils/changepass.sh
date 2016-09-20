@@ -1,0 +1,1 @@
+echo $INNUENDO_PASS | sudo -S (echo $3 | passwd --stdin $1)
