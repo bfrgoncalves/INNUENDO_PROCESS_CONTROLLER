@@ -1,10 +1,10 @@
 from app import app
 from flask.ext.restful import Api
 
-from resources.users import UserResource
+from resources.jobs.jobs import Job_queue, Test
 
-#Setup Controller API
+#Setup API
 api = Api(app)
 
-#CREATE USER CONTROLLER
-api.add_resource(UserResource, '/controller/v1.0/users', endpoint = 'controller_users')
+api.add_resource(Job_queue, '/api/v1.0/jobs/')
+api.add_resource(Test, '/api/v1.0/jobs/test/')

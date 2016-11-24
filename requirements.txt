@@ -23,6 +23,8 @@ pyasn1==0.1.9
 pycparser==2.14
 python-dateutil==2.5.3
 pytz==2016.6.1
+redis==2.10.5
+rq==0.7.0
 sftpserver==0.2
 six==1.10.0
 SQLAlchemy==1.0.15

@@ -1,6 +1,5 @@
-#Admin
-ADMIN = 'ubuntu'
-ADMIN_PASS = 'ubuntu'
+#CONFIG file for INNUENDO Job Controller
+REDIS_URL = 'redis://localhost:6379'
 
-ROOT_CREDENTIALS_FOLDER = '/home/.innuendo_cred/'
-SEPARATOR = '@--@'
+#Dependencies paths
+INNUCA_PATH = 'dependencies/INNUca/INNUca.py'
