@@ -10,8 +10,6 @@ import json
 from rq import Queue #Queue
 from redis import Redis
 
-from config import CURRENT_ROOT
-
 job_post_parser = reqparse.RequestParser()
 job_post_parser.add_argument('parameters', dest='parameters', type=str, required=True, help="Job Parameters")
 job_post_parser.add_argument('username', dest='username', type=str, required=True, help="Username")
