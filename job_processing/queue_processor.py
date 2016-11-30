@@ -16,7 +16,11 @@ class Queue_Processor:
 		parameters = kwargs['parameters']['used Parameter']
 		for key, value in parameters.iteritems():
 			key_value_args.append(str(key))
-			key_value_args.append('"' + str(value) + '"')
+			
+			if len(value.split(' ')) > 1:
+				key_value_args.append('"' + str(value) + '"')
+			else:
+				key_value_args.append(str(value))
 
 		#print key_value_args
 		key_value_args = [config['INNUCA_PATH']] + key_value_args
