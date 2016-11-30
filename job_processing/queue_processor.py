@@ -22,6 +22,9 @@ class Queue_Processor:
 			else:
 				key_value_args.append(str(value))
 
+		key_value_args.append("--spadesMaxMemory")
+		key_value_args.append("4")
+
 		#print key_value_args
 		key_value_args = [config['INNUCA_PATH']] + key_value_args
 		print key_value_args
