@@ -24,6 +24,9 @@ class Queue_Processor:
 					print value
 				key_value_args.append('"' + str(value) + '"')
 			else:
+				if str(key) == '-i':
+					value += kwargs['username']
+					print value
 				key_value_args.append(str(value))
 
 		key_value_args.append("--spadesMaxMemory")
