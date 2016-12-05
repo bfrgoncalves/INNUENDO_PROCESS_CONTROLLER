@@ -19,7 +19,7 @@ class Queue_Processor:
 			key_value_args.append(str(key))
 			
 			if len(value.split(' ')) > 1:
-				if value.find('uploads') > -1:
+				if str(key) == '-i':
 					value += kwargs['username']
 					print value
 				key_value_args.append('"' + str(value) + '"')
