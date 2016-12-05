@@ -19,6 +19,8 @@ class Queue_Processor:
 			key_value_args.append(str(key))
 			
 			if len(value.split(' ')) > 1:
+				if value.indexOf('uploads') > -1:
+					value += kwargs['username']
 				key_value_args.append('"' + str(value) + '"')
 			else:
 				key_value_args.append(str(value))
@@ -29,8 +31,8 @@ class Queue_Processor:
 		#print key_value_args
 		key_value_args = [config['INNUCA_PATH']] + key_value_args
 		print key_value_args
-		os.system("cd uploads/" + kwargs['username'])
 		proc = subprocess.Popen(key_value_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		print proc.returncode
 		if proc.returncode == 0:
 			return True
 		else:
