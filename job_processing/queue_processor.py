@@ -17,17 +17,17 @@ class Queue_Processor:
 		parameters = kwargs['parameters']['used Parameter']
 		for key, value in parameters.iteritems():
 			key_value_args.append(str(key))
+
+			if str(key) == '-i':
+				value += kwargs['username']
+				key_value_args.append('-o')
+				key_value_args.append('"' + str(value) + '"')
 			
-			if len(value.split(' ')) > 1:
-				if str(key) == '-i':
-					value += kwargs['username']
-					print value
+			elif len(value.split(' ')) > 1:
 				key_value_args.append('"' + str(value) + '"')
 			else:
-				if str(key) == '-i':
-					value += kwargs['username']
-					print value
 				key_value_args.append(str(value))
+			
 
 		key_value_args.append("--spadesMaxMemory")
 		key_value_args.append("4")
