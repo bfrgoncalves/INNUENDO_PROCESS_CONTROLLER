@@ -20,9 +20,9 @@ class Queue_Processor:
 
 			if str(key) == '-i':
 				value += kwargs['username']
-				key_value_args.append('"' + str(value) + '"')
+				key_value_args.append(str(value))
 				key_value_args.append('-o')
-				key_value_args.append('"' + str(value) + '"')
+				key_value_args.append(str(value))
 			
 			elif len(value.split(' ')) > 1:
 				key_value_args.append('"' + str(value) + '"')
