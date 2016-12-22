@@ -29,7 +29,7 @@ class Queue_Processor:
 				key_value_args.append(str(user_folder))
 			
 			elif len(value.split(' ')) > 1:
-				key_value_args.append('"' + str(value) + '"')
+				key_value_args.append("'" + str(value) + "'")
 			else:
 				key_value_args.append(str(value))
 			
@@ -42,7 +42,7 @@ class Queue_Processor:
 		key_value_args = [config['INNUCA_PATH']] + key_value_args
 		print key_value_args
 		print 'sh job_processing/launch_job.sh "' + ' '.join(key_value_args) + '"'
-		os.system("sh job_processing/launch_job.sh '" + ' '.join(key_value_args) + "'")
+		os.system('sh job_processing/launch_job.sh "' + ' '.join(key_value_args) + '"')
 		#proc = subprocess.Popen(key_value_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		#if proc.returncode == 0:
 			#return True
