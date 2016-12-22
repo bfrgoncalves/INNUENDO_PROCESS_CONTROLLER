@@ -17,7 +17,7 @@ class Queue_Processor:
 		parameters = kwargs['parameters']['used Parameter']
 		username = kwargs['username']
 
-		user_folder = '/home/users/' + username + '/'
+		user_folder = '/home/users/' + username + '/test'
 
 		for key, value in parameters.iteritems():
 			key_value_args.append(str(key))
@@ -41,7 +41,7 @@ class Queue_Processor:
 		#print key_value_args
 		key_value_args = [config['INNUCA_PATH']] + key_value_args
 		print key_value_args
-		#os.system('./launch_job.sh "' + key_value_args + '"')
+		os.system('./launch_job.sh "' + key_value_args + '"')
 		#proc = subprocess.Popen(key_value_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		#if proc.returncode == 0:
 			#return True
