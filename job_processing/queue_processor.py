@@ -35,7 +35,7 @@ class Queue_Processor:
 		key_value_args.append("4")
 
 		user_folder = '/home/users/' + username + '/'
-		print parameters
+		print kwargs['files']
 		#print key_value_args
 		key_value_args = [config['INNUCA_PATH']] + key_value_args
 		print key_value_args
