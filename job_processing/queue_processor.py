@@ -16,14 +16,17 @@ class Queue_Processor:
 		key_value_args = []
 		parameters = kwargs['parameters']['used Parameter']
 		username = kwargs['username']
+
+		user_folder = '/home/users/' + username + '/'
+
 		for key, value in parameters.iteritems():
 			key_value_args.append(str(key))
 
 			if str(key) == '-i':
-				value += kwargs['username']
-				key_value_args.append(str(value))
+				#value += kwargs['username']
+				key_value_args.append(str(user_folder))
 				key_value_args.append('-o')
-				key_value_args.append(str(value))
+				key_value_args.append(str(user_folder))
 			
 			elif len(value.split(' ')) > 1:
 				key_value_args.append('"' + str(value) + '"')
@@ -34,7 +37,6 @@ class Queue_Processor:
 		key_value_args.append("--spadesMaxMemory")
 		key_value_args.append("4")
 
-		user_folder = '/home/users/' + username + '/'
 		print kwargs['files']
 		#print key_value_args
 		key_value_args = [config['INNUCA_PATH']] + key_value_args
