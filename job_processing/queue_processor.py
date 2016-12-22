@@ -35,13 +35,12 @@ class Queue_Processor:
 
 		#print key_value_args
 		key_value_args = [config['INNUCA_PATH']] + key_value_args
-		print key_value_args
-		proc = subprocess.Popen(key_value_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		print proc.returncode
-		if proc.returncode == 0:
-			return True
-		else:
-			return False
+		os.system('./launch_job.sh "' + key_value_args + '"')
+		#proc = subprocess.Popen(key_value_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		#if proc.returncode == 0:
+			#return True
+		#else:
+			#return False
 
 	def insert_job(self, **kwargs):
 		#Insert jobs in queue
