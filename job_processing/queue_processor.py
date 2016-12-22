@@ -15,6 +15,7 @@ class Queue_Processor:
 	def process_job(self, **kwargs):
 		key_value_args = []
 		parameters = kwargs['parameters']['used Parameter']
+		username = kwargs['username']
 		for key, value in parameters.iteritems():
 			key_value_args.append(str(key))
 
@@ -33,6 +34,8 @@ class Queue_Processor:
 		key_value_args.append("--spadesMaxMemory")
 		key_value_args.append("4")
 
+		user_folder = '/home/users/' + username + '/'
+		print parameters
 		#print key_value_args
 		key_value_args = [config['INNUCA_PATH']] + key_value_args
 		print key_value_args
