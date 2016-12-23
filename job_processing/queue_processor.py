@@ -50,12 +50,12 @@ class Queue_Processor:
 		print stdout
 		jobID = stdout.split(' ')
 		jobID = jobID[-1].strip('\n')
-		print jobID
+
 		if proc.returncode == 0:
-			return jobID, True
+			return jobID, 200
 		else:
 
-			return False
+			return 400
 
 	def insert_job(self, **kwargs):
 		#Insert jobs in queue
