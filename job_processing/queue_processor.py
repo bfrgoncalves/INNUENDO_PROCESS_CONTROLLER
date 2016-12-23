@@ -2,6 +2,7 @@ from rq import Queue #Queue
 from redis import Redis
 import subprocess
 import os
+import shlex
 
 #READ CONFIG FILE
 config = {}
@@ -41,9 +42,10 @@ class Queue_Processor:
 		#print key_value_args
 		key_value_args = [config['INNUCA_PATH']] + key_value_args
 		print key_value_args
-		print 'sh job_processing/launch_job.sh "' + ' '.join(key_value_args) + '"'
-		os.system('sh job_processing/launch_job.sh "' + ' '.join(key_value_args) + '"')
-		#proc = subprocess.Popen(key_value_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		commands = ['sh','job_processing/launch_job.sh'] + ["' + ' '.join(key_value_args) + '"]
+		print commands
+		#os.system('sh job_processing/launch_job.sh "' + ' '.join(key_value_args) + '"')
+		#proc = subprocess.Popen(shlex.split(commands), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		#if proc.returncode == 0:
 			#return True
 		#else:
