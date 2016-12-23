@@ -45,11 +45,17 @@ class Queue_Processor:
 		commands = ['sh','job_processing/launch_job.sh'] + ['"'+' '.join(key_value_args) + '"']
 		print commands
 		#os.system('sh job_processing/launch_job.sh "' + ' '.join(key_value_args) + '"')
-		#proc = subprocess.Popen(shlex.split(commands), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		#if proc.returncode == 0:
-			#return True
-		#else:
-			#return False
+		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		stdout, stderr = proc.communicate()
+		print stdout
+		jobID = stdout.split(' ')
+		jobID = jobID[-1]
+		print jobID
+		if proc.returncode == 0:
+			return True
+		else:
+
+			return False
 
 	def insert_job(self, **kwargs):
 		#Insert jobs in queue
