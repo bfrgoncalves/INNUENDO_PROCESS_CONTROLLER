@@ -52,7 +52,7 @@ class Queue_Processor:
 		jobID = jobID[-1].strip('\n')
 		print jobID
 		if proc.returncode == 0:
-			return True
+			return True, jobID
 		else:
 
 			return False
