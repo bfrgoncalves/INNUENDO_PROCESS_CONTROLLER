@@ -42,7 +42,7 @@ class Queue_Processor:
 		#print key_value_args
 		key_value_args = [config['INNUCA_PATH']] + key_value_args
 		print key_value_args
-		commands = ['sh','job_processing/launch_job.sh'] + ['"'+' '.join(key_value_args) + '"']
+		commands = ['sh','job_processing/launch_job.sh'] + [' '.join(key_value_args)]
 		print commands
 		#os.system('sh job_processing/launch_job.sh "' + ' '.join(key_value_args) + '"')
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
