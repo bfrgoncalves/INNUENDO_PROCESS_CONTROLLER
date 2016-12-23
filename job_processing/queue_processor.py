@@ -49,7 +49,7 @@ class Queue_Processor:
 		stdout, stderr = proc.communicate()
 		print stdout
 		jobID = stdout.split(' ')
-		jobID = jobID[-1]
+		jobID = jobID[-1].strip('\n')
 		print jobID
 		if proc.returncode == 0:
 			return True
