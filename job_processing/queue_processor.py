@@ -13,7 +13,7 @@ q = Queue('innuendo_jobs', connection=redis_conn)
 
 class Queue_Processor:
 
-	def process_job(self, **kwargs):
+	def process_job(self, kwargs):
 		key_value_args = []
 		parameters = kwargs['parameters']['used Parameter']
 		username = kwargs['username']
@@ -59,6 +59,6 @@ class Queue_Processor:
 
 	def insert_job(self, **kwargs):
 		#Insert jobs in queue
-		jobID, code = self.process_job(kwargs=kwargs)
+		jobID, code = self.process_job(kwargs)
 		return jobID
 
