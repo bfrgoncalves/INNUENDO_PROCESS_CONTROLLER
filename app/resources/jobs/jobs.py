@@ -22,9 +22,9 @@ class Job_queue(Resource):
 	def post(self):
 		args = job_post_parser.parse_args()
 		innuendo_processor = Queue_Processor()
-		innuendo_processor.insert_job(username=args.username, parameters=eval(args.parameters), files=eval(args.files))
+		jobID = innuendo_processor.insert_job(username=args.username, parameters=eval(args.parameters), files=eval(args.files))
 
-		return 200
+		return {jobID:jobID}, 200
 
 class Test(Resource):
 

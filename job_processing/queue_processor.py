@@ -55,11 +55,10 @@ class Queue_Processor:
 			return jobID, 200
 		else:
 
-			return 400
+			return '', 400
 
 	def insert_job(self, **kwargs):
 		#Insert jobs in queue
-		job = q.enqueue_call(func=self.process_job, kwargs=kwargs)
-		print job
-		return job
+		jobID, code = self.process_job(kwargs)
+		return jobID
 
