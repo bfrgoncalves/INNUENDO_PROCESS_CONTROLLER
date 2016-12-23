@@ -59,6 +59,6 @@ class Queue_Processor:
 
 	def insert_job(self, **kwargs):
 		#Insert jobs in queue
-		jobID, code = self.process_job(kwargs)
+		jobID, code = self.process_job(kwargs=kwargs)
 		return jobID
 
