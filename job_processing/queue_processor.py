@@ -60,3 +60,6 @@ class Queue_Processor:
 	def insert_job(self, **kwargs):
 		#Insert jobs in queue
 		job = q.enqueue_call(func=self.process_job, kwargs=kwargs)
+		print job
+		return job
+
