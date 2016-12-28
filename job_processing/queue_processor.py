@@ -14,12 +14,12 @@ q = Queue('innuendo_jobs', connection=redis_conn)
 
 class Queue_Processor:
 
-	def process_job(self, kwargs):
+	def process_job(self, job_parameters):
 		key_value_args = []
-		job_parameters = json.loads(kwargs['job_parameters'])
+		job_parameters = json.loads(job_parameters)
 		########### CONTINUAR AQUI - UM JOB POR ESTIRPE ###############
 		print job_parameters
-		return True
+		return 1,200
 		'''
 		parameters = kwargs['parameters']['used Parameter']
 		username = kwargs['username']
@@ -64,8 +64,8 @@ class Queue_Processor:
 			return '', 400
 		'''
 
-	def insert_job(self, **kwargs):
+	def insert_job(self, job_parameters):
 		#Insert jobs in queue
-		jobID, code = self.process_job(kwargs)
+		jobID, code = self.process_job(job_parameters)
 		return jobID
 
