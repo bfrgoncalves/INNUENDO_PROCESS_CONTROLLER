@@ -22,6 +22,7 @@ class Job_queue(Resource):
 	def post(self):
 		args = job_post_parser.parse_args()
 		job_parameters = args.data
+		print job_parameters
 		innuendo_processor = Queue_Processor()
 		jobID = innuendo_processor.insert_job(job_parameters=job_parameters)
 
