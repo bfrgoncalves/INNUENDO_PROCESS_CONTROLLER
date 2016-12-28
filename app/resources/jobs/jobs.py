@@ -11,9 +11,9 @@ from rq import Queue #Queue
 from redis import Redis
 
 job_post_parser = reqparse.RequestParser()
-job_post_parser.add_argument('parameters', dest='parameters', type=str, required=True, help="Job Parameters")
-job_post_parser.add_argument('username', dest='username', type=str, required=True, help="Username")
-job_post_parser.add_argument('files', dest='files', type=str, required=True, help="Files to use")
+job_post_parser.add_argument('data', dest='data', type=str, required=True, help="Job Parameters")
+#job_post_parser.add_argument('username', dest='username', type=str, required=True, help="Username")
+#job_post_parser.add_argument('files', dest='files', type=str, required=True, help="Files to use")
 #parameters -> workflow_id
 
 #get workflow, get protocols, get protocol parameters, run process
@@ -21,8 +21,9 @@ class Job_queue(Resource):
 	
 	def post(self):
 		args = job_post_parser.parse_args()
+		job_parameters = args.data
 		innuendo_processor = Queue_Processor()
-		jobID = innuendo_processor.insert_job(username=args.username, parameters=eval(args.parameters), files=eval(args.files))
+		jobID = innuendo_processor.insert_job(job_parameters=job_parameters)
 
 		return {jobID:jobID}, 200
 

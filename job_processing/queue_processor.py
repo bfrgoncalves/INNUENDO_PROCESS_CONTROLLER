@@ -3,6 +3,7 @@ from redis import Redis
 import subprocess
 import os
 import shlex
+import json
 
 #READ CONFIG FILE
 config = {}
@@ -15,6 +16,11 @@ class Queue_Processor:
 
 	def process_job(self, kwargs):
 		key_value_args = []
+		job_parameters = json.loads(kwargs['job_parameters'])
+		########### CONTINUAR AQUI - UM JOB POR ESTIRPE ###############
+		print job_parameters
+		return True
+		'''
 		parameters = kwargs['parameters']['used Parameter']
 		username = kwargs['username']
 
@@ -56,6 +62,7 @@ class Queue_Processor:
 		else:
 
 			return '', 400
+		'''
 
 	def insert_job(self, **kwargs):
 		#Insert jobs in queue
