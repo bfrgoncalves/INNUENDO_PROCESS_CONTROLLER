@@ -90,7 +90,7 @@ class Queue_Processor:
 				#jobID = stdout.split(' ')
 				#jobID = jobID[-1].strip('\n')
 
-		submitToSLURM(workflow_filenames, count_workflows-1)
+		submitToSLURM(workflow_filenames, count_workflows)
 
 		#commands = ['sh','job_processing/launch_job.sh'] + [' '.join(key_value_args)]
 
