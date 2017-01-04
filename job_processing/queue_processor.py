@@ -19,7 +19,8 @@ def setFilesByProgram(key_value_args, workflow):
 	wf_params = json.loads(workflow['parameters'])
 	if wf_params['used Software'] in config['APPLICATIONS_ARRAY']:
 		software = wf_params['used Software']
-		software = 'INNUca'
+		if software == '':
+			software = 'INNUca'
 		softwarePath = config['FILETYPES_SOFTWARE'][software][0]['path']
 		language = config['FILETYPES_SOFTWARE'][software][0]['language']
 		return key_value_args, softwarePath, language
@@ -28,19 +29,20 @@ def setFilesByProgram(key_value_args, workflow):
 
 def submitToSLURM(workflow_path_array, numberOfWorkflows):
 	array_to_string = '#'.join(workflow_path_array)
-	print array_to_string
 	commands = ['sh','job_processing/launch_job.sh'] + [array_to_string, str(numberOfWorkflows)]
-	print commands
 	proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	stdout, stderr = proc.communicate()
-	print stdout
+
+	jobID = stdout.split(' ')
+	jobID = jobID[-1].strip('\n')
+	return jobID
 
 class Queue_Processor:
 
 	def process_job(self, job_parameters):
 		key_value_args = []
 		job_parameters = json.loads(job_parameters)
-		########### CONTINUAR AQUI - UM JOB POR ESTIRPE ###############
+
 		print job_parameters
 
 		count_workflows = 0;
@@ -48,10 +50,7 @@ class Queue_Processor:
 		for workflow in job_parameters:
 
 			count_workflows += 1;
-			print workflow
 			parameters = json.loads(workflow['parameters'])['used Parameter']
-			#parameters = parameters['used Parameter']
-			print parameters
 			username = workflow['username']
 
 			workflow_job_name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
@@ -77,33 +76,15 @@ class Queue_Processor:
 
 			if key_value_args != False:
 				key_value_args = [language, softwarePath] + key_value_args
-				print key_value_args
-				#commands = ['sh','job_processing/launch_job.sh'] + [' '.join(key_value_args)]
 				with open(workflow_filepath, 'w') as jobs_file:
 					jobs_file.write(' '.join(key_value_args))
 				workflow_filenames.append(workflow_filepath)
-				#os.system('sh job_processing/launch_job.sh "' + ' '.join(key_value_args) + '"')
-				
-				#proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-				#stdout, stderr = proc.communicate()
-				#print stdout
-				#jobID = stdout.split(' ')
-				#jobID = jobID[-1].strip('\n')
 
-		submitToSLURM(workflow_filenames, count_workflows)
-
-		#commands = ['sh','job_processing/launch_job.sh'] + [' '.join(key_value_args)]
+		jobID = submitToSLURM(workflow_filenames, count_workflows)
 
 
-		return 1,200
+		return jobID, 200
 
-		#key_value_args.append("--spadesMaxMemory")
-		#key_value_args.append("4")
-
-		#if proc.returncode == 0:
-		#	return jobID, 200
-		#else:
-		#	return '', 400
 
 	def insert_job(self, job_parameters):
 		#Insert jobs in queue

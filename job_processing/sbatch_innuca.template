@@ -15,18 +15,20 @@
 #SBATCH --mail-user=mickaelsilva@fm.ul.pt
 
 # run as user
-
 export PATH="/home/innuendo/.linuxbrew/bin:$PATH"
 export PATH="/home/innuendo/.linuxbrew/Cellar/mlst/2.6/bin:$PATH"
 
-#echo "INNUCA IS GOING TO RUN!!!"
 # run the application
 IFS='#' read -r -a array <<< ARRAY_STRING
 
+echo 'JOB PARAMETERS FILE LOCATION:'
 echo ${array[$SLURM_ARRAY_TASK_ID]}
 
 command_to_use=$(head -n 1 ${array[$SLURM_ARRAY_TASK_ID]})
 
-echo $command_to_use
+echo 'JOB PARAMETERS:'
+echo ${command_to_use[$SLURM_ARRAY_TASK_ID]}
+
+#RUN COMMAND
 eval ${command_to_use[$SLURM_ARRAY_TASK_ID]}
-#echo "INNUCA HAS FINISHED"
+
