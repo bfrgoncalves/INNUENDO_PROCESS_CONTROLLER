@@ -15,7 +15,7 @@ redis_conn = Redis()
 q = Queue('innuendo_jobs', connection=redis_conn)
 
 def setFilesByProgram(key_value_args, workflow):
-
+	print workflow
 	if workflow['used Parameter']['usedSoftware'] in config['APPLICATIONS_ARRAY']:
 		software = workflow['used Parameter']['usedSoftware']
 		software = 'INNUca'
