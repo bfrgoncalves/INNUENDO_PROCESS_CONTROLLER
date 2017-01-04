@@ -97,10 +97,8 @@ class Queue_Processor:
 		#	return jobID, 200
 		#else:
 		#	return '', 400
-		'''
 
 	def insert_job(self, job_parameters):
 		#Insert jobs in queue
 		jobID, code = self.process_job(job_parameters)
 		return jobID
-	'''
