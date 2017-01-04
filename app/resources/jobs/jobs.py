@@ -26,7 +26,7 @@ class Job_queue(Resource):
 		innuendo_processor = Queue_Processor()
 		jobID = innuendo_processor.insert_job(job_parameters=job_parameters)
 
-		return {jobID:jobID}, 200
+		return {'jobID':jobID}, 200
 
 class Test(Resource):
 

@@ -14,12 +14,18 @@
 # send mail to this address
 #SBATCH --mail-user=mickaelsilva@fm.ul.pt
 
+#Set number of tasks
+#SBATCH --array=0-NUMBER_OF_TASKS%1
+
 # run as user
 
 export PATH="/home/innuendo/.linuxbrew/bin:$PATH"
 export PATH="/home/innuendo/.linuxbrew/Cellar/mlst/2.6/bin:$PATH"
 
-echo "INNUCA IS GOING TO RUN!!!"
+#echo "INNUCA IS GOING TO RUN!!!"
 # run the application
-srun -c 6 JOB_PARAMETERS
-echo "INNUCA HAS FINISHED"
+IFS='#' read -r -a array <<< ARRAY_STRING
+
+echo $array[$SLURM_ARRAY_TASK_ID]
+eval $array[$SLURM_ARRAY_TASK_ID]
+#echo "INNUCA HAS FINISHED"
