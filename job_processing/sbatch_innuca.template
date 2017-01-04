@@ -15,7 +15,7 @@
 #SBATCH --mail-user=mickaelsilva@fm.ul.pt
 
 # SLURM ARRAY
-#SBATCH --array=0-NUMBEROFTASKS%1
+# SBATCH --array=0-NUMBEROFTASKS%1
 
 # run as user
 export PATH="/home/innuendo/.linuxbrew/bin:$PATH"
