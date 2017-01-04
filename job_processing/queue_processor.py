@@ -20,8 +20,8 @@ def setFilesByProgram(key_value_args, workflow):
 	if wf_params['used Software'] in config['APPLICATIONS_ARRAY']:
 		software = wf_params['used Software']
 		software = 'INNUca'
-		softwarePath = config['FILETYPES_SOFTWARE'][software]['path']
-		language = config['FILETYPES_SOFTWARE'][software]['language']
+		softwarePath = config['FILETYPES_SOFTWARE'][software][0]['path']
+		language = config['FILETYPES_SOFTWARE'][software][0]['language']
 		return key_value_args, softwarePath, language
 	else:
 		return False, False
