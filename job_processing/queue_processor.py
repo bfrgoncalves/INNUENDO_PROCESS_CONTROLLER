@@ -78,7 +78,7 @@ class Queue_Processor:
 				key_value_args = [language, softwarePath] + key_value_args
 				print key_value_args
 				#commands = ['sh','job_processing/launch_job.sh'] + [' '.join(key_value_args)]
-				with os.open(workflow_filepath, 'w') as jobs_file:
+				with open(workflow_filepath, 'w') as jobs_file:
 					jobs_file.write(' '.join(key_value_args))
 				print commands
 				workflow_filenames.append(workflow_filepath)
