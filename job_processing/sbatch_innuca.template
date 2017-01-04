@@ -14,7 +14,7 @@
 # send mail to this address
 #SBATCH --mail-user=mickaelsilva@fm.ul.pt
 
-#SLURM ARRAY
+# SLURM ARRAY
 #SBATCH --array=0-NUMBEROFTASKS%1
 
 # run as user
