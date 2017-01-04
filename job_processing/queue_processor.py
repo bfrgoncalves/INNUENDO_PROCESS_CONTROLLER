@@ -43,8 +43,9 @@ class Queue_Processor:
 		count_workflows = 0;
 		workflow_filenames = [];
 		for workflow in job_parameters:
-			
+
 			count_workflows += 1;
+			print workflow
 			parameters = workflow['used Parameter']
 			username = workflow['username']
 
