@@ -5,6 +5,7 @@ import os
 import shlex
 import json
 import random
+import string
 
 #READ CONFIG FILE
 config = {}
