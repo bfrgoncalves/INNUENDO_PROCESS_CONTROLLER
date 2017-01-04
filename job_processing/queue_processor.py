@@ -46,8 +46,8 @@ class Queue_Processor:
 
 			count_workflows += 1;
 			print workflow
-			parameters = json.loads('"' + workflow['parameters'] + '"')
-			parameters = parameters['used Parameter']
+			parameters = json.loads('[' + workflow['parameters'] + ']')
+			parameters = parameters[0]['used Parameter']
 			print parameters
 			username = workflow['username']
 
