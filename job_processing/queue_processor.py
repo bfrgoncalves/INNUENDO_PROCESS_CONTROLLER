@@ -46,7 +46,7 @@ class Queue_Processor:
 
 			count_workflows += 1;
 			print workflow
-			parameters = workflow['used Parameter']
+			parameters = workflow['parameters']['used Parameter']
 			username = workflow['username']
 
 			workflow_job_name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
