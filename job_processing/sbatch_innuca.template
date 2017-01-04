@@ -25,8 +25,8 @@ IFS='#' read -r -a array <<< ARRAY_STRING
 
 echo ${array[$SLURM_ARRAY_TASK_ID]}
 
-#command_to_use=$(head -n 1 ${array[$SLURM_ARRAY_TASK_ID]})
+command_to_use=$(head -n 1 ${array[$SLURM_ARRAY_TASK_ID]})
 
-#echo $command_to_use
-#eval $array[$SLURM_ARRAY_TASK_ID]
+echo $command_to_use
+eval ${command_to_use[$SLURM_ARRAY_TASK_ID]}
 #echo "INNUCA HAS FINISHED"
