@@ -23,7 +23,7 @@ export PATH="/home/innuendo/.linuxbrew/Cellar/mlst/2.6/bin:$PATH"
 # run the application
 IFS='#' read -r -a array <<< ARRAY_STRING
 
-echo $array[$SLURM_ARRAY_TASK_ID])
+echo $array[$SLURM_ARRAY_TASK_ID]
 
 command_to_use=$(head -n 1 $array[$SLURM_ARRAY_TASK_ID])
 
