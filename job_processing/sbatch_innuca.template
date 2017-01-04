@@ -19,7 +19,7 @@ export PATH="/home/innuendo/.linuxbrew/bin:$PATH"
 export PATH="/home/innuendo/.linuxbrew/Cellar/mlst/2.6/bin:$PATH"
 
 # run the application
-IFS='#' read -r -a array <<< ARRAY_STRING
+IFS='\#' read -r -a array <<< ARRAY_STRING
 
 echo 'JOB PARAMETERS FILE LOCATION:'
 echo ${array[$SLURM_ARRAY_TASK_ID]}
