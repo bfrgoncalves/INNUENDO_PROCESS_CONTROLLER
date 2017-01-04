@@ -19,6 +19,7 @@ def setFilesByProgram(key_value_args, workflow):
 	wf_params = json.loads(workflow['parameters'])
 	if wf_params['used Software'] in config['APPLICATIONS_ARRAY']:
 		software = wf_params['used Software']
+		print software
 		if software == '':
 			software = 'INNUca'
 		softwarePath = config['FILETYPES_SOFTWARE'][software][0]['path']
