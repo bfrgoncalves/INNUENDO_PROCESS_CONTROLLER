@@ -52,6 +52,8 @@ class Queue_Processor:
 		for workflow in job_parameters:
 
 			key_value_args = []
+			count_workflows = 0;
+			
 			count_workflows += 1;
 			parameters = json.loads(workflow['parameters'])['used Parameter']
 			username = workflow['username']
