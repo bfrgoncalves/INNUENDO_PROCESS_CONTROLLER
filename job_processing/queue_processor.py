@@ -16,8 +16,8 @@ q = Queue('innuendo_jobs', connection=redis_conn)
 
 def setFilesByProgram(key_value_args, workflow):
 	print workflow
-	if workflow['used Software'] in config['APPLICATIONS_ARRAY']:
-		software = workflow['used Parameter']['used Software']
+	if workflow['parameters']['used Software'] in config['APPLICATIONS_ARRAY']:
+		software = workflow['parameters']['used Software']
 		software = 'INNUca'
 		softwarePath = config['FILETYPES_SOFTWARE'][software]['path']
 		language = config['FILETYPES_SOFTWARE'][software]['language']
