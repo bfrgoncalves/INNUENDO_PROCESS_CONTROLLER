@@ -34,7 +34,7 @@ def submitToSLURM(workflow_path_array, numberOfWorkflows):
 	commands = ['sh','job_processing/launch_job.sh'] + [array_to_string, str(numberOfWorkflows)]
 	proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	stdout, stderr = proc.communicate()
-
+	print stdout
 	jobID = stdout.split(' ')
 	jobID = jobID[-1].strip('\n')
 	return jobID
@@ -53,7 +53,7 @@ class Queue_Processor:
 
 			key_value_args = []
 			count_workflows = 0;
-			
+
 			count_workflows += 1;
 			parameters = json.loads(workflow['parameters'])['used Parameter']
 			username = workflow['username']
