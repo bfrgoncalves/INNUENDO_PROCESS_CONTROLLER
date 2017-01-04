@@ -43,12 +43,13 @@ class Queue_Processor:
 		count_workflows = 0;
 		workflow_filenames = [];
 		for workflow in job_parameters:
-			workflow_job_name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
-			workflow_filepath = os.path.join(config['JOBS_FOLDER'], username + '_' + workflow_job_name +'.txt')
-
+			
 			count_workflows += 1;
 			parameters = workflow['used Parameter']
 			username = workflow['username']
+
+			workflow_job_name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
+			workflow_filepath = os.path.join(config['JOBS_FOLDER'], username + '_' + workflow_job_name +'.txt')
 			
 			user_folder = '/home/users/' + username + '/test'
 
