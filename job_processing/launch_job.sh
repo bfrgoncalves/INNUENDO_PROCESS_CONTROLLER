@@ -2,6 +2,7 @@
 
 echo $1
 echo $2
+echo $3
 
 OLD=ARRAY_STRING
 TASKNUMBER=NUMBEROFTASKS

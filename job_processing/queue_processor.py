@@ -6,6 +6,7 @@ import shlex
 import json
 import random
 import string
+from process_parameters import process_parameters
 
 #READ CONFIG FILE
 config = {}
@@ -19,7 +20,6 @@ def setFilesByProgram(key_value_args, workflow):
 	wf_params = json.loads(workflow['parameters'])
 	if wf_params['used Software'] in config['APPLICATIONS_ARRAY']:
 		software = wf_params['used Software']
-		print software
 		if software == '':
 			software = 'INNUca'
 		softwarePath = config['FILETYPES_SOFTWARE'][software][0]['path']
@@ -28,7 +28,7 @@ def setFilesByProgram(key_value_args, workflow):
 	else:
 		return False, False
 
-def submitToSLURM(workflow_path_array, numberOfWorkflows):
+def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows):
 	array_to_string = '\#'.join(workflow_path_array)
 	array_tasks=[]
 	count_tasks=0
@@ -61,26 +61,14 @@ class Queue_Processor:
 			count_workflows += 1;
 			parameters = json.loads(workflow['parameters'])['used Parameter']
 			username = workflow['username']
+			print parameters
 
 			workflow_job_name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
 			workflow_filepath = os.path.join(config['JOBS_FOLDER'], username + '_' + workflow_job_name +'.txt')
 			
-			user_folder = '/home/users/' + username + '/test'
+			user_folder = '/home/users/' + username
 
-			for key, value in parameters.iteritems():
-				key_value_args.append(str(key))
-
-				if str(key) == '-i':
-					#value += kwargs['username']
-					key_value_args.append(str(user_folder))
-					key_value_args.append('-o')
-					key_value_args.append(str(user_folder))
-				
-				elif len(value.split(' ')) > 1:
-					key_value_args.append("'" + str(value) + "'")
-				else:
-					key_value_args.append(str(value))
-
+			key_value_args = process_parameters(parameters)
 			key_value_args, softwarePath, language = setFilesByProgram(key_value_args, workflow)
 
 			if key_value_args != False:
@@ -89,7 +77,7 @@ class Queue_Processor:
 					jobs_file.write(' '.join(key_value_args))
 				workflow_filenames.append(workflow_filepath)
 
-		jobID = submitToSLURM(workflow_filenames, count_workflows)
+		jobID = submitToSLURM(user_folder, workflow_filenames, count_workflows)
 
 
 		return jobID, 200
