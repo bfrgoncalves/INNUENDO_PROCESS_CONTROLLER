@@ -6,7 +6,9 @@ def get_protocol_parameters(parameters):
 	key_value_args = []
 
 	for key, value in parameters.iteritems():
-		if key != '-i' or key != '-o':
+		if key == '-i' or key == '-o':
+			continue
+		else:
 			key_value_args.append(str(key))
 
 			if len(value.split(' ')) > 1:
