@@ -1,5 +1,5 @@
 
-def process_parameters(parameters):
+def process_parameters(parameters, user_folder):
 
 	key_value_args = []
 

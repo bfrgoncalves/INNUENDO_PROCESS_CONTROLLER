@@ -68,7 +68,7 @@ class Queue_Processor:
 			
 			user_folder = '/home/users/' + username
 
-			key_value_args = process_parameters(parameters)
+			key_value_args = process_parameters(parameters, user_folder)
 			key_value_args, softwarePath, language = setFilesByProgram(key_value_args, workflow)
 
 			if key_value_args != False:
