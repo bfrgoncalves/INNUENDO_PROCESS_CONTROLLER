@@ -21,10 +21,10 @@ def process_innuca(key_value_args, parameters, user_folder):
 	prev_application_steps = ''
 
 	key_value_args.append('-i')
-	key_value_args.append(os.path.join(str(user_folder),'$SLURM_ARRAY_JOB_ID'))
+	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID'))
 
 	key_value_args.append('-o')
-	key_value_args.append(os.path.join(str(user_folder),'$SLURM_ARRAY_JOB_ID'))
+	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID'))
 
 	return key_value_args, prev_application_steps
 
@@ -36,13 +36,13 @@ def process_chewbbaca(key_value_args, parameters, user_folder):
 	prev_application_steps = 'find ' + user_folder + '/*.fasta > ' + user_folder + '/$SLURM_ARRAY_JOB_ID/listGenes.txt;'
 
 	key_value_args.append('-i')
-	key_value_args.append(os.path.join(str(user_folder),'$SLURM_ARRAY_JOB_ID', 'listGenomes.txt'))
+	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'listGenomes.txt'))
 
 	key_value_args.append('-o')
-	key_value_args.append(os.path.join(str(user_folder),'$SLURM_ARRAY_JOB_ID'))
+	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID'))
 
 	key_value_args.append('-g')
-	key_value_args.append(os.path.join(str(user_folder),'$SLURM_ARRAY_JOB_ID','listGenes.txt'))
+	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID','listGenes.txt'))
 
 
 	return key_value_args, prev_application_steps
