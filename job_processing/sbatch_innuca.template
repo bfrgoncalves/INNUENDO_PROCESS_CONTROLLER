@@ -51,8 +51,8 @@ command_to_use=$(cat ${array[$SLURM_ARRAY_TASK_ID]})
 
 echo 'JOB PARAMETERS:'
 echo $SLURM_ARRAY_TASK_ID
-echo command_to_use
+echo $command_to_use
 
 #RUN COMMAND
-eval command_to_use
+eval $command_to_use
 
