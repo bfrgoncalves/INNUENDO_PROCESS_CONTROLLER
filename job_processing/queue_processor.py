@@ -20,8 +20,6 @@ def setFilesByProgram(key_value_args, workflow):
 	wf_params = json.loads(workflow['parameters'])
 	if wf_params['used Software'] in config['APPLICATIONS_ARRAY']:
 		software = wf_params['used Software']
-		if software == '':
-			software = 'INNUca'
 		softwarePath = config['FILETYPES_SOFTWARE'][software][0]['path']
 		language = config['FILETYPES_SOFTWARE'][software][0]['language']
 		return key_value_args, softwarePath, language
@@ -74,12 +72,13 @@ class Queue_Processor:
 			
 			user_folder = '/home/users/' + username
 
-			key_value_args = process_parameters(parameters, user_folder)
+			key_value_args, prev_application_steps = process_parameters(parameters, user_folder, workflow)
 			key_value_args, softwarePath, language = setFilesByProgram(key_value_args, workflow)
 
 			if key_value_args != False:
 				key_value_args = [language, softwarePath] + key_value_args
 				with open(workflow_filepath, 'w') as jobs_file:
+					jobs_file.write(prev_application_steps)
 					jobs_file.write(' '.join(key_value_args))
 				workflow_filenames.append(workflow_filepath)
 
