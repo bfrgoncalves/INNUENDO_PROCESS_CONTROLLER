@@ -51,6 +51,10 @@ def process_chewbbaca(key_value_args, parameters, user_folder):
 
 def process_parameters(parameters, user_folder, workflow):
 
+	#READ CONFIG FILE
+	config = {}
+	execfile("config.py", config)
+
 	options = {'INNUca':process_innuca, 'chewBBACA':process_chewbbaca}
 
 	wf_params = json.loads(workflow['parameters'])
