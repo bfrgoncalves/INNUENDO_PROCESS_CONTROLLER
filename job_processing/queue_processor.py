@@ -62,6 +62,7 @@ class Queue_Processor:
 			parameters = json.loads(workflow['parameters'])['used Parameter']
 			files = json.loads(workflow['files'])
 			username = workflow['username']
+			print files
 
 			workflow_job_name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
 			workflow_filepath = os.path.join(config['JOBS_FOLDER'], username + '_' + workflow_job_name +'.txt')
