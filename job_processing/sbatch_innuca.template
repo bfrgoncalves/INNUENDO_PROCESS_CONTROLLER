@@ -6,7 +6,7 @@
 #SBATCH --nodes=1
 
 # set name of job
-#SBATCH --job-name=innuca_a_bombar
+#SBATCH --job-name=template_name
 
 # mail alert at start, end and abortion of execution
 #SBATCH --mail-type=ALL
