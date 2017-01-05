@@ -14,6 +14,12 @@
 # send mail to this address
 #SBATCH --mail-user=mickaelsilva@fm.ul.pt
 
+#Number of tasks
+#SBATCH --array=NUMBEROFTASKS
+
+#Simultaious tasks
+#SBATCH --ntasks=1
+
 # run as user
 export PATH="/home/innuendo/.linuxbrew/bin:$PATH"
 export PATH="/home/innuendo/.linuxbrew/Cellar/mlst/2.6/bin:$PATH"
