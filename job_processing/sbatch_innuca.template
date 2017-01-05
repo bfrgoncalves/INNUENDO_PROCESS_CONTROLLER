@@ -26,16 +26,30 @@ export PATH="/home/innuendo/.linuxbrew/Cellar/mlst/2.6/bin:$PATH"
 
 # run the application
 IFS='\#' read -r -a array <<< ARRAY_STRING
+IFS=',' read -r -a files_to_transfer <<< FILES_TO_TRANSFER
 
-echo 'JOB PARAMETERS FILE LOCATION:'
-echo ${array[$SLURM_ARRAY_TASK_ID]}
+job_directory=USER_DIR/$SLURM_ARRAY_JOB_ID
 
-command_to_use=$(head -n 1 ${array[$SLURM_ARRAY_TASK_ID]})
+if [ ! -d "$job_directory" ]; then
+	mkdir $job_directory
+fi
 
-echo 'JOB PARAMETERS:'
-echo $SLURM_ARRAY_TASK_ID
-echo ${command_to_use[0]}
+for f in $files_to_transfer
+do
+   ln -s $f $job_directory/${f##*/}
+done
+
+
+
+#echo 'JOB PARAMETERS FILE LOCATION:'
+#echo ${array[$SLURM_ARRAY_TASK_ID]}
+
+#command_to_use=$(head -n 1 ${array[$SLURM_ARRAY_TASK_ID]})
+
+#echo 'JOB PARAMETERS:'
+#echo $SLURM_ARRAY_TASK_ID
+#echo ${command_to_use[0]}
 
 #RUN COMMAND
-eval srun ${command_to_use[0]}
+#eval srun ${command_to_use[0]}
 

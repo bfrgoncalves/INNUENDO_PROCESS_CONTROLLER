@@ -28,7 +28,7 @@ def setFilesByProgram(key_value_args, workflow):
 	else:
 		return False, False
 
-def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows):
+def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows, array_of_files):
 	array_to_string = '\#'.join(workflow_path_array)
 	array_tasks=[]
 	count_tasks=0
@@ -37,7 +37,8 @@ def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows):
 		count_tasks+=1
 	print array_to_string
 	print array_tasks
-	commands = ['sh','job_processing/launch_job.sh'] + [array_to_string, ','.join(array_tasks)]
+
+	commands = ['sh','job_processing/launch_job.sh'] + [array_to_string, ','.join(array_tasks), ','.join(array_of_files), user_folder]
 	proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	stdout, stderr = proc.communicate()
 	print stdout
@@ -62,7 +63,11 @@ class Queue_Processor:
 			parameters = json.loads(workflow['parameters'])['used Parameter']
 			files = json.loads(workflow['files'])
 			username = workflow['username']
-			print files
+
+			array_of_files = []
+
+			for x in files:
+				array_of_files.append(files[x])
 
 			workflow_job_name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
 			workflow_filepath = os.path.join(config['JOBS_FOLDER'], username + '_' + workflow_job_name +'.txt')
@@ -78,7 +83,7 @@ class Queue_Processor:
 					jobs_file.write(' '.join(key_value_args))
 				workflow_filenames.append(workflow_filepath)
 
-		jobID = submitToSLURM(user_folder, workflow_filenames, count_workflows)
+		jobID = submitToSLURM(user_folder, workflow_filenames, count_workflows, array_of_files)
 
 
 		return jobID, 200
