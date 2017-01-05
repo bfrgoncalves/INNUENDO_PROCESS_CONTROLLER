@@ -31,6 +31,7 @@ IFS=',' read -r -a files_to_transfer <<< FILES_TO_TRANSFER
 job_directory=USER_DIR/$SLURM_ARRAY_JOB_ID
 
 if [ ! -d "$job_directory" ]; then
+	echo "AQUI"
 	mkdir $job_directory
 fi
 
