@@ -29,14 +29,21 @@ def process_innuca(key_value_args, parameters, user_folder):
 	key_value_args.append('-o')
 	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID'))
 
-	return key_value_args, prev_application_steps
+	after_application_steps = 'ln -s $(cat '+str(user_folder),'SLURM_ARRAY_JOB_ID')+'/*/final_assembly.txt) '+
+								+os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID")+'/innuca_assembly_SLURM_ARRAY_JOB_ID.fasta'
+
+	#after_application_steps = 'count_assemblies=0; for file_found in $(find . -name final_assembly.txt); do (( count_assemblies++ )); ln -s $(cat $file_found) '+os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID")+'/innuca_assembly_SLURM_ARRAY_JOB_ID.fasta; done'
+
+	#MOVE ASSEMBly to job folder
+
+	return key_value_args, prev_application_steps, after_application_steps
 
 
 def process_chewbbaca(key_value_args, parameters, user_folder):
 	#list of genomes
 	#list of genes
 	prev_application_steps = 'find ' + user_folder + '/SLURM_ARRAY_JOB_ID/*.fasta > ' + user_folder + '/SLURM_ARRAY_JOB_ID/listGenomes.txt;'
-	prev_application_steps += 'find ' + user_folder + 'AgalSchema/*.fasta > ' + user_folder + '/SLURM_ARRAY_JOB_ID/listGenes.txt;'
+	prev_application_steps += 'find ' + user_folder + '/AgalSchema/*.fasta > ' + user_folder + '/SLURM_ARRAY_JOB_ID/listGenes.txt;'
 
 	key_value_args.append('-i')
 	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'listGenomes.txt'))
@@ -47,8 +54,10 @@ def process_chewbbaca(key_value_args, parameters, user_folder):
 	key_value_args.append('-g')
 	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID','listGenes.txt'))
 
+	after_application_steps = ''
 
-	return key_value_args, prev_application_steps
+
+	return key_value_args, prev_application_steps, after_application_steps
 	
 
 

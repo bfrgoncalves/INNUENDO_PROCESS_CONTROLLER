@@ -72,7 +72,7 @@ class Queue_Processor:
 			
 			user_folder = '/home/users/' + username
 
-			key_value_args, prev_application_steps = process_parameters(parameters, user_folder, workflow)
+			key_value_args, prev_application_steps, after_application_steps = process_parameters(parameters, user_folder, workflow)
 			key_value_args, softwarePath, language = setFilesByProgram(key_value_args, workflow)
 
 			if key_value_args != False:
@@ -80,6 +80,7 @@ class Queue_Processor:
 				with open(workflow_filepath, 'w') as jobs_file:
 					jobs_file.write(prev_application_steps)
 					jobs_file.write(' '.join(key_value_args))
+					jobs_file.write(after_application_steps)
 				workflow_filenames.append(workflow_filepath)
 
 		jobID = submitToSLURM(user_folder, workflow_filenames, count_workflows, array_of_files)
