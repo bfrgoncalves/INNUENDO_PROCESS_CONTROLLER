@@ -41,6 +41,11 @@ def process_innuca(key_value_args, parameters, user_folder):
 def process_chewbbaca(key_value_args, parameters, user_folder):
 	#list of genomes
 	#list of genes
+
+	#READ CONFIG FILE
+	config = {}
+	execfile("config.py", config)
+
 	prev_application_steps = 'find ' + user_folder + '/SLURM_ARRAY_JOB_ID/*.fasta > ' + user_folder + '/SLURM_ARRAY_JOB_ID/listGenomes.txt;'
 	prev_application_steps += 'find ' + user_folder + '/AgalSchema/*.fasta > ' + user_folder + '/SLURM_ARRAY_JOB_ID/listGenes.txt;'
 
@@ -51,7 +56,7 @@ def process_chewbbaca(key_value_args, parameters, user_folder):
 	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID'))
 
 	key_value_args.append('-b')
-	key_value_args.append(str('/home/innuendo/sandbox/ncbi-blast-2.5.0+/bin'))
+	key_value_args.append(config['BLAST_PATH'])
 
 	key_value_args.append('-g')
 	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID','listGenes.txt'))
