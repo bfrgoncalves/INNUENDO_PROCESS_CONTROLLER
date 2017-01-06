@@ -29,7 +29,7 @@ def process_innuca(key_value_args, parameters, user_folder):
 	key_value_args.append('-o')
 	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID'))
 
-	after_application_steps = 'ln -s $(cat ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/*/final_assembly.txt) ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/innuca_assembly_SLURM_ARRAY_JOB_ID.fasta'
+	after_application_steps = ';ln -s $(cat ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/*/final_assembly.txt) ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/innuca_assembly_SLURM_ARRAY_JOB_ID.fasta'
 
 	#after_application_steps = 'count_assemblies=0; for file_found in $(find . -name final_assembly.txt); do (( count_assemblies++ )); ln -s $(cat $file_found) '+os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID")+'/innuca_assembly_SLURM_ARRAY_JOB_ID.fasta; done'
 
