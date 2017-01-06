@@ -76,7 +76,7 @@ def process_parameters(parameters, user_folder, workflow):
 	options = {'INNUca':process_innuca, 'chewBBACA':process_chewbbaca}
 
 	key_value_args = get_protocol_parameters(parameters)
-	key_value_args, prev_application_steps = options[software](key_value_args, parameters, user_folder)
+	key_value_args, prev_application_steps, after_application_steps = options[software](key_value_args, parameters, user_folder)
 
 
-	return key_value_args, prev_application_steps
+	return key_value_args, prev_application_steps, after_application_steps
