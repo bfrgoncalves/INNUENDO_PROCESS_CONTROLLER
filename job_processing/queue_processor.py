@@ -53,7 +53,7 @@ def extract_ids(job_out):
 			job_id = x.split('_')[0]
 			task_ids = x.split('[')[1].split(']')[0].split('-')
 			for k in range(int(task_ids[0]), int(task_ids[1])):
-				tasks.append(jobid + '_' + str(k))
+				tasks.append(job_id + '_' + str(k))
 		else:
 			tasks.append(x)
 	
