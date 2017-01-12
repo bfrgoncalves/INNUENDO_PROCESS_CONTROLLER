@@ -89,17 +89,17 @@ class Queue_Processor:
 		#commands = 'squeue --job '+ jobID +' | sed "1d" | sed "s/ \+/\t/g" | cut -f2'
 		#print commands.split(' ')
 		commands = 'squeue --job '+ jobID
-		proc1 = subprocess.Popen([commands], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		#print proc1.communicate()
 		commands = 'sed "1d"'
-		proc2 = subprocess.Popen([commands], stdin=proc1.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		proc2 = subprocess.Popen(commands.split(' '), stdin=proc1.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		commands = 'sed "s/ \+/\t/g"'
-		print proc2.communicate()
-		proc3 = subprocess.Popen([commands], stdin=proc2.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		print 'P2', proc2.communicate()
+		proc3 = subprocess.Popen(commands.split(' '), stdin=proc2.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		commands = 'cut -f2'
-		print proc3.communicate()
-		proc4 = subprocess.Popen([commands], stdin=proc3.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		print proc4.communicate()
+		print 'P3', proc3.communicate()
+		proc4 = subprocess.Popen(commands.split(' '), stdin=proc3.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		print 'P4', proc4.communicate()
 		stdout, stderr = proc4.communicate()
 		#print stdout, stderr
 
