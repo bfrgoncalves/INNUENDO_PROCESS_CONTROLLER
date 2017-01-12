@@ -86,11 +86,17 @@ class Queue_Processor:
 		jobID = submitToSLURM(user_folder, workflow_filenames, count_workflows, array_of_files)
 
 		#check job ids via squeue
-		commands = ['squeue --job '+ jobID +' | sed "1d" | sed "s/ \+/\t/g" | cut -f2']
-		print commands
-		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		stdout, stderr = proc.communicate()
-		print stdout, stderr
+		#commands = 'squeue --job '+ jobID +' | sed "1d" | sed "s/ \+/\t/g" | cut -f2'
+		print commands.split(' ')
+		commands = 'squeue --job '+ jobID
+		proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		commands = 'sed "1d"'
+		proc2 = subprocess.Popen(commands.split(' '), stdin=proc1.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		commands = 'sed "s/ \+/\t/g"'
+		proc3 = subprocess.Popen(commands.split(' '), stdin=proc2.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		commands = 'cut -f2'
+		proc4 = subprocess.Popen(commands.split(' '), stdin=proc3.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		proc4.stdout, proc4.stderr = proc.communicate()
 
 
 		return jobID, 200
