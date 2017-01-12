@@ -88,10 +88,10 @@ class Queue_Processor:
 		#check job ids via squeue
 		#commands = 'squeue --job '+ jobID +' | sed "1d" | sed "s/ \+/\t/g" | cut -f2'
 		#print commands.split(' ')
-		commands = 'sh job_processing/get_number_of_jobs.sh'
+		commands = 'sh job_processing/get_number_of_jobs.sh ' + jobID
 		proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		print proc1.communicate()
-		#print stdout, stderr
+		stdout, stderr = proc1.communicate()
+		print stdout, stderr
 
 
 		return jobID, 200
