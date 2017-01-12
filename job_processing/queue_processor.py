@@ -87,7 +87,7 @@ class Queue_Processor:
 
 		#check job ids via squeue
 		#commands = 'squeue --job '+ jobID +' | sed "1d" | sed "s/ \+/\t/g" | cut -f2'
-		print commands.split(' ')
+		#print commands.split(' ')
 		commands = 'squeue --job '+ jobID
 		proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		commands = 'sed "1d"'
