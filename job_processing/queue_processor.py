@@ -96,7 +96,8 @@ class Queue_Processor:
 		proc3 = subprocess.Popen(commands.split(' '), stdin=proc2.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		commands = 'cut -f2'
 		proc4 = subprocess.Popen(commands.split(' '), stdin=proc3.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		proc4.stdout, proc4.stderr = proc.communicate()
+		stdout, stderr = proc4.communicate()
+		print stdout, stderr
 
 
 		return jobID, 200
