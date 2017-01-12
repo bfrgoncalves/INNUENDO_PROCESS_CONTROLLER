@@ -90,7 +90,7 @@ class Queue_Processor:
 		#print commands.split(' ')
 		commands = 'squeue --job '+ jobID
 		proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		print proc1.communicate()
+		#print proc1.communicate()
 		commands = 'sed "1d"'
 		proc2 = subprocess.Popen(commands.split(' '), stdin=proc1.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		commands = 'sed "s/ \+/\t/g"'
