@@ -44,6 +44,23 @@ def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows, array_of_
 	jobID = jobID[-1].strip('\n')
 	return jobID
 
+def extract_ids(job_out):
+	job_out = job_out.split('\n')
+	tasks = []
+	
+	for x in job_out:
+		if '[' in x:
+			job_id = x.split('_')[0]
+			task_ids = x.split('[')[1].split(']')[0].split('-')
+			for k in range(int(task_ids[0]), int(task_ids[1])):
+				tasks.append(jobid + '_' + str(k))
+		else:
+			tasks.append(x)
+	
+	print tasks
+	return tasks
+
+
 class Queue_Processor:
 
 	def process_job(self, job_parameters):
@@ -93,6 +110,8 @@ class Queue_Processor:
 		stdout, stderr = proc1.communicate()
 		print stdout, stderr
 
+		if stderr == '':
+			task_ids = extract_ids(stdout)
 
 		return jobID, 200
 
