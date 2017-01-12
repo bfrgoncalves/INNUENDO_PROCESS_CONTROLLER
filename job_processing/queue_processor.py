@@ -52,7 +52,7 @@ def extract_ids(job_out):
 		if '[' in x:
 			job_id = x.split('_')[0]
 			task_ids = x.split('[')[1].split(']')[0].split('-')
-			for k in range(int(task_ids[0]), int(task_ids[1])):
+			for k in range(int(task_ids[0]), int(task_ids[1])+1):
 				tasks.append(job_id + '_' + str(k))
 		else:
 			tasks.append(x)
