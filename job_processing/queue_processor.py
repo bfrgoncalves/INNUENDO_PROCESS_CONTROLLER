@@ -111,7 +111,7 @@ class Queue_Processor:
 		if stderr == '':
 			task_ids = extract_ids(stdout)
 
-		return tasks_ids, 200
+		return task_ids, 200
 
 
 	def insert_job(self, job_parameters):
