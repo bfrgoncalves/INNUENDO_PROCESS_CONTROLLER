@@ -90,7 +90,7 @@ class Queue_Processor:
 		print commands.split(' ')
 		proc = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
-		print stdout
+		print stdout, stderr
 
 
 		return jobID, 200
