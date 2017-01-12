@@ -92,6 +92,7 @@ class Queue_Processor:
 		proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		#print proc1.communicate()
 		commands = "sed '1d'"
+		print commands.split(' ')
 		proc2 = subprocess.Popen(commands.split(' '), stdin=proc1.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		commands = 'sed "s/ \+/\t/g"'
 		print 'P2', proc2.communicate()
