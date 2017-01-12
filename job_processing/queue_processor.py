@@ -57,7 +57,6 @@ def extract_ids(job_out):
 		elif x != '':
 			tasks.append(x)
 	
-	print tasks
 	return tasks
 
 
@@ -108,12 +107,11 @@ class Queue_Processor:
 		commands = 'sh job_processing/get_number_of_jobs.sh ' + jobID
 		proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc1.communicate()
-		print stdout, stderr
 
 		if stderr == '':
 			task_ids = extract_ids(stdout)
 
-		return jobID, 200
+		return tasks_ids, 200
 
 
 	def insert_job(self, job_parameters):
