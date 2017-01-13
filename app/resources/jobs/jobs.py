@@ -38,7 +38,5 @@ class Job_queue(Resource):
 		commands = 'sh job_processing/get_job_status.sh ' + job_id
 		proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc1.communicate()
-		print stdout, stderr
-		print 'OK'
 
 		return stdout
