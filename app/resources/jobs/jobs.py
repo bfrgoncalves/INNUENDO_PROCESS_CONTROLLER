@@ -12,6 +12,9 @@ from redis import Redis
 
 job_post_parser = reqparse.RequestParser()
 job_post_parser.add_argument('data', dest='data', type=str, required=True, help="Job Parameters")
+
+job_get_parser = reqparse.RequestParser()
+job_get_parser.add_argument('job_id', dest='job_id', type=str, required=True, help="Job ID")
 #job_post_parser.add_argument('username', dest='username', type=str, required=True, help="Username")
 #job_post_parser.add_argument('files', dest='files', type=str, required=True, help="Files to use")
 #parameters -> workflow_id
@@ -30,4 +33,11 @@ class Job_queue(Resource):
 class Test(Resource):
 
 	def get(self):
+
+		args = job_post_parser.parse_args()
+		job_id = args.job_id
+		commands = 'sh job_processing/get_job_status.sh ' + job_id
+		proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		stdout, stderr = proc1.communicate()
+		print stdout, stderr
 		print 'OK'
