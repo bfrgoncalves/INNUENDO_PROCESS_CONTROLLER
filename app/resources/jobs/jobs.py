@@ -41,3 +41,5 @@ class Test(Resource):
 		stdout, stderr = proc1.communicate()
 		print stdout, stderr
 		print 'OK'
+
+		return stdout
