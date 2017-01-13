@@ -30,8 +30,6 @@ class Job_queue(Resource):
 
 		return {'jobID':jobID}, 200
 
-class Test(Resource):
-
 	def get(self):
 
 		args = job_post_parser.parse_args()
