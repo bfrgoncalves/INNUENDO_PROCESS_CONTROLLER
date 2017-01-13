@@ -32,7 +32,7 @@ class Job_queue(Resource):
 
 	def get(self):
 
-		args = job_post_parser.parse_args()
+		args = job_get_parser.parse_args()
 		job_id = args.job_id
 		commands = 'sh job_processing/get_job_status.sh ' + job_id
 		proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
