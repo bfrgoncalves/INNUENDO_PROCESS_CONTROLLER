@@ -6,6 +6,7 @@ from job_processing.queue_processor import Queue_Processor
 
 import datetime
 import json
+import subprocess
 
 from rq import Queue #Queue
 from redis import Redis
