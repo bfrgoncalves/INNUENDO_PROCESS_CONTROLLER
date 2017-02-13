@@ -39,4 +39,6 @@ class Job_queue(Resource):
 		proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc1.communicate()
 
+		print stdout
+
 		return stdout
