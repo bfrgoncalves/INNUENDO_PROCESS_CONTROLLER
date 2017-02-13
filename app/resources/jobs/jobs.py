@@ -40,13 +40,14 @@ class Job_queue(Resource):
 		stdout, stderr = proc1.communicate()
 
 		print stdout
-		
-		if stdout != '':
+
+		if len(stdout.split('\t')) == 0:
 			commands = 'sh job_processing/get_completed_jobs.sh ' + job_id
 			proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 			stdout, stderr = proc1.communicate()
 			print stdout
 			parts = stdout.split('\t')
-			print parts
+			if len(parts) == 0:
+				stdout = job_id + '\tFAILED'
 
 		return stdout
