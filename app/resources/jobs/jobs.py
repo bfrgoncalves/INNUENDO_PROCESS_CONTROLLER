@@ -38,14 +38,12 @@ class Job_queue(Resource):
 		commands = 'sh job_processing/get_job_status.sh ' + job_id
 		proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc1.communicate()
-
 		print stdout
-		print len(stdout.split('\t'))
+
 		if len(stdout.split('\t')) == 1:
 			commands = 'sh job_processing/get_completed_jobs.sh ' + job_id
 			proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 			stdout, stderr = proc1.communicate()
-			print stdout
 			parts = stdout.split('\t')
 			if len(parts) == 0:
 				stdout = job_id + '\tFAILED'
