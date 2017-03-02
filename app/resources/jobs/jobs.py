@@ -42,7 +42,7 @@ class Job_queue(Resource):
 		print stdout, len(stdout.split('\t'))
 
 		if len(stdout.split('\t')) == 1:
-			commands = 'sh job_processing/get_completed_jobs.sh ' + job_id
+			commands = 'sh job_processing/get_completed_jobs.sh ' + job_id.split('_')[0]
 			proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 			stdout, stderr = proc1.communicate()
 			print stdout, stderr
