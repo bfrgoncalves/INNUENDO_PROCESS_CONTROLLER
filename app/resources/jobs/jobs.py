@@ -35,7 +35,6 @@ class Job_queue(Resource):
 
 		args = job_get_parser.parse_args()
 		job_id = args.job_id
-		print job_id
 		commands = 'sh job_processing/get_job_status.sh ' + job_id
 		proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc1.communicate()
@@ -45,7 +44,6 @@ class Job_queue(Resource):
 			commands = 'sh job_processing/get_completed_jobs.sh ' + job_id.split('_')[0]
 			proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 			stdout, stderr = proc1.communicate()
-			print stdout, stderr
 			parts = stdout.split('\t')
 			if len(parts) == 0:
 				stdout = job_id + '\tFAILED'
