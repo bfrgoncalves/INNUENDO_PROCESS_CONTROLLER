@@ -39,9 +39,9 @@ class Job_queue(Resource):
 		commands = 'sh job_processing/get_job_status.sh ' + job_id
 		proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc1.communicate()
-		print stdout, stderr
+		print stdout
 
-		if len(stdout.split('\t')) == 1:
+		if len(stdout.split('\t')) == 1 or 'Invalid job id specified' in stdout:
 			commands = 'sh job_processing/get_completed_jobs.sh ' + job_id
 			proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 			stdout, stderr = proc1.communicate()
