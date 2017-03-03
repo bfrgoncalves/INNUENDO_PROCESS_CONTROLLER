@@ -29,7 +29,7 @@ job_get_parser.add_argument('username', dest='username', type=str, required=True
 def load_results_from_file(job_id, username):
 
 	user_folder = '/home/users/' + username + '/' + job_id.split('_')[0] + '/INNUca'
-	onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
+	onlyfiles = [f for f in listdir(user_folder) if isfile(join(user_folder, f))]
 
 	results = {}
 
