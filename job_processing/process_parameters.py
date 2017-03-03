@@ -38,9 +38,9 @@ def process_innuca(key_value_args, parameters, user_folder):
 
 	#after_application_steps = '; python ' + config['FILETYPES_SOFTWARE']['INNUca'][0]['app_path'] + 'combine_reports.py -i ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID')
 	after_application_steps = '; mkdir ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/INNUca'
-	after_application_steps += '; ln -s $(cat ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/*/final_assembly.txt) ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca/innuca_assembly_SLURM_ARRAY_JOB_ID.fasta;' 
-	after_application_steps += ' ln -s $(cat ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/*/samples_report.*.json) ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca/innuca_run_report_SLURM_ARRAY_JOB_ID.json;' 
-	after_application_steps += ' ln -s $(cat ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/*/combine_samples_reports.*.json) ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca/innuca_results_SLURM_ARRAY_JOB_ID.json;' 
+	after_application_steps += '; ln -s $(cat ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/final_assembly.txt) ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca/innuca_assembly_SLURM_ARRAY_JOB_ID.fasta;' 
+	after_application_steps += ' ln -s $(cat ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/samples_report.*.json) ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca/innuca_run_report_SLURM_ARRAY_JOB_ID.json;' 
+	after_application_steps += ' ln -s $(cat ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/combine_samples_reports.*.json) ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca/innuca_results_SLURM_ARRAY_JOB_ID.json;' 
 
 	#after_application_steps = 'count_assemblies=0; for file_found in $(find . -name final_assembly.txt); do (( count_assemblies++ )); ln -s $(cat $file_found) '+os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID")+'/innuca_assembly_SLURM_ARRAY_JOB_ID.fasta; done'
 

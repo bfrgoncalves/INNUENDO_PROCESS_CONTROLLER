@@ -21,6 +21,10 @@ job_get_parser.add_argument('job_id', dest='job_id', type=str, required=True, he
 #parameters -> workflow_id
 
 #get workflow, get protocols, get protocol parameters, run process
+
+#def add_job_data_to_db():
+
+
 class Job_queue(Resource):
 	
 	def post(self):
@@ -47,5 +51,7 @@ class Job_queue(Resource):
 			parts = stdout.split('\t')
 			if len(parts) == 0:
 				stdout = job_id + '\tFAILED'
+			#else:
+				#sadd_job_data_to_db
 
 		return stdout
