@@ -9,4 +9,4 @@ BLAST_PATH = '/home/innuendo/sandbox/ncbi-blast-2.5.0+/bin/blastp'
 
 #Available applications
 APPLICATIONS_ARRAY = ['INNUca', 'chewBBACA', '']
-FILETYPES_SOFTWARE = {'INNUca': [{'language':'python', '-f': '.fastq', 'path': 'dependencies/INNUca/INNUca.py'}], 'chewBBACA':[{'language': 'python', '-f': 'fasta', 'path': 'dependencies/chewBBACA/allelecall/BBACA.py'}]}
+FILETYPES_SOFTWARE = {'INNUca': [{'language':'python', '-f': '.fastq', 'app_path': 'dependencies/INNUca/', 'path': 'dependencies/INNUca/INNUca.py'}], 'chewBBACA':[{'language': 'python', '-f': 'fasta', 'app_path': 'dependencies/chewBBACA/', 'path': 'dependencies/chewBBACA/allelecall/BBACA.py'}]}
