@@ -33,11 +33,15 @@ def load_results_from_file(job_id, username):
 
 	results = {}
 
+	array_of_results = []
+
 	for i in onlyfiles:
 		print i
 		data = open(os.path.join(user_folder,i)).read()
 		json_data = json.loads(data)
-		print json_data
+		array_of_results.append(json_data)
+	
+	return array_of_results
 
 
 class Job_queue(Resource):
