@@ -29,6 +29,8 @@ def process_innuca(key_value_args, parameters, user_folder):
 	key_value_args.append('-o')
 	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID'))
 
+	key_value_args.append('--json')
+
 	config = {}
 	execfile("config.py", config)
 
