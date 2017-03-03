@@ -35,7 +35,7 @@ def load_results_from_file(job_id, username):
 
 	for i in onlyfiles:
 		print i
-		data = open(i).read()
+		data = open(os.path.join(user_folder,i)).read()
 		json_data = json.loads(data)
 		print json_data
 
