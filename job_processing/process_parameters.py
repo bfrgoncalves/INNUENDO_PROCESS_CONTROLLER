@@ -73,7 +73,7 @@ def process_chewbbaca(key_value_args, parameters, user_folder):
 	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID','listGenes.txt'))
 
 	key_value_args.append('--cpu')
-	key_value_args.append(3)
+	key_value_args.append('3')
 
 	key_value_args.append('--json')
 
