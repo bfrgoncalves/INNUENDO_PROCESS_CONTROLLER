@@ -58,7 +58,7 @@ def process_chewbbaca(key_value_args, parameters, user_folder):
 	execfile("config.py", config)
 
 	prev_application_steps = 'find ' + user_folder + '/SLURM_ARRAY_JOB_ID/*.fasta > ' + user_folder + '/SLURM_ARRAY_JOB_ID/listGenomes.txt; '
-	prev_application_steps += 'find ' + 'dependencies/chewBBACA/campy2017/genes/*.fasta > ' + user_folder + '/SLURM_ARRAY_JOB_ID/listGenes.txt;'
+	prev_application_steps += 'find ' + 'dependencies/chewBBACA/campy_scheme_2017/genes/*.fasta > ' + user_folder + '/SLURM_ARRAY_JOB_ID/listGenes.txt;'
 
 	key_value_args.append('-i')
 	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'listGenomes.txt'))
@@ -71,6 +71,8 @@ def process_chewbbaca(key_value_args, parameters, user_folder):
 
 	key_value_args.append('-g')
 	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID','listGenes.txt'))
+
+	key_value_args.append('--json')
 
 	after_application_steps = ';mkdir ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/chewBBACA; '
 
