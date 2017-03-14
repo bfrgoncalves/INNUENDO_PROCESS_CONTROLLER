@@ -38,7 +38,7 @@ def process_innuca(key_value_args, parameters, user_folder):
 
 	#after_application_steps = '; python ' + config['FILETYPES_SOFTWARE']['INNUca'][0]['app_path'] + 'combine_reports.py -i ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID')
 	after_application_steps = '; mkdir ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/INNUca;'
-	after_application_steps += ' ln -s $(cat ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/final_assembly.txt) ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca;' 
+	#after_application_steps += ' ln -s $(cat ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/final_assembly.txt) ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca;' 
 	after_application_steps += ' ln -s ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/samples_report.*.json ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca;' 
 	after_application_steps += ' ln -s ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/combine_samples_reports.*.json ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca;' 
 
@@ -58,7 +58,7 @@ def process_chewbbaca(key_value_args, parameters, user_folder):
 	execfile("config.py", config)
 
 	prev_application_steps = 'find ' + user_folder + '/SLURM_ARRAY_JOB_ID/*.fasta > ' + user_folder + '/SLURM_ARRAY_JOB_ID/listGenomes.txt; '
-	prev_application_steps += 'find ' + user_folder + '/AgalSchema/*.fasta > ' + user_folder + '/SLURM_ARRAY_JOB_ID/listGenes.txt;'
+	prev_application_steps += 'find ' + 'dependencies/chewBBACA/campy2017/genes/*.fasta > ' + user_folder + '/SLURM_ARRAY_JOB_ID/listGenes.txt;'
 
 	key_value_args.append('-i')
 	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'listGenomes.txt'))
