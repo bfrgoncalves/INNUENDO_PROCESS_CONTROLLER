@@ -78,6 +78,8 @@ def process_chewbbaca(key_value_args, parameters, user_folder):
 
 	key_value_args.append('--json')
 
+	after_application_steps = ''
+
 	#after_application_steps = ';mkdir ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/chewBBACA; '
 
 	return key_value_args, prev_application_steps, after_application_steps
