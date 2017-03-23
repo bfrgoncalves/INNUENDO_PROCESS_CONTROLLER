@@ -59,12 +59,13 @@ def process_chewbbaca(key_value_args, parameters, user_folder):
 
 	prev_application_steps = 'find ' + user_folder + '/SLURM_ARRAY_JOB_ID/*/*.fasta > ' + user_folder + '/SLURM_ARRAY_JOB_ID/listGenomes.txt; '
 	prev_application_steps += 'find ' + 'dependencies/chewBBACA/campy_scheme_2017/genes/*.fasta > ' + user_folder + '/SLURM_ARRAY_JOB_ID/listGenes.txt;'
+	prev_application_steps = 'mkdir ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/chewBBACA; '
 
 	key_value_args.append('-i')
 	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'listGenomes.txt'))
 
 	key_value_args.append('-o')
-	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID/'))
+	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID/chewBBACA'))
 
 	key_value_args.append('-b')
 	key_value_args.append(config['BLAST_PATH'])
@@ -77,7 +78,7 @@ def process_chewbbaca(key_value_args, parameters, user_folder):
 
 	key_value_args.append('--json')
 
-	after_application_steps = ';mkdir ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/chewBBACA; '
+	#after_application_steps = ';mkdir ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/chewBBACA; '
 
 	return key_value_args, prev_application_steps, after_application_steps
 	
