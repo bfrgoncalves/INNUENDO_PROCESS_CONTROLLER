@@ -71,7 +71,7 @@ class Job_queue(Resource):
 			proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 			stdout, stderr = proc1.communicate()
 			parts = stdout.split('\t')
-			print stdout
+			print stdout, stderr
 			if len(parts) == 0:
 				stdout = job_id + '\tFAILED'
 			else:
