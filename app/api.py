@@ -10,4 +10,4 @@ api = Api(app)
 api.add_resource(Job_queue, '/jobs/')
 
 #get files from user
-api.add_resource(FilesResource, '/files/')
+api.add_resource(FilesResource, '/fastqs/')
