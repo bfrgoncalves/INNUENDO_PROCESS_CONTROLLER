@@ -1,8 +1,7 @@
 from app import app
 from flask.ext.restful import Api
 
-from resources.jobs.jobs import Job_queue
-from resources.files.files import FilesResource
+from resources.jobs.jobs import Job_queue, FilesResource
 
 #Setup API
 api = Api(app)
@@ -10,4 +9,4 @@ api = Api(app)
 api.add_resource(Job_queue, '/jobs/')
 
 #get files from user
-api.add_resource(FilesResource, '/fastqs/')
+api.add_resource(FilesResource, '/jobs/fastqs/')

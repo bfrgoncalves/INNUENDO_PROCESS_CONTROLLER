@@ -24,6 +24,9 @@ job_get_parser.add_argument('username', dest='username', type=str, required=True
 #job_post_parser.add_argument('files', dest='files', type=str, required=True, help="Files to use")
 #parameters -> workflow_id
 
+file_get_parser = reqparse.RequestParser()
+file_get_parser.add_argument('username', dest='username', type=str, required=True, help="Username")
+
 #get workflow, get protocols, get protocol parameters, run process
 
 def load_results_from_file(job_id, username):
@@ -78,3 +81,15 @@ class Job_queue(Resource):
 				store_in_db = True
 
 		return {'stdout':stdout, 'store_in_db':store_in_db, 'results':results}
+
+
+class FilesResource(Resource):
+
+	def get(self):
+
+		args = file_get_parser.parse_args()
+		files_folder = os.path.join('/home/users/', args.username, config['FTP_FILES_FOLDER'], '*')
+		for fl in glob.glob(files_folder):
+		    print fl
+		
+		return 200
