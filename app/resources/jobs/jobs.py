@@ -95,7 +95,9 @@ class FilesResource(Resource):
 
 		args = file_get_parser.parse_args()
 		files_folder = os.path.join('/home/users/', args.username, config['FTP_FILES_FOLDER'], '*')
+		v_files = []
 		for fl in glob.glob(files_folder):
-		    print fl
+		    print os.path.basename(fl)
+		    v_files.append(fl)
 		
-		return 200
+		return {'files': v_files}, 200
