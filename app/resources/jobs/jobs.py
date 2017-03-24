@@ -14,6 +14,8 @@ from os.path import isfile, join
 from rq import Queue #Queue
 from redis import Redis
 
+import glob
+
 job_post_parser = reqparse.RequestParser()
 job_post_parser.add_argument('data', dest='data', type=str, required=True, help="Job Parameters")
 
