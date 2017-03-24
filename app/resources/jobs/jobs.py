@@ -29,6 +29,10 @@ file_get_parser.add_argument('username', dest='username', type=str, required=Tru
 
 #get workflow, get protocols, get protocol parameters, run process
 
+#READ CONFIG FILE
+config = {}
+execfile("config.py", config)
+
 def load_results_from_file(job_id, username):
 
 	user_folder = '/home/users/' + username + '/' + job_id.split('_')[0] + '/INNUca'
