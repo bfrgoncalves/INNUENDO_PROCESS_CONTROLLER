@@ -80,13 +80,14 @@ class Queue_Processor:
 
 			array_of_files = []
 
+			user_folder = '/home/users/' + username
+
 			for x in files:
-				array_of_files.append(files[x])
+				array_of_files.append(os.path.join(user_folder, config['FTP_FILES_FOLDER'],files[x]))
 
 			workflow_job_name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
 			workflow_filepath = os.path.join(config['JOBS_FOLDER'], username + '_' + workflow_job_name +'.txt')
 			
-			user_folder = '/home/users/' + username
 
 			key_value_args, prev_application_steps, after_application_steps = process_parameters(parameters, user_folder, workflow)
 			key_value_args, softwarePath, language = setFilesByProgram(key_value_args, workflow)

@@ -4,6 +4,9 @@ REDIS_URL = 'redis://localhost:6379'
 #Folder for files with jobs
 JOBS_FOLDER = 'job_processing/parameters_files'
 
+#Files folder (FTP)
+FTP_FILES_FOLDER = 'ftp'
+
 #BLAST PATH
 BLAST_PATH = '/home/innuendo/sandbox/ncbi-blast-2.5.0+/bin/blastp'
 

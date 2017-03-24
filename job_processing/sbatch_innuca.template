@@ -40,7 +40,7 @@ fi
 for f in "${files_to_transfer[@]}"
 do
    echo "ln -s $user_dir/$f $job_directory/${f##*/}"
-   ln -s $user_dir/$f $job_directory/${f##*/}
+   ln -s $f $job_directory/${f##*/}
 done
 
 
