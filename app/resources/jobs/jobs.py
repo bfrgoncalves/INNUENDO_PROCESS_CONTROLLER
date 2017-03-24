@@ -97,7 +97,7 @@ class FilesResource(Resource):
 		files_folder = os.path.join('/home/users/', args.username, config['FTP_FILES_FOLDER'], '*')
 		v_files = []
 		for fl in glob.glob(files_folder):
-		    print os.path.basename(fl)
-		    v_files.append(fl)
+		    #print os.path.basename(fl)
+		    v_files.append(os.path.basename(fl))
 		
 		return {'files': v_files}, 200
