@@ -37,10 +37,12 @@ execfile("config.py", config)
 
 def load_results_from_file(job_id, username):
 
-	user_folder = '/home/users/' + username + '/' + job_id.split('_')[0] + '/INNUca'
+	user_folder = '/home/users/' + username + '/' + job_id.split('_')[0] + '/*_' + job_id
 
-	onlyfiles = [f for f in listdir(user_folder) if isfile(join(user_folder, f))]
+	onlyfiles = [f for f in glob.glob(user_folder)]
 
+	print onlyfiles
+	
 	results = {}
 
 	array_of_results = []
