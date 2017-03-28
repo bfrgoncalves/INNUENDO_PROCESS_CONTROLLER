@@ -46,7 +46,7 @@ def load_results_from_file(job_id, username):
 			user_folder += '/*/*'
 			break
 
-		else if 'INNUca' in i:
+		elif 'INNUca' in i:
 			user_folder += '/*'
 			break
 
