@@ -50,17 +50,14 @@ def load_results_from_file(job_id, username):
 			user_folder += '/*'
 			break
 
-	print user_folder
-
 	onlyfiles = [f for f in glob.glob(user_folder)]
-
-	print onlyfiles
 
 	results = {}
 
 	array_of_results = []
 
 	for i in onlyfiles:
+		print i
 		data = open(i).read()
 		json_data = json.loads(data)
 		array_of_results.append(json_data)
