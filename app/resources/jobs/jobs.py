@@ -42,6 +42,7 @@ def load_results_from_file(job_id, username):
 	print user_folder
 
 	if 'chewBBACA' in user_folder:
+		print 'AQUI'
 		user_folder += '/*/*'
 
 	onlyfiles = [f for f in glob.glob(user_folder)]
