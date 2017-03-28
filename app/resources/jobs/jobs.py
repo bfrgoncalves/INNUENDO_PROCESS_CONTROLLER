@@ -42,12 +42,12 @@ def load_results_from_file(job_id, username):
 	onlyfiles = [f for f in glob.glob(user_folder)]
 
 	for i in onlyfiles:
-		if 'chewBBACA' in user_folder:
+		if 'chewBBACA' in i:
 			user_folder += '/*/*'
 			break
 
 	print user_folder
-	
+
 	onlyfiles = [f for f in glob.glob(user_folder)]
 
 	print onlyfiles
