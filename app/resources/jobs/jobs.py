@@ -39,12 +39,15 @@ def load_results_from_file(job_id, username):
 
 	user_folder = '/home/users/' + username + '/' + job_id.split('_')[0] + '/*_' + job_id + '/*'
 
+	onlyfiles = [f for f in glob.glob(user_folder)]
+
+	for i in onlyfiles:
+		if 'chewBBACA' in user_folder:
+			user_folder += '/*/*'
+			break
+
 	print user_folder
-
-	if 'chewBBACA' in user_folder:
-		print 'AQUI'
-		user_folder += '/*/*'
-
+	
 	onlyfiles = [f for f in glob.glob(user_folder)]
 
 	print onlyfiles
