@@ -69,8 +69,6 @@ class Queue_Processor:
 		count_workflows = 0;
 		workflow_filenames = [];
 
-		used_softwares = [];
-
 		for workflow in job_parameters:
 
 			key_value_args = []
@@ -78,7 +76,6 @@ class Queue_Processor:
 			parameters = json.loads(workflow['parameters'])['used Parameter']
 			files = json.loads(workflow['files'])
 			username = workflow['username']
-			used_softwares.append(json.loads(workflow['parameters'])['used Software'])
 
 			array_of_files = []
 
@@ -114,7 +111,7 @@ class Queue_Processor:
 		if stderr == '':
 			task_ids = extract_ids(stdout)
 
-		return {'task_ids':task_ids, 'used_Softwares':used_softwares}, 200
+		return {'task_ids':task_ids}, 200
 
 
 	def insert_job(self, job_parameters):
