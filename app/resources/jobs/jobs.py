@@ -59,6 +59,7 @@ def load_results_from_file(job_id, username):
 	for i in onlyfiles:
 		print i
 		data = open(i).read()
+		print data
 		json_data = json.loads(data)
 		array_of_results.append(json_data)
 	
