@@ -46,6 +46,10 @@ def load_results_from_file(job_id, username):
 			user_folder += '/*/*'
 			break
 
+		else if 'INNUca' in i:
+			user_folder += '/*'
+			break
+
 	print user_folder
 
 	onlyfiles = [f for f in glob.glob(user_folder)]
