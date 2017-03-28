@@ -43,11 +43,11 @@ def load_results_from_file(job_id, username):
 
 	for i in onlyfiles:
 		if 'chewBBACA' in i:
-			user_folder += '/*/*'
+			user_folder += '/*/*.json'
 			break
 
 		elif 'INNUca' in i:
-			user_folder += '/*'
+			user_folder += '/*.json'
 			break
 
 	onlyfiles = [f for f in glob.glob(user_folder)]
