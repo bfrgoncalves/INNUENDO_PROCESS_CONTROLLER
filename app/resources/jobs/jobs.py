@@ -61,7 +61,7 @@ def load_results_from_file(job_id, username):
 	array_of_results = []
 
 	for i in onlyfiles:
-		data = open(os.path.join(user_folder,i)).read()
+		data = open(i).read()
 		json_data = json.loads(data)
 		array_of_results.append(json_data)
 	
