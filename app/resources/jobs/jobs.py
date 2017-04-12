@@ -29,6 +29,10 @@ job_get_parser.add_argument('username', dest='username', type=str, required=True
 file_get_parser = reqparse.RequestParser()
 file_get_parser.add_argument('username', dest='username', type=str, required=True, help="Username")
 
+download_file_get_parser = reqparse.RequestParser()
+download_file_get_parser.add_argument('username', dest='username', type=str, required=True, help="Username")
+download_file_get_parser.add_argument('accession_number', dest='accession_number', type=str, required=True, help="Accession number")
+
 #get workflow, get protocols, get protocol parameters, run process
 
 #READ CONFIG FILE
@@ -115,3 +119,21 @@ class FilesResource(Resource):
 		    v_files.append(os.path.basename(fl))
 		
 		return {'files': v_files}, 200
+
+
+class DownloadFilesResource(Resource):
+
+	def get(self):
+		args = download_file_get_parser.parse_args()
+		user_folder = '/home/users/' + username + '/' + config["FTP_FILES_FOLDER"]
+		print user_folder
+		with open(os.path.join(user_folder, 'ENA_file.txt'), 'w') as ena_file:
+			ena_file.write(args.accession_number + '\n')
+		
+		commands = 'python dependencies/getSeqENA/getSeqENA.py -l ' + ena_file + ' -o ' + user_folder
+		proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		stdout, stderr = proc1.communicate()
+		print stdout, stderr
+
+
+
