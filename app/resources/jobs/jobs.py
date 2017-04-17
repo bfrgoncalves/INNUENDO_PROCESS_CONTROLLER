@@ -118,7 +118,7 @@ class FilesResource(Resource):
 		    #print os.path.basename(fl)
 		    v_files.append(os.path.basename(fl))
 		
-		return {'files': v_files}, 200
+		return {'files': sorted(v_files)}, 200
 
 
 class DownloadFilesResource(Resource):
