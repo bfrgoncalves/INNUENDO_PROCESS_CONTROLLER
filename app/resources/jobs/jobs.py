@@ -129,7 +129,7 @@ class DownloadFilesResource(Resource):
 		print user_folder
 		ena_file_txt = os.path.join(user_folder, 'ENA_file.txt')
 		with open(ena_file_txt, 'w') as ena_file:
-			ena_file.write(args.accession_numbers.split(",").join('\n') + '\n')
+			ena_file.write('\n'.join(args.accession_numbers.split(",")) + '\n')
 		
 		print ena_file_txt
 		commands = 'python dependencies/getSeqENA/getSeqENA.py -l ' + ena_file_txt + ' -o ' + user_folder
