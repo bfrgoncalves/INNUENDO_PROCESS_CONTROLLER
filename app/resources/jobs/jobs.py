@@ -125,7 +125,7 @@ class DownloadFilesResource(Resource):
 
 	def get(self):
 		args = download_file_get_parser.parse_args()
-		user_folder = '/home/users/' + username + '/' + config["FTP_FILES_FOLDER"]
+		user_folder = '/home/users/' + args.username + '/' + config["FTP_FILES_FOLDER"]
 		print user_folder
 		with open(os.path.join(user_folder, 'ENA_file.txt'), 'w') as ena_file:
 			ena_file.write(args.accession_number + '\n')
@@ -134,6 +134,8 @@ class DownloadFilesResource(Resource):
 		proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc1.communicate()
 		print stdout, stderr
+
+		return 200
 
 
 
