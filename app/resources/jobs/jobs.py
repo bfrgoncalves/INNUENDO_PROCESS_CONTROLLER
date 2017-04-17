@@ -132,9 +132,9 @@ class DownloadFilesResource(Resource):
 			ena_file.write(args.accession_number + '\n')
 		
 		print ena_file_txt
-		commands = 'python dependencies/getSeqENA/getSeqENA.py -l ' + ena_file_txt + ' -o ' + user_folder + ';'
-		commands += 'mv ' + os.path.join(user_folder, args.accession_number, args.accession_number) + '* ' + user_folder + ';'
-		commands += 'rm -r ' + os.path.join(user_folder, args.accession_number) + ';'
+		commands = 'python dependencies/getSeqENA/getSeqENA.py -l ' + ena_file_txt + ' -o ' + user_folder + ' ;'
+		commands += 'mv ' + os.path.join(user_folder, args.accession_number, args.accession_number) + '* ' + user_folder + ' ;'
+		commands += 'rm -r ' + os.path.join(user_folder, args.accession_number) + ' ;'
 		proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc1.communicate()
 		print stdout, stderr
