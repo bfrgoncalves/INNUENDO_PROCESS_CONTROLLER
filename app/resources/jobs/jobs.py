@@ -112,7 +112,7 @@ class FilesResource(Resource):
 	def get(self):
 
 		args = file_get_parser.parse_args()
-		files_folder = os.path.join('/home/users/', args.username, config['FTP_FILES_FOLDER'], '*')
+		files_folder = os.path.join('/home/users/', args.username, config['FTP_FILES_FOLDER'], '*.gz')
 		v_files = []
 		for fl in glob.glob(files_folder):
 		    #print os.path.basename(fl)
