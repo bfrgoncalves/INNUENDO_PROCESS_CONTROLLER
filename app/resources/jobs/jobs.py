@@ -31,7 +31,7 @@ file_get_parser.add_argument('username', dest='username', type=str, required=Tru
 
 download_file_get_parser = reqparse.RequestParser()
 download_file_get_parser.add_argument('username', dest='username', type=str, required=True, help="Username")
-download_file_get_parser.add_argument('accession_number', dest='accession_number', type=str, required=True, help="Accession number")
+download_file_get_parser.add_argument('accession_numbers', dest='accession_numbers', type=str, required=True, help="Accession numbers")
 
 #get workflow, get protocols, get protocol parameters, run process
 
@@ -129,7 +129,7 @@ class DownloadFilesResource(Resource):
 		print user_folder
 		ena_file_txt = os.path.join(user_folder, 'ENA_file.txt')
 		with open(ena_file_txt, 'w') as ena_file:
-			ena_file.write(args.accession_number + '\n')
+			ena_file.write(args.accession_numbers.split(",").join('\n') + '\n')
 		
 		print ena_file_txt
 		commands = 'python dependencies/getSeqENA/getSeqENA.py -l ' + ena_file_txt + ' -o ' + user_folder
@@ -137,11 +137,13 @@ class DownloadFilesResource(Resource):
 		stdout, stderr = proc1.communicate()
 		print stdout, stderr
 
-		commands = 'mv ' + os.path.join(user_folder, args.accession_number, args.accession_number) + '* ' + user_folder + ' ;'
-		commands += 'rm -r ' + os.path.join(user_folder, args.accession_number) + ' ;'
-		os.system(commands)
+		numbers = args.accession_numbers.split(",")
 
-
+		for number in numbers:
+			if number != "":
+				commands = 'mv ' + os.path.join(user_folder, number, number) + '* ' + user_folder + ' ;'
+				commands += 'rm -r ' + os.path.join(user_folder, number) + ' ;'
+				os.system(commands)
 
 		return 200
 
