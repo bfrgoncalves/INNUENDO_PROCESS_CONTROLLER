@@ -103,6 +103,7 @@ class Job_queue(Resource):
 			parts = stdout.split('\t')
 			if len(parts) == 0:
 				stdout = job_id + '\tFAILED'
+				results = [[],[]]
 			else:
 				results = load_results_from_file(job_id, args.username)
 				store_in_db = True
