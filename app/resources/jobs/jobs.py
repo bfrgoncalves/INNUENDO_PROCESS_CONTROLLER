@@ -93,8 +93,9 @@ class Job_queue(Resource):
 		stdout, stderr = proc1.communicate()
 		print stdout, len(stdout.split('\t'))
 
-		results = ''
+		results = [[],[]]
 		store_in_db = False
+
 
 		if len(stdout.split('\t')) == 1:
 			commands = 'sh job_processing/get_completed_jobs.sh ' + job_id.split('_')[0]
@@ -103,7 +104,6 @@ class Job_queue(Resource):
 			parts = stdout.split('\t')
 			if len(parts) == 0:
 				stdout = job_id + '\tFAILED'
-				results = [[],[]]
 			else:
 				results = load_results_from_file(job_id, args.username)
 				store_in_db = True
