@@ -59,6 +59,7 @@ def load_results_from_file(job_id, username):
 	results = {}
 
 	array_of_results = []
+	array_of_paths = []
 
 	for i in onlyfiles:
 		data = open(i).read()
@@ -66,8 +67,10 @@ def load_results_from_file(job_id, username):
 		json_data = json.loads(data)
 
 		array_of_results.append(json_data)
+		array_of_paths.append(i)
+
 	
-	return array_of_results
+	return [array_of_results, array_of_paths]
 
 
 class Job_queue(Resource):
@@ -104,7 +107,7 @@ class Job_queue(Resource):
 				results = load_results_from_file(job_id, args.username)
 				store_in_db = True
 
-		return {'stdout':stdout, 'store_in_db':store_in_db, 'results':results}
+		return {'stdout':stdout, 'store_in_db':store_in_db, 'results':results[0], 'paths':results[1]}
 
 
 class FilesResource(Resource):
