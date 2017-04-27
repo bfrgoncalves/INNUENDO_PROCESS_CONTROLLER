@@ -1,5 +1,6 @@
 import json
 import os
+import glob
 
 def get_protocol_parameters(parameters):
 
@@ -39,12 +40,14 @@ def process_innuca(key_value_args, parameters, user_folder):
 	#after_application_steps = '; python ' + config['FILETYPES_SOFTWARE']['INNUca'][0]['app_path'] + 'combine_reports.py -i ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID')
 	after_application_steps = '; mkdir ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/INNUca_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID;'
 	#after_application_steps += ' ln -s $(cat ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/final_assembly.txt) ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca;' 
-	after_application_steps += ' ln -s ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/samples_report.*.json ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID;' 
-	after_application_steps += ' ln -s ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/combine_samples_reports.*.json ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID;' 
-
-	#after_application_steps = 'count_assemblies=0; for file_found in $(find . -name final_assembly.txt); do (( count_assemblies++ )); ln -s $(cat $file_found) '+os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID")+'/innuca_assembly_SLURM_ARRAY_JOB_ID.fasta; done'
+	after_application_steps += ' ln -s ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/samples_report.*.json ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/run_info.json;' 
+	after_application_steps += ' ln -s ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/combine_samples_reports.*.json ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/run_stats.json;' 
 
 	#MOVE ASSEMBly to job folder
+	for file_found in glob(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID')+'/*/final_assembly.txt'):
+		with open(file_found,'r') as ff:
+			line = ff.next()
+			after_application_steps += ' ln -s ' + line +' '+ os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/run_output.json;' 
 
 	return key_value_args, prev_application_steps, after_application_steps
 
@@ -80,8 +83,19 @@ def process_chewbbaca(key_value_args, parameters, user_folder):
 
 	after_application_steps = ''
 
-	#after_application_steps = ';mkdir ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/chewBBACA; '
-
+	#MOVE RESULTS to job folder
+	for directory_found in glob(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID/chewBBACA_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID')+'/*'):
+		for file_found in glob(directory_found):
+			txt_name = ""
+			if "Status" in file_found:
+				txt_name = "run_info.json"
+			elif "alleles" in file_found:
+				txt_name = "run_output.json"
+			elif "statistics" in file_found:
+				txt_name = "run_stats.json"
+			
+			after_application_steps += ' ln -s ' + file_found +' '+ os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/'+txt_name+';'
+		
 	return key_value_args, prev_application_steps, after_application_steps
 	
 
