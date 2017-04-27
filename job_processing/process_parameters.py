@@ -49,6 +49,7 @@ def process_innuca(key_value_args, parameters, user_folder):
 			line = ff.next()
 			after_application_steps += ' ln -s ' + line +' '+ os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/run_output.json;' 
 
+	print after_application_steps
 	return key_value_args, prev_application_steps, after_application_steps
 
 
