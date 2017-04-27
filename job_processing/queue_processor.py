@@ -35,6 +35,7 @@ def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows, array_of_
 		count_tasks+=1
 	print array_to_string
 	print array_tasks
+	print array_of_files
 
 	commands = ['sh','job_processing/launch_job.sh'] + [array_to_string, ','.join(array_tasks), ','.join(array_of_files), user_folder]
 	proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
