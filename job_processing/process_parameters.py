@@ -1,6 +1,6 @@
 import json
 import os
-import glob
+from glob import glob
 
 def get_protocol_parameters(parameters):
 
