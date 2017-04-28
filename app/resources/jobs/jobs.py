@@ -64,7 +64,10 @@ def load_results_from_file(job_id, username):
 	for i in onlyfiles:
 		data = open(i).read()
 		print i
-		json_data = json.loads(data)
+		try:
+			json_data = json.loads(data)
+		except ValueError:
+			json_data = {"stats": "Not JSON"}
 
 		array_of_results.append(json_data)
 		array_of_paths.append(i)
