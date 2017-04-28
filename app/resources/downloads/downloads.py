@@ -27,12 +27,13 @@ execfile("config.py", config)
 class DownloadResults(Resource):
 
 	def get(self):
+		print "AQUI!!!"
 		args = file_get_parser.parse_args()
 		try:
-	        return send_file(args.file_path, as_attachment=True)
-	    except Exception as e:
-	    	print e
-	        self.Error(400)
+			return send_file(args.file_path, as_attachment=True)
+		except Exception as e:
+			print e
+			self.Error(400)
 
 
 
