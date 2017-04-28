@@ -30,7 +30,9 @@ class DownloadResults(Resource):
 		print "AQUI!!!"
 		args = file_get_parser.parse_args()
 		try:
-			return send_file(args.file_path, as_attachment=True)
+			response = send_file(args.file_path, as_attachment=True)
+			response.headers.add('Access-Control-Allow-Origin', '*')
+			return response
 		except Exception as e:
 			print e
 			#self.Error(400)
