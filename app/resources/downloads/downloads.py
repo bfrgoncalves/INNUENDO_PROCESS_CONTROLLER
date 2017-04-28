@@ -1,6 +1,6 @@
 from app import app
 from flask.ext.restful import Api, Resource, reqparse, abort, fields, marshal_with #filters data according to some fields
-from flask import jsonify
+from flask import jsonify, send_file
 
 from job_processing.queue_processor import Queue_Processor
 
@@ -33,7 +33,8 @@ class DownloadResults(Resource):
 			return send_file(args.file_path, as_attachment=True)
 		except Exception as e:
 			print e
-			self.Error(400)
+			#self.Error(400)
+			return 404
 
 
 
