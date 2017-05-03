@@ -24,8 +24,8 @@ myRepository = catalog.getRepository(AG_REPOSITORY, Repository.OPEN)
 myRepository.initialize()
 #dbconAg = myRepository.getConnection()
 #dedicateddbconAg = myRepository.getConnection()
-print "Repository %s is up!  It contains %i statements." % (
-	myRepository.getDatabaseName(), dbconAg.size())
+#print "Repository %s is up!  It contains %i statements." % (
+#	myRepository.getDatabaseName(), dbconAg.size())
 
 print '####################################################'
 
