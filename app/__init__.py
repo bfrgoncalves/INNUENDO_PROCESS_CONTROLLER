@@ -1,8 +1,9 @@
 from flask import Flask
 import os 
+import franz
 
-from flask.franz.openrdf.sail.allegrographserver import AllegroGraphServer
-from flask.franz.openrdf.repository.repository import Repository
+from franz.openrdf.sail.allegrographserver import AllegroGraphServer
+from franz.openrdf.repository.repository import Repository
 from franz.miniclient import repository
 from config import basedir,AG_HOST,AG_PORT,AG_REPOSITORY,AG_USER,AG_PASSWORD
 
