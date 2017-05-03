@@ -64,10 +64,10 @@ def get_process_input(project_id, pipeline_id, process_id):
 
 		result.close()
 
-		if(len(jsonResult) == 0){
+		if len(jsonResult) == 0:
 			sys.stderr.write(400)
-		}
-		else sys.stdout.write(jsonResult[0])
+		else:
+			sys.stdout.write(jsonResult[0])
 		#print jsonResult["file3"]
 	except Exception as e:
 		sys.stderr.write(404)
