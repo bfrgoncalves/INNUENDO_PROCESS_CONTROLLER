@@ -17,11 +17,11 @@ app = Flask(__name__)
 app.config.from_object('config') #Reads the config file located at ../
 
 #setup agraph
-server= AllegroGraphServer(AG_HOST, AG_PORT, AG_USER, AG_PASSWORD)
-catalog = server.openCatalog()             ## default rootCatalog
+#server= AllegroGraphServer(AG_HOST, AG_PORT, AG_USER, AG_PASSWORD)
+#catalog = server.openCatalog()             ## default rootCatalog
 #print "Available repositories in catalog '%s':  %s" % (catalog.getName(), catalog.listRepositories())    
-myRepository = catalog.getRepository(AG_REPOSITORY, Repository.OPEN)
-myRepository.initialize()
+#myRepository = catalog.getRepository(AG_REPOSITORY, Repository.OPEN)
+#myRepository.initialize()
 #dbconAg = myRepository.getConnection()
 #dedicateddbconAg = myRepository.getConnection()
 #print "Repository %s is up!  It contains %i statements." % (
