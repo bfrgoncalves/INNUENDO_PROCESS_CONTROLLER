@@ -63,7 +63,7 @@ def get_process_input(project_id, pipeline_id, process_id):
 		jsonResult=parseAgraphQueryRes(result,["file3"])
 
 		result.close()
-
+		sys.stdout.write(jsonResult["file3"])
 		#print jsonResult["file3"]
 	except Exception as e:
 		sys.stderr.write('Erro: {e}'.format(e=e))
