@@ -22,8 +22,8 @@ catalog = server.openCatalog()             ## default rootCatalog
 #print "Available repositories in catalog '%s':  %s" % (catalog.getName(), catalog.listRepositories())    
 myRepository = catalog.getRepository(AG_REPOSITORY, Repository.OPEN)
 myRepository.initialize()
-dbconAg = myRepository.getConnection()
-dedicateddbconAg = myRepository.getConnection()
+#dbconAg = myRepository.getConnection()
+#dedicateddbconAg = myRepository.getConnection()
 print "Repository %s is up!  It contains %i statements." % (
 	myRepository.getDatabaseName(), dbconAg.size())
 
