@@ -4,7 +4,7 @@ import argparse
 
 from queryParse2Json import parseAgraphStatementsRes,parseAgraphQueryRes
 
-from config import obo,localNSpace,protocolsTypes,processTypes,processMessages
+#from config import obo,localNSpace,protocolsTypes,processTypes,processMessages
 from franz.openrdf.vocabulary.rdf import RDF
 from franz.openrdf.vocabulary.xmlschema import XMLSchema
 from franz.openrdf.query.query import QueryLanguage
@@ -14,6 +14,11 @@ from franz.openrdf.model import URI
 config = {}
 execfile("config.py", config)
 
+obo = config["obo"]
+localNSpace = config["localNSpace"]
+protocolsTypes = config["protocolsTypes"]
+processTypes = config["processTypes"]
+processMessages = config["processMessages"]
 
 def get_process_input(project_id, pipeline_id, process_id):
 
