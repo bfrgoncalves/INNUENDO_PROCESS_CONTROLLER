@@ -63,10 +63,14 @@ def get_process_input(project_id, pipeline_id, process_id):
 		jsonResult=parseAgraphQueryRes(result,["file3"])
 
 		result.close()
-		sys.stdout.write(jsonResult[0])
+
+		if(len(jsonResult) == 0){
+			sys.stderr.write(400)
+		}
+		else sys.stdout.write(jsonResult[0])
 		#print jsonResult["file3"]
 	except Exception as e:
-		sys.stderr.write('Erro: {e}'.format(e=e))
+		sys.stderr.write(404)
 
 
 
@@ -107,10 +111,11 @@ def set_process_output(project_id, pipeline_id, process_id, run_info, run_stats,
 		dbconAg.add(stmt1)
 		dbconAg.add(stmt2)
 		dbconAg.add(stmt3)
-		return 202
+		
+		sys.stdout.write(202)
 	except Exception as e:
 		#print "ERROR", e
-		return 404
+		sys.stdout.write(404)
 
 
 def main():
