@@ -48,7 +48,7 @@ from franz.openrdf.query.query import QueryLanguage
 from franz.openrdf.model import URI
 
 
-def get_process_input(project_id, pipeline_id, process_id):
+def get_process_input(project_id, pipeline_id, process_id, run_info, run_stats, output):
 
 	try:
 		procStr = localNSpace + "projects/" + str(project_id) + "/pipelines/" + str(pipeline_id) + "/processes/" + str(process_id)
@@ -75,7 +75,7 @@ def get_process_input(project_id, pipeline_id, process_id):
 
 
 
-def set_process_output(project_id, pipeline_id, process_id, output):
+def set_process_output(project_id, pipeline_id, process_id, run_info, run_stats, output):
 
 	try:
 		#Agraph
@@ -90,13 +90,13 @@ def set_process_output(project_id, pipeline_id, process_id, output):
 
 		outputURI = dbconAg.createURI(outputURI[0]['obj'])
 
-		runInfo = dbconAg.createLiteral((args.run_info), datatype=XMLSchema.STRING)
+		runInfo = dbconAg.createLiteral((run_info), datatype=XMLSchema.STRING)
 		runInfoProp = dbconAg.createURI(namespace=obo, localname="NGS_0000092")
 
-		runStats = dbconAg.createLiteral((args.run_stats), datatype=XMLSchema.STRING)
+		runStats = dbconAg.createLiteral((run_stats), datatype=XMLSchema.STRING)
 		runStatsProp = dbconAg.createURI(namespace=obo, localname="NGS_0000093")
 
-		runFile = dbconAg.createLiteral((args.output), datatype=XMLSchema.STRING)
+		runFile = dbconAg.createLiteral((output), datatype=XMLSchema.STRING)
 		runFileProp = dbconAg.createURI(namespace=obo, localname="NGS_0000094")
 
 		dbconAg.remove(outputURI, runInfoProp, None)
