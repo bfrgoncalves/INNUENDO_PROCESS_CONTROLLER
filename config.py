@@ -1,4 +1,5 @@
 import os
+basedir = os.path.abspath(os.path.dirname("__file__")) #base directory of app structure
 
 #CONFIG file for INNUENDO Job Controller
 REDIS_URL = 'redis://localhost:6379'
