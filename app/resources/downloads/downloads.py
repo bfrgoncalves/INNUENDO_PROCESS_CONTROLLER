@@ -27,7 +27,6 @@ execfile("config.py", config)
 class DownloadResults(Resource):
 
 	def get(self):
-		print "AQUI!!!"
 		args = file_get_parser.parse_args()
 		try:
 			response = send_file(args.file_path, as_attachment=True)
