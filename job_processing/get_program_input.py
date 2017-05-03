@@ -51,9 +51,9 @@ from franz.openrdf.model import URI
 
 def get_process_input(project_id, pipeline_id, process_id):
 
-	sys.stdout('STDout')
+	sys.stdout.write('STDout')
 	try:
-		sys.stdout('TRYEEE')
+		sys.stdout.write('TRYEEE')
 		procStr = localNSpace + "projects/" + str(project_id) + "/pipelines/" + str(pipeline_id) + "/processes/" + str(process_id)
 		queryString = "SELECT ?file1 ?file2 ?file3   WHERE {<"+procStr+"> obo:RO_0002233 ?in. ?in obo:NGS_0000092 ?file1.?in obo:NGS_0000093 ?file2.?in obo:NGS_0000094 ?file3.}"
 		#print queryString
@@ -66,7 +66,7 @@ def get_process_input(project_id, pipeline_id, process_id):
 
 		#print jsonResult["file3"]
 	except Exception as e:
-		sys.stderr('Erro: {e}'.format(e=e))
+		sys.stderr.write('Erro: {e}'.format(e=e))
 
 
 
