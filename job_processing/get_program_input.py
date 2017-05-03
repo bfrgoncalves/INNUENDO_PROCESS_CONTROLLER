@@ -2,7 +2,7 @@ import os
 import requests
 import argparse
 
-from app.utils.queryParse2Json import parseAgraphStatementsRes,parseAgraphQueryRes
+from queryParse2Json import parseAgraphStatementsRes,parseAgraphQueryRes
 
 from config import obo,localNSpace,protocolsTypes,processTypes,processMessages
 from franz.openrdf.vocabulary.rdf import RDF
