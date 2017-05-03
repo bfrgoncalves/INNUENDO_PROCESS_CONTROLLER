@@ -33,7 +33,7 @@ class DownloadResults(Resource):
 			response = send_file(args.file_path, as_attachment=True)
 			response.headers.add('Access-Control-Allow-Origin', '*')
 			response.headers.add('Content-Type', 'application/force-download')
-			return response, 200
+			return response
 		except Exception as e:
 			print e
 			#self.Error(400)

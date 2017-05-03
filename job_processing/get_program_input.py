@@ -48,7 +48,7 @@ from franz.openrdf.query.query import QueryLanguage
 from franz.openrdf.model import URI
 
 
-def get_process_input(project_id, pipeline_id, process_id, run_info, run_stats, output):
+def get_process_input(project_id, pipeline_id, process_id):
 
 	try:
 		procStr = localNSpace + "projects/" + str(project_id) + "/pipelines/" + str(pipeline_id) + "/processes/" + str(process_id)
@@ -58,20 +58,12 @@ def get_process_input(project_id, pipeline_id, process_id, run_info, run_stats, 
 		result = tupleQuery.evaluate()
 		
 		jsonResult=parseAgraphQueryRes(result,["file3"])
-		print jsonResult
-		
-		'''file_out = ""
-		for bindingSet in result:
-			print bindingSet
-			file_out = bindingSet["file3"] #output_file
-		'''
+
 		result.close()
 
-		
-		return jsonResult, 200
+		print jsonResult["file3"]
 	except Exception as e:
-		print "ERROR", e
-		return 404
+		print e
 
 
 
@@ -132,14 +124,11 @@ def main():
 
 	args = parser.parse_args()
 
-	if args.t == 'output' and not args.v1:
-		get_process_output(args.project, args.pipeline, args.process)
-	elif args.t == 'input' and not args.v1:
+	if args.t == 'input' and not args.v1:
 		get_process_input(args.project, args.pipeline, args.process)
 	elif args.t == 'output' and args.v1:
 		set_process_output(args.project, args.pipeline, args.process, args.v1, args.v2, args.v3)
-	elif args.t == 'input' and args.v1:
-		set_process_input(args.project, args.pipeline, args.process, args.v1, args.v2, args.v3)
+
 
 
 
