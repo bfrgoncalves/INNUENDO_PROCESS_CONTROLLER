@@ -1,3 +1,5 @@
+import os
+
 #CONFIG file for INNUENDO Job Controller
 REDIS_URL = 'redis://localhost:6379'
 
