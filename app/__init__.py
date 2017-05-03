@@ -23,4 +23,5 @@ dedicateddbconAg = myRepository.getConnection()
 print "Repository %s is up!  It contains %i statements." % (
 	myRepository.getDatabaseName(), dbconAg.size())
 
+print '####################################################'
 from app import api
