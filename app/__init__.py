@@ -6,7 +6,7 @@ from franz.openrdf.repository.repository import Repository
 from franz.miniclient import repository
 from config import basedir,AG_HOST,AG_PORT,AG_REPOSITORY,AG_USER,AG_PASSWORD
 
-from queryParse2Json import parseAgraphStatementsRes,parseAgraphQueryRes
+#from queryParse2Json import parseAgraphStatementsRes,parseAgraphQueryRes
 
 #from config import obo,localNSpace,protocolsTypes,processTypes,processMessages
 
