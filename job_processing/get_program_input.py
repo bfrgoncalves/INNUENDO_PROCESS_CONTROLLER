@@ -70,7 +70,7 @@ def get_process_input(project_id, pipeline_id, process_id, run_info, run_stats, 
 		
 		return jsonResult, 200
 	except Exception as e:
-		print e
+		print "ERROR", e
 		return 404
 
 
@@ -114,7 +114,7 @@ def set_process_output(project_id, pipeline_id, process_id, run_info, run_stats,
 		dbconAg.add(stmt3)
 		return 202
 	except Exception as e:
-		print e
+		print "ERROR", e
 		return 404
 
 
