@@ -7,6 +7,10 @@ from franz.openrdf.repository.repository import Repository
 from franz.miniclient import repository
 from config import basedir,AG_HOST,AG_PORT,AG_REPOSITORY,AG_USER,AG_PASSWORD
 
+#from queryParse2Json import parseAgraphStatementsRes,parseAgraphQueryRes
+
+#from config import obo,localNSpace,protocolsTypes,processTypes,processMessages
+
 #print config
 #Setup app
 app = Flask(__name__)
@@ -24,4 +28,10 @@ print "Repository %s is up!  It contains %i statements." % (
 	myRepository.getDatabaseName(), dbconAg.size())
 
 print '####################################################'
+
+from franz.openrdf.vocabulary.rdf import RDF
+from franz.openrdf.vocabulary.xmlschema import XMLSchema
+from franz.openrdf.query.query import QueryLanguage
+from franz.openrdf.model import URI
+
 from app import api
