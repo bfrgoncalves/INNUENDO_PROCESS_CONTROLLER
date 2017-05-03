@@ -34,4 +34,6 @@ from franz.openrdf.vocabulary.xmlschema import XMLSchema
 from franz.openrdf.query.query import QueryLanguage
 from franz.openrdf.model import URI
 
+print "BABABAB"
+
 from app import api
