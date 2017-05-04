@@ -74,7 +74,7 @@ def get_process_input(project_id, pipeline_id, process_id):
 
 
 
-def set_process_output(project_id, pipeline_id, process_id, run_info, run_stats, output):
+def set_process_output(project_id, pipeline_id, process_id, run_info, run_stats, output, log_file):
 
 	try:
 		#Agraph
@@ -134,6 +134,7 @@ def main():
 	parser.add_argument('-v1', type=str, help='path value for file1', required=False)
 	parser.add_argument('-v2', type=str, help='path value for file2', required=False)
 	parser.add_argument('-v3', type=str, help='path value for file3', required=False)
+	parser.add_argument('-v4', type=str, help='path value for file4', required=False)
 	parser.add_argument('-t', type=str, help='type of set (input or output)', required=True)
 
 	args = parser.parse_args()
@@ -141,7 +142,7 @@ def main():
 	if args.t == 'input' and not args.v1:
 		get_process_input(args.project, args.pipeline, args.process)
 	elif args.t == 'output' and args.v1:
-		set_process_output(args.project, args.pipeline, args.process, args.v1, args.v2, args.v3)
+		set_process_output(args.project, args.pipeline, args.process, args.v1, args.v2, args.v3, args.v4)
 
 
 
