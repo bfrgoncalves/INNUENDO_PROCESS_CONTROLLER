@@ -54,7 +54,7 @@ def get_process_input(project_id, pipeline_id, process_id):
 	try:
 		procStr = localNSpace + "projects/" + str(project_id) + "/pipelines/" + str(pipeline_id) + "/processes/" + str(process_id)
 		queryString = "SELECT ?typelabel ?file1 ?file2 ?file3 WHERE{<"+procStr+"> obo:RO_0002233 ?in. ?in a ?type.?type rdfs:label ?typelabel. OPTIONAL { ?in obo:NGS_0000092 ?file1; obo:NGS_0000093 ?file2; obo:NGS_0000094 ?file3; }}"
-
+		print queryString
 		#queryString = "SELECT ?file1 ?file2 ?file3 ?type   WHERE {<"+procStr+"> obo:RO_0002233 ?in. ?in obo:NGS_0000092 ?file1.?in obo:NGS_0000093 ?file2.?in obo:NGS_0000094 ?file3. ?in a ?type}"
 		#print queryString
 		tupleQuery = dbconAg.prepareTupleQuery(QueryLanguage.SPARQL, queryString)
