@@ -67,7 +67,7 @@ def get_process_input(project_id, pipeline_id, process_id):
 		if "biosamples sample" in jsonResult[0]["label"]:
 			sys.stdout.write('FirstProcess')
 		elif "read" in jsonResult[0]["label"]:
-			sys.stdout.write(jsonResult[0]["file_3"])
+			sys.stdout.write(jsonResult[0]["file_3"].split('"')[1])
 		#print jsonResult["file3"]
 	except Exception as e:
 		sys.stderr.write("404")
