@@ -70,6 +70,7 @@ def get_process_input(project_id, pipeline_id, process_id):
 			sys.stdout.write(jsonResult[0]["file3"])
 		#print jsonResult["file3"]
 	except Exception as e:
+		print jsonResult
 		sys.stderr.write("404")
 		sys.stderr.write(e)
 
