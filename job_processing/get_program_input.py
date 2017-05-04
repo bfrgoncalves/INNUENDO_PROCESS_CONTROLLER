@@ -51,9 +51,7 @@ from franz.openrdf.model import URI
 
 def get_process_input(project_id, pipeline_id, process_id):
 
-	sys.stdout.write('STDout')
 	try:
-		sys.stdout.write('TRYEEE')
 		procStr = localNSpace + "projects/" + str(project_id) + "/pipelines/" + str(pipeline_id) + "/processes/" + str(process_id)
 		queryString = "SELECT ?file1 ?file2 ?file3   WHERE {<"+procStr+"> obo:RO_0002233 ?in. ?in obo:NGS_0000092 ?file1.?in obo:NGS_0000093 ?file2.?in obo:NGS_0000094 ?file3.}"
 		#print queryString
@@ -65,12 +63,12 @@ def get_process_input(project_id, pipeline_id, process_id):
 		result.close()
 
 		if len(jsonResult) == 0:
-			sys.stderr.write(400)
+			sys.stderr.write("400")
 		else:
 			sys.stdout.write(jsonResult[0])
 		#print jsonResult["file3"]
 	except Exception as e:
-		sys.stderr.write(404)
+		sys.stderr.write("404")
 
 
 
@@ -112,10 +110,10 @@ def set_process_output(project_id, pipeline_id, process_id, run_info, run_stats,
 		dbconAg.add(stmt2)
 		dbconAg.add(stmt3)
 		
-		sys.stdout.write(202)
+		sys.stdout.write("202")
 	except Exception as e:
 		#print "ERROR", e
-		sys.stdout.write(404)
+		sys.stdout.write("404")
 
 
 def main():
