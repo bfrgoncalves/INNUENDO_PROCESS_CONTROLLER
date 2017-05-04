@@ -60,7 +60,7 @@ def get_process_input(project_id, pipeline_id, process_id):
 		tupleQuery = dbconAg.prepareTupleQuery(QueryLanguage.SPARQL, queryString)
 		result = tupleQuery.evaluate()
 		
-		jsonResult=parseAgraphQueryRes(result,["file3", ["typelabel"]])
+		jsonResult=parseAgraphQueryRes(result,["file3", "typelabel"])
 
 		result.close()
 		print jsonResult[0]["typelabel"]
@@ -70,9 +70,7 @@ def get_process_input(project_id, pipeline_id, process_id):
 			sys.stdout.write(jsonResult[0]["file3"])
 		#print jsonResult["file3"]
 	except Exception as e:
-		print jsonResult
 		sys.stderr.write("404")
-		sys.stderr.write("Erro: {e}".format(e=e))
 
 
 

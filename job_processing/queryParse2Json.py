@@ -4,7 +4,6 @@ import json
 def parseAgraphQueryRes(result,listValuesToGet):
 	resultList=[]
 	for bindingSet in result:
-			print bindingSet
 			auxDict={}
 			
 			for elem in listValuesToGet:
