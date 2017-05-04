@@ -64,9 +64,9 @@ def get_process_input(project_id, pipeline_id, process_id):
 
 		result.close()
 
-		if "biosamples sample" in jsonResult[0]["typelabel"]:
+		if "biosamples sample" in jsonResult[0]["label"]:
 			sys.stdout.write('FirstProcess')
-		elif "read" in jsonResult[0]["typelabel"]:
+		elif "read" in jsonResult[0]["label"]:
 			sys.stdout.write(jsonResult[0]["file3"])
 		#print jsonResult["file3"]
 	except Exception as e:
@@ -98,19 +98,25 @@ def set_process_output(project_id, pipeline_id, process_id, run_info, run_stats,
 		runFile = dbconAg.createLiteral((output), datatype=XMLSchema.STRING)
 		runFileProp = dbconAg.createURI(namespace=obo, localname="NGS_0000094")
 
+		logFile = dbconAg.createLiteral((log_file), datatype=XMLSchema.STRING)
+		logFileProp = dbconAg.createURI(namespace=obo, localname="NGS_0000096")
+
 		dbconAg.remove(outputURI, runInfoProp, None)
 		dbconAg.remove(outputURI, runStatsProp, None)
 		dbconAg.remove(outputURI, runFileProp, None)
+		dbconAg.remove(outputURI, logFileProp, None)
 
 		#add outputs paths to process
 		stmt1 = dbconAg.createStatement(outputURI, runInfoProp, runInfo)
 		stmt2 = dbconAg.createStatement(outputURI, runStatsProp, runStats)
 		stmt3 = dbconAg.createStatement(outputURI, runFileProp, runFile)
+		stmt4 = dbconAg.createStatement(outputURI, logFileProp, logFile)
 
 		#send to allegro
 		dbconAg.add(stmt1)
 		dbconAg.add(stmt2)
 		dbconAg.add(stmt3)
+		dbconAg.add(stmt4)
 		
 		sys.stdout.write("202")
 	except Exception as e:
