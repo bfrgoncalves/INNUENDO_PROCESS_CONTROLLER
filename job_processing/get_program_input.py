@@ -63,10 +63,10 @@ def get_process_input(project_id, pipeline_id, process_id):
 		jsonResult=parseAgraphQueryRes(result,["file3", "typelabel"])
 
 		result.close()
-		print jsonResult[0]["typelabel"]
-		if jsonResult[0]["typelabel"] == "biosamples sample":
+
+		if "biosamples sample" in jsonResult[0]["typelabel"]:
 			sys.stdout.write('FirstProcess')
-		elif jsonResult[0]["typelabel"] == "read":
+		elif "read" in jsonResult[0]["typelabel"]:
 			sys.stdout.write(jsonResult[0]["file3"])
 		#print jsonResult["file3"]
 	except Exception as e:
