@@ -133,16 +133,14 @@ class DownloadFilesResource(Resource):
 	def get(self):
 		args = download_file_get_parser.parse_args()
 		user_folder = '/home/users/' + args.username + '/' + config["FTP_FILES_FOLDER"]
-		print user_folder
 		ena_file_txt = os.path.join(user_folder, 'ENA_file.txt')
+		
 		with open(ena_file_txt, 'w') as ena_file:
 			ena_file.write('\n'.join(args.accession_numbers.split(",")) + '\n')
 		
-		print ena_file_txt
 		commands = 'python dependencies/getSeqENA/getSeqENA.py -l ' + ena_file_txt + ' -o ' + user_folder
 		proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc1.communicate()
-		print stdout, stderr
 
 		numbers = args.accession_numbers.split(",")
 
@@ -152,7 +150,7 @@ class DownloadFilesResource(Resource):
 				commands += 'rm -r ' + os.path.join(user_folder, number) + ' ;'
 				os.system(commands)
 
-		return 200
+		return {'stdout':stdout, 'stderr':stderr}, 200
 
 
 
