@@ -124,9 +124,8 @@ class Queue_Processor:
 			ena_file.write('\n'.join(download_parameters.accession_numbers.split(",")) + '\n')
 		
 		f = open(os.path.join(user_folder, output_id + '_download.txt'), "w")
-		commands = 'python dependencies/getSeqENA/getSeqENA.py -l ' + ena_file_txt + ' -o ' + user_folder + ' > ' + os.path.join(user_folder, output_id + '_download.txt')
-		os.system(commands)
-		#proc1 = subprocess.Popen(commands.split(' '), stdout=f)
+		commands = 'python dependencies/getSeqENA/getSeqENA.py -l ' + ena_file_txt + ' -o ' + user_folder
+		proc1 = subprocess.Popen(commands.split(' '), stdout=f)
 		#stdout, stderr = proc1.communicate()
 
 		'''numbers = download_parameters.accession_numbers.split(",")
