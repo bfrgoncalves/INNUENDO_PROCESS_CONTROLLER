@@ -130,27 +130,12 @@ class FilesResource(Resource):
 
 class DownloadFilesResource(Resource):
 
-	def get(self):
+	def post(self):
 		args = download_file_get_parser.parse_args()
-		user_folder = '/home/users/' + args.username + '/' + config["FTP_FILES_FOLDER"]
-		ena_file_txt = os.path.join(user_folder, 'ENA_file.txt')
-		
-		with open(ena_file_txt, 'w') as ena_file:
-			ena_file.write('\n'.join(args.accession_numbers.split(",")) + '\n')
-		
-		commands = 'python dependencies/getSeqENA/getSeqENA.py -l ' + ena_file_txt + ' -o ' + user_folder
-		proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		stdout, stderr = proc1.communicate()
-
-		numbers = args.accession_numbers.split(",")
-
-		for number in numbers:
-			if number != "":
-				commands = 'mv ' + os.path.join(user_folder, number, number) + '* ' + user_folder + ' ;'
-				commands += 'rm -r ' + os.path.join(user_folder, number) + ' ;'
-				os.system(commands)
-
-		return {'stdout':stdout, 'stderr':stderr}, 200
+		innuendo_processor = Queue_Processor()
+		output = innuendo_processor.download_accessions(download_parameters=args)
+		print "OUTPUT", output
+		return output, 200
 
 
 

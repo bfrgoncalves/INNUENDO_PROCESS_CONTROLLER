@@ -111,8 +111,41 @@ class Queue_Processor:
 
 		return {'task_ids':task_ids}, 200
 
+	
+
+	def process_download_accessions(self, download_parameters):
+
+		user_folder = '/home/users/' + download_parameters.username + '/' + config["FTP_FILES_FOLDER"]
+		ena_file_txt = os.path.join(user_folder, 'ENA_file.txt')
+
+		output_id = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5))
+		
+		with open(ena_file_txt, 'w') as ena_file:
+			ena_file.write('\n'.join(download_parameters.accession_numbers.split(",")) + '\n')
+		
+		commands = 'python dependencies/getSeqENA/getSeqENA.py -l ' + ena_file_txt + ' -o ' + user_folder + ' > ' + os.path.join(user_folder, output_id + '_download.txt')
+		proc1 = subprocess.Popen(commands.split(' '))
+		#stdout, stderr = proc1.communicate()
+
+		'''numbers = download_parameters.accession_numbers.split(",")
+
+		for number in numbers:
+			if number != "":
+				commands = 'mv ' + os.path.join(user_folder, number, number) + '* ' + user_folder + ' ;'
+				commands += 'rm -r ' + os.path.join(user_folder, number) + ' ;'
+				os.system(commands)'''
+
+		return {'output_file_id': output_id + '_download.txt'}, 200
+
+	
 
 	def insert_job(self, job_parameters):
 		#Insert jobs in queue
 		jobID, code = self.process_job(job_parameters)
 		return jobID
+
+	
+	def download_accessions(self, download_parameters):
+		#Insert jobs in queue
+		output, code = self.process_download_accessions(download_parameters)
+		return output
