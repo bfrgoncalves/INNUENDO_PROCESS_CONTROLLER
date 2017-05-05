@@ -137,5 +137,15 @@ class DownloadFilesResource(Resource):
 		print "OUTPUT", output
 		return output, 200
 
+	def get(self):
+		args = download_file_get_parser.parse_args()
+		file_array = []
+		file_folder = os.path.join('/home/users/', args.username, config['FTP_FILES_FOLDER'], args.accession_numbers)
+		with open(file_folder, 'r') as file_to_send:
+			for line in file_to_send:
+				file_array.push(line)
+		
+		return {'output':file_array}, 200
+
 
 
