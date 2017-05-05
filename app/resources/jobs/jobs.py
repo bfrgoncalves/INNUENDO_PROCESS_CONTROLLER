@@ -143,7 +143,7 @@ class DownloadFilesResource(Resource):
 		file_folder = os.path.join('/home/users/', args.username, config['FTP_FILES_FOLDER'], args.accession_numbers)
 		with open(file_folder, 'r') as file_to_send:
 			for line in file_to_send:
-				file_array.push(line)
+				file_array.append(line)
 		
 		return {'output':file_array}, 200
 
