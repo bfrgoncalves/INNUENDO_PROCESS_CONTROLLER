@@ -128,6 +128,11 @@ class Queue_Processor:
 		proc1 = subprocess.Popen(commands.split(' '), stdout=f)
 		#stdout, stderr = proc1.communicate()
 
+		# Poll process for new output until finished
+	    for line in iter(process.stdout.readline, ""):
+	        print line,
+	        output += line
+
 		'''numbers = download_parameters.accession_numbers.split(",")
 
 		for number in numbers:

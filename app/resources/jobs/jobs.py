@@ -61,6 +61,8 @@ def load_results_from_file(job_id, username):
 	array_of_results = []
 	array_of_paths = []
 
+	print onlyfiles
+
 	for i in onlyfiles:
 		data = open(i).read()
 		print i
