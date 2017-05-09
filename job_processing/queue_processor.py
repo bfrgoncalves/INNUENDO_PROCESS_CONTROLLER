@@ -128,19 +128,6 @@ class Queue_Processor:
 		proc1 = subprocess.Popen(commands.split(' '), stdout=f)
 		#stdout, stderr = proc1.communicate()
 
-		# Poll process for new output until finished
-	    for line in iter(process.stdout.readline, ""):
-	        print line,
-	        output += line
-
-		'''numbers = download_parameters.accession_numbers.split(",")
-
-		for number in numbers:
-			if number != "":
-				commands = 'mv ' + os.path.join(user_folder, number, number) + '* ' + user_folder + ' ;'
-				commands += 'rm -r ' + os.path.join(user_folder, number) + ' ;'
-				os.system(commands)'''
-
 		return {'output_file_id': output_id + '_download.txt'}, 200
 
 	
