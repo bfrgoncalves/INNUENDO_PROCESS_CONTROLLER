@@ -96,7 +96,7 @@ def process_chewbbaca(key_value_args, parameters, user_folder, workflow):
 	key_value_args.append('3')
 
 	#force proceed if already exist chewBBACA files before running
-	key_value_args.append('--fc')
+	#key_value_args.append('--fc')
 
 	key_value_args.append('--json')
 
@@ -108,6 +108,7 @@ def process_chewbbaca(key_value_args, parameters, user_folder, workflow):
 	after_application_steps = ''
 
 	#MOVE RESULTS to job folder
+	after_application_steps += '; rm -rf dependencies/chewBBACA/campy_scheme_2017/genes/temp'
 	after_application_steps += '; mv ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID/chewBBACA_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID')+'/results_*/reportStatus.json '+ os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/run_info.json;'
 	after_application_steps += ' mv ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID/chewBBACA_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID')+'/results_*/results_alleles.json '+ os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/run_output.json;'
 	after_application_steps += ' mv ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID/chewBBACA_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID')+'/results_*/results_statistics.json '+ os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/run_stats.json;'
