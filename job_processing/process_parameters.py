@@ -95,6 +95,9 @@ def process_chewbbaca(key_value_args, parameters, user_folder, workflow):
 	key_value_args.append('--cpu')
 	key_value_args.append('3')
 
+	#force proceed if already exist chewBBACA files before running
+	key_value_args.append('--fc')
+
 	key_value_args.append('--json')
 
 	#Log of the program run
