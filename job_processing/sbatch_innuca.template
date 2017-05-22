@@ -18,11 +18,12 @@
 #SBATCH --array=NUMBEROFTASKS
 
 #Simultaious tasks
-#SBATCH --ntasks=1
+#SBATCH --ntasks=NUMBEROFTASKS
 
 # run as user
-export PATH="/home/innuendo/.linuxbrew/bin:$PATH"
-export PATH="/home/innuendo/.linuxbrew/Cellar/mlst/2.6/bin:$PATH"
+export PATH="/home/debian/.linuxbrew/bin:$PATH"
+export PATH="/home/debian/.linuxbrew/Cellar/mlst/2.6/bin:$PATH"
+export PATH="/home/debian/ncbi-blast-2.6.0+/bin:$PATH"
 
 # run the application
 IFS='\#' read -r -a array <<< ARRAY_STRING
