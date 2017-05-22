@@ -30,6 +30,8 @@ def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows, array_of_
 	array_to_string = '\#'.join(workflow_path_array)
 	array_tasks=[]
 	count_tasks=0
+	print "######"
+	print numberOfWorkflows
 	for a in range(0, numberOfWorkflows):
 		array_tasks.append(str(count_tasks))
 		count_tasks+=1
