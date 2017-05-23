@@ -29,10 +29,10 @@ def setFilesByProgram(key_value_args, workflow):
 def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows, array_of_files):
 	array_to_string = '\#'.join(workflow_path_array)
 	array_tasks=[]
-	count_tasks=0
+	count_tasks=1
 	print "######"
 	print numberOfWorkflows
-	for a in range(0, numberOfWorkflows+1):
+	for a in range(0, numberOfWorkflows):
 		array_tasks.append(str(count_tasks))
 		count_tasks+=1
 
