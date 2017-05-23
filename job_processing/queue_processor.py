@@ -29,16 +29,18 @@ def setFilesByProgram(key_value_args, workflow):
 def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows, array_of_files):
 	array_to_string = '\#'.join(workflow_path_array)
 	array_tasks=[]
-	count_tasks=1
+	count_tasks=0
+	total_tasks=1
 	print "######"
 	print numberOfWorkflows
 	for a in range(0, numberOfWorkflows):
 		array_tasks.append(str(count_tasks))
 		count_tasks+=1
+		total_tasks+=1
 
 	print "##################"
 	print array_tasks
-	commands = ['sh','job_processing/launch_job.sh'] + [array_to_string, ','.join(array_tasks), str(count_tasks), ','.join(array_of_files), user_folder]
+	commands = ['sh','job_processing/launch_job.sh'] + [array_to_string, ','.join(array_tasks), str(total_tasks), ','.join(array_of_files), user_folder]
 	proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	stdout, stderr = proc.communicate()
 	print stdout
