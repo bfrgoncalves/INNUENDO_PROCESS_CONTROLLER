@@ -18,7 +18,7 @@
 #SBATCH --array=NUMBEROFTASKS
 
 #Simultaious tasks
-#SBATCH --ntasks=TASKSPERNODE
+#SBATCH --ntasks=1
 
 # run as user
 export PATH="/home/debian/.linuxbrew/bin:$PATH"
