@@ -59,5 +59,6 @@ echo $SLURM_ARRAY_TASK_ID
 echo $real_command_to_use
 
 #RUN COMMAND
-eval $real_command_to_use
+#IFTRUE
+#eval $real_command_to_use
 
