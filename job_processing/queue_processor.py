@@ -37,8 +37,8 @@ def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows, array_of_
 		count_tasks+=1
 		total_tasks+=1
 
-	with open("job_processing/sbatch_innuca.template") as template_file:
-		with open("job_processing/sbatch_innuca_1.template") as n_file:
+	with open("job_processing/sbatch_innuca.template", "r") as template_file:
+		with open("job_processing/sbatch_innuca_1.template", "w") as n_file:
 			for line in template_file:
 				if "#IFTRUE" in line:
 					n_file.write("if eval $real_command_to_use; then "+status_definition_true+"; else "+status_definition_false+"; fi")
