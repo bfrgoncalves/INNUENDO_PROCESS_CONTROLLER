@@ -76,7 +76,7 @@ def get_process_input(project_id, pipeline_id, process_id):
 
 
 
-def set_process_output(project_id, pipeline_id, process_id, run_info, run_stats, output, log_file):
+def set_process_output(project_id, pipeline_id, process_id, run_info, run_stats, output, log_file, status):
 
 	try:
 		#Agraph
@@ -103,21 +103,21 @@ def set_process_output(project_id, pipeline_id, process_id, run_info, run_stats,
 		logFile = dbconAg.createLiteral((log_file), datatype=XMLSchema.STRING)
 		logFileProp = dbconAg.createURI(namespace=obo, localname="NGS_0000096")
 
-		runStatus = dbconAg.createLiteral((log_file), datatype=XMLSchema.STRING)
+		runStatus = dbconAg.createLiteral((status), datatype=XMLSchema.STRING)
 		runStatusProp = dbconAg.createURI(namespace=obo, localname="NGS_0000097")
 
 		dbconAg.remove(outputURI, runInfoProp, None)
 		dbconAg.remove(outputURI, runStatsProp, None)
 		dbconAg.remove(outputURI, runFileProp, None)
 		dbconAg.remove(outputURI, logFileProp, None)
-		dbconAg.remove(outputURI, runStatusProp, None)
+		dbconAg.remove(processURI, runStatusProp, None)
 
 		#add outputs paths to process
 		stmt1 = dbconAg.createStatement(outputURI, runInfoProp, runInfo)
 		stmt2 = dbconAg.createStatement(outputURI, runStatsProp, runStats)
 		stmt3 = dbconAg.createStatement(outputURI, runFileProp, runFile)
 		stmt4 = dbconAg.createStatement(outputURI, logFileProp, logFile)
-		stmt5 = dbconAg.createStatement(outputURI, runStatusProp, runStatus)
+		stmt5 = dbconAg.createStatement(processURI, runStatusProp, runStatus)
 
 		#send to allegro
 		dbconAg.add(stmt1)
@@ -151,7 +151,7 @@ def main():
 	if args.t == 'input' and not args.v1:
 		get_process_input(args.project, args.pipeline, args.process)
 	elif args.t == 'output' and args.v1:
-		set_process_output(args.project, args.pipeline, args.process, args.v1, args.v2, args.v3, args.v4)
+		set_process_output(args.project, args.pipeline, args.process, args.v1, args.v2, args.v3, args.v4, args.v5)
 
 
 
