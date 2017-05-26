@@ -41,7 +41,7 @@ def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows, array_of_
 		with open("job_processing/sbatch_innuca_1.template", "w") as n_file:
 			for line in template_file:
 				if "#IFTRUE" in line:
-					n_file.write('if [ $? -eq 0 ]; then'+status_definition_true.replace("/SLURM_ARRAY_JOB_ID/g","$SLURM_ARRAY_JOB_ID")+' else'+status_definition_false.replace("/SLURM_ARRAY_JOB_ID/g","$SLURM_ARRAY_JOB_ID")+' fi')
+					n_file.write('if [ $? -eq 0 ]; then'+status_definition_true.replace("SLURM_ARRAY_JOB_ID","$SLURM_ARRAY_JOB_ID")+' else'+status_definition_false.replace("SLURM_ARRAY_JOB_ID","$SLURM_ARRAY_JOB_ID")+' fi')
 				else:
 					n_file.write(line)
 
