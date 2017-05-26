@@ -75,7 +75,7 @@ def get_process_input(project_id, pipeline_id, process_id):
 			sys.stdout.write(jsonResult[0]["file_3"].split('"')[1])
 		#print jsonResult["file3"]
 	except Exception as e:
-		print "BYERROR"
+		print "BYERROR", e
 		sys.stderr.write("404")
 
 
