@@ -22,7 +22,7 @@
 
 # run as user
 export PATH="/home/debian/.linuxbrew/bin:$PATH"
-export PATH="/home/debian/.linuxbrew/Cellar/mlst/2.6/bin:$PATH"
+export PATH="/home/debian/.linuxbrew/Cellar/mlst/2.8/bin:$PATH"
 export PATH="/home/debian/ncbi-blast-2.6.0+/bin:$PATH"
 
 # run the application
