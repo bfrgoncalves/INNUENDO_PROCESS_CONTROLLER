@@ -53,19 +53,21 @@ def get_process_input(project_id, pipeline_id, process_id):
 
 	try:
 		procStr = localNSpace + "projects/" + str(project_id) + "/pipelines/" + str(pipeline_id) + "/processes/" + str(process_id)
-		queryString = "SELECT (str(?typelabel) as ?label) (str(?file1) as ?file_1) (str(?file2) as ?file_2) (str(?file3) as ?file_3) WHERE{<"+procStr+"> obo:RO_0002233 ?in. ?in a ?type.?type rdfs:label ?typelabel. OPTIONAL { ?in obo:NGS_0000092 ?file1; obo:NGS_0000093 ?file2; obo:NGS_0000094 ?file3; }}"
+		queryString = "SELECT (str(?typelabel) as ?label) (str(?file1) as ?file_1) (str(?file2) as ?file_2) (str(?file3) as ?file_3) (str(?status) as ?statusStr) WHERE{<"+procStr+"> obo:RO_0002233 ?in. <"+procStr+"> obo:NGS_0000097 ?status. ?in a ?type.?type rdfs:label ?typelabel. OPTIONAL { ?in obo:NGS_0000092 ?file1; obo:NGS_0000093 ?file2; obo:NGS_0000094 ?file3; }}"
 		#print queryString
 		#queryString = "SELECT ?file1 ?file2 ?file3 ?type   WHERE {<"+procStr+"> obo:RO_0002233 ?in. ?in obo:NGS_0000092 ?file1.?in obo:NGS_0000093 ?file2.?in obo:NGS_0000094 ?file3. ?in a ?type}"
 		#print queryString
 		tupleQuery = dbconAg.prepareTupleQuery(QueryLanguage.SPARQL, queryString)
 		result = tupleQuery.evaluate()
 		
-		jsonResult=parseAgraphQueryRes(result,["file_3", "label"])
+		jsonResult=parseAgraphQueryRes(result,["file_3", "label", "statusStr"])
 
 		result.close()
 
 		if "biosamples sample" in jsonResult[0]["label"]:
 			sys.stdout.write('FirstProcess')
+		elif "false" in jsonResult[0]["statusStr"]:
+			sys.stderr.write("404")
 		elif "read" in jsonResult[0]["label"]:
 			sys.stdout.write(jsonResult[0]["file_3"].split('"')[1])
 		#print jsonResult["file3"]
@@ -101,22 +103,28 @@ def set_process_output(project_id, pipeline_id, process_id, run_info, run_stats,
 		logFile = dbconAg.createLiteral((log_file), datatype=XMLSchema.STRING)
 		logFileProp = dbconAg.createURI(namespace=obo, localname="NGS_0000096")
 
+		runStatus = dbconAg.createLiteral((log_file), datatype=XMLSchema.STRING)
+		runStatusProp = dbconAg.createURI(namespace=obo, localname="NGS_0000097")
+
 		dbconAg.remove(outputURI, runInfoProp, None)
 		dbconAg.remove(outputURI, runStatsProp, None)
 		dbconAg.remove(outputURI, runFileProp, None)
 		dbconAg.remove(outputURI, logFileProp, None)
+		dbconAg.remove(outputURI, runStatusProp, None)
 
 		#add outputs paths to process
 		stmt1 = dbconAg.createStatement(outputURI, runInfoProp, runInfo)
 		stmt2 = dbconAg.createStatement(outputURI, runStatsProp, runStats)
 		stmt3 = dbconAg.createStatement(outputURI, runFileProp, runFile)
 		stmt4 = dbconAg.createStatement(outputURI, logFileProp, logFile)
+		stmt5 = dbconAg.createStatement(outputURI, runStatusProp, runStatus)
 
 		#send to allegro
 		dbconAg.add(stmt1)
 		dbconAg.add(stmt2)
 		dbconAg.add(stmt3)
 		dbconAg.add(stmt4)
+		dbconAg.add(stmt5)
 		
 		sys.stdout.write("202")
 	except Exception as e:
@@ -135,6 +143,7 @@ def main():
 	parser.add_argument('-v2', type=str, help='path value for file2', required=False)
 	parser.add_argument('-v3', type=str, help='path value for file3', required=False)
 	parser.add_argument('-v4', type=str, help='path value for file4', required=False)
+	parser.add_argument('-v5', type=str, help='path value for status', required=False)
 	parser.add_argument('-t', type=str, help='type of set (input or output)', required=True)
 
 	args = parser.parse_args()
