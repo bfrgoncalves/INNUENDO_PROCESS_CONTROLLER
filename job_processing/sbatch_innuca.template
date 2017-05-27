@@ -48,6 +48,7 @@ done
 
 echo 'JOB PARAMETERS FILE LOCATION:'
 echo ${array[$SLURM_ARRAY_TASK_ID]}
+echo INNUca_$(SLURM_ARRAY_JOB_ID)_$SLURM_ARRAY_TASK_ID
 
 #command_to_use=$(head -n 1 ${array[$SLURM_ARRAY_TASK_ID]})
 command_to_use=$(cat ${array[$SLURM_ARRAY_TASK_ID]})
