@@ -29,6 +29,8 @@ def process_innuca(key_value_args, parameters, user_folder, workflow):
 	prev_application_steps += 'if [ "$p_innuendo_input" == "404" ]; then exit 1; fi;'
 	prev_application_steps += 'if [ "$p_innuendo_input" != "FirstProcess" ]; then exit 1; fi;'
 
+	#prev_application_steps += ' python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 null -v2 null -v3 null -v4 null -v5 running -t output;'
+
 	key_value_args.append('-i')
 	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID'))
 
@@ -79,6 +81,8 @@ def process_chewbbaca(key_value_args, parameters, user_folder, workflow):
 
 	prev_application_steps += 'if [ "$p_innuendo_input" == "404" ]; then exit 1; fi;'
 	prev_application_steps += 'if [ "$p_innuendo_input" == "FirstProcess" ]; then exit 1; fi;'
+
+	#prev_application_steps += ' python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 null -v2 null -v3 null -v4 null -v5 running -t output;'
 
 	prev_application_steps += 'find $p_innuendo_input > ' + user_folder + '/SLURM_ARRAY_JOB_ID/listGenomes.txt; '
 	#prev_application_steps += 'find ' + user_folder + '/SLURM_ARRAY_JOB_ID/*/*.fasta > ' + user_folder + '/SLURM_ARRAY_JOB_ID/listGenomes.txt; '
