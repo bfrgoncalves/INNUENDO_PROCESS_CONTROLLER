@@ -58,10 +58,8 @@ def load_results_from_file(job_id, username):
 
 	results = {}
 
-	array_of_results = []
-	array_of_paths = []
-
-	print "ONLY FILES"
+	array_of_results = {}
+	array_of_paths = {}
 	
 	print onlyfiles
 
@@ -73,9 +71,15 @@ def load_results_from_file(job_id, username):
 		except ValueError:
 			json_data = {"stats": "Not JSON"}
 
-		array_of_results.append(json_data)
-		array_of_paths.append(i)
-
+		if "run_output" in i:
+			array_of_results["run_output"] = json_data;
+			array_of_paths["run_output"] = i;
+		elif "run_stats" in i:
+			array_of_results["run_stats"] = json_data;
+			array_of_paths["run_stats"] = i;
+		elif "run_info" in i:
+			array_of_results["run_info"] = json_data;
+			array_of_paths["run_info"] = i;
 	
 	return [array_of_results, array_of_paths]
 
