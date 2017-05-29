@@ -119,7 +119,7 @@ class Job_queue(Resource):
 				results = load_results_from_file(job_id, args.username)
 				store_in_db = True
 
-		return {'stdout':stdout, 'store_in_db':store_in_db, 'results':results[0], 'paths':results[1]}
+		return {'stdout':stdout, 'store_in_db':store_in_db, 'results':results[0], 'paths':results[1], 'job_id': job_id}
 
 
 class FilesResource(Resource):
