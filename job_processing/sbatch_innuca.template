@@ -27,6 +27,8 @@ export PATH="/home/debian/ncbi-blast-2.6.0+/bin:$PATH"
 
 # run the application
 IFS='\#' read -r -a array <<< ARRAY_STRING
+IFS='\#' read -r -a array_of_processes <<< ARRAY_PROCESSES
+IFS='\#' read -r -a array_of_workflows <<< ARRAY_WORKFLOWS
 IFS=',' read -r -a files_to_transfer <<< FILES_TO_TRANSFER
 
 user_dir=USER_DIR

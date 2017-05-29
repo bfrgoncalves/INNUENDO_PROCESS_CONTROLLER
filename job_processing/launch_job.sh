@@ -5,9 +5,13 @@ echo $2
 echo $3
 echo $4
 echo $5
+echo $6
+echo $7
 
 
 OLD=ARRAY_STRING
+PROCESSES=ARRAY_PROCESSES
+WORKFLOWS=ARRAY_WORKFLOWS
 TASKNUMBER=NUMBEROFTASKS
 TOTALTASKSPERNODE=TASKSPERNODE
 USER_D=USER_DIR
@@ -17,7 +21,9 @@ cat job_processing/sbatch_innuca_1.template | sed "s#$OLD#$1#1" > sbatch_innuca.
 cat sbatch_innuca.sh | sed "s#$TASKNUMBER#$2#1" > sbatch_innuca_1.sh
 cat sbatch_innuca_1.sh | sed "s#$TOTALTASKSPERNODE#$3#1" > sbatch_innuca_2.sh
 cat sbatch_innuca_2.sh | sed "s#$FILESTOTRANSFER#$4#1" > sbatch_innuca_3.sh
-cat sbatch_innuca_3.sh | sed "s#$USER_D#$5#1" > sbatch_innuca.sh
+cat sbatch_innuca_3.sh | sed "s#$PROCESSES#$6#1" > sbatch_innuca_4.sh
+cat sbatch_innuca_4.sh | sed "s#$WORKFLOWS#$7#1" > sbatch_innuca_5.sh
+cat sbatch_innuca_5.sh | sed "s#$USER_D#$5#1" > sbatch_innuca.sh
 
 rm sbatch_innuca_*.sh
 
