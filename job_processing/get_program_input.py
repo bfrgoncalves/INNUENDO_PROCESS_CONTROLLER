@@ -63,9 +63,6 @@ def get_process_input(project_id, pipeline_id, process_id):
 
 		result.close()
 
-		print procStr
-		print jsonResult
-
 		if "biosamples sample" in jsonResult[0]["label"]:
 			sys.stdout.write('FirstProcess')
 		#elif "false" in jsonResult[0]["statusStr"]:
