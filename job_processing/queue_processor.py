@@ -29,7 +29,7 @@ def setFilesByProgram(key_value_args, workflow):
 def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows, array_of_files, status_definition_true, status_definition_false, processes_ids, workflows_ids):
 	array_to_string = '\#'.join(workflow_path_array)
 	array_of_process_ids = '\#'.join(processes_ids)
-	array_of_workflow_ids = '\#'.join(processes_ids)
+	array_of_workflow_ids = '\#'.join(workflows_ids)
 	array_tasks=[]
 	count_tasks=0
 	total_tasks=1
