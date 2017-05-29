@@ -26,10 +26,11 @@ def setFilesByProgram(key_value_args, workflow):
 	else:
 		return False, False
 
-def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows, array_of_files, status_definition_true, status_definition_false, processes_ids, workflows_ids):
+def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows, array_of_files, status_definition_true, status_definition_false, processes_ids, workflows_ids, outputs_names):
 	array_to_string = '\#'.join(workflow_path_array)
 	array_of_process_ids = '\#'.join(processes_ids)
 	array_of_workflow_ids = '\#'.join(workflows_ids)
+	array_of_out_names = '\#'.join(outputs_names)
 	array_tasks=[]
 	count_tasks=0
 	total_tasks=1
@@ -48,7 +49,7 @@ def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows, array_of_
 					n_file.write(line)
 
 
-	commands = ['sh','job_processing/launch_job.sh'] + [array_to_string, ','.join(array_tasks), str(total_tasks), ','.join(array_of_files), user_folder, array_of_process_ids, array_of_workflow_ids]
+	commands = ['sh','job_processing/launch_job.sh'] + [array_to_string, ','.join(array_tasks), str(total_tasks), ','.join(array_of_files), user_folder, array_of_process_ids, array_of_workflow_ids, array_of_out_names]
 	proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	stdout, stderr = proc.communicate()
 	print stdout
@@ -82,6 +83,7 @@ class Queue_Processor:
 		workflow_filenames = [];
 		processes_ids = [];
 		workflows_ids = [];
+		outputs_names = [];
 
 
 		for workflow in job_parameters:
@@ -103,7 +105,7 @@ class Queue_Processor:
 			workflow_filepath = os.path.join(config['JOBS_FOLDER'], username + '_' + workflow_job_name +'.txt')
 			
 
-			key_value_args, prev_application_steps, after_application_steps, status_definition_true, status_definition_false, process_ids, workflow_id = process_parameters(parameters, user_folder, workflow)
+			key_value_args, prev_application_steps, after_application_steps, status_definition_true, status_definition_false, process_ids, workflow_id, output_name = process_parameters(parameters, user_folder, workflow)
 			key_value_args, softwarePath, language = setFilesByProgram(key_value_args, workflow)
 
 			if key_value_args != False:
@@ -115,8 +117,9 @@ class Queue_Processor:
 				workflow_filenames.append(workflow_filepath)
 				processes_ids.append(process_ids)
 				workflows_ids.append(workflow_id)
+				outputs_names.append(output_name)
 
-		jobID = submitToSLURM(user_folder, workflow_filenames, count_workflows, array_of_files, status_definition_true, status_definition_false, processes_ids, workflows_ids)
+		jobID = submitToSLURM(user_folder, workflow_filenames, count_workflows, array_of_files, status_definition_true, status_definition_false, processes_ids, workflows_ids, outputs_names)
 
 		#check job ids via squeue
 		#commands = 'squeue --job '+ jobID +' | sed "1d" | sed "s/ \+/\t/g" | cut -f2'
