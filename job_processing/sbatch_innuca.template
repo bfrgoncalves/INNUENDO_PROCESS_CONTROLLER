@@ -71,7 +71,7 @@ echo 'JOB PARAMETERS:'
 
 for job_file in "${array[@]}"
 do
-   srun sh $job_file
+   srun sh $job_file $SLURM_JOB_ID
 done
 
 #IFTRUE
