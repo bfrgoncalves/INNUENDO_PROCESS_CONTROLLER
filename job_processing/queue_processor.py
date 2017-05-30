@@ -59,7 +59,7 @@ def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows, array_of_
 	print stdout
 	jobID = stdout.split(' ')
 	jobID = jobID[-1].strip('\n')
-	return jobID
+	return jobID, array_tasks
 
 def extract_ids(job_out):
 	job_out = job_out.split('\n')
@@ -130,17 +130,22 @@ class Queue_Processor:
 				outputs_names.append(output_name)'''
 
 		#jobID = submitToSLURM(user_folder, workflow_filenames, count_workflows, array_of_files, status_definition_true, status_definition_false, processes_ids, workflows_ids, outputs_names)
-		jobID = submitToSLURM(user_folder, workflow_filenames, count_workflows, array_of_files)
+		jobID, task_numbers = submitToSLURM(user_folder, workflow_filenames, count_workflows, array_of_files)
 
 		#check job ids via squeue
 		#commands = 'squeue --job '+ jobID +' | sed "1d" | sed "s/ \+/\t/g" | cut -f2'
 		#print commands.split(' ')
-		commands = 'sh job_processing/get_number_of_jobs.sh ' + jobID
+		'''commands = 'sh job_processing/get_number_of_jobs.sh ' + jobID
 		proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		stdout, stderr = proc1.communicate()
+		stdout, stderr = proc1.communicate()'''
 
-		if stderr == '':
-			task_ids = extract_ids(stdout)
+		task_ids = []
+
+		for t in task_numbers:
+			task_ids.append(jobID + "_" + t)
+
+		'''if stderr == '':
+			task_ids = extract_ids(stdout)'''
 
 		return {'task_ids':task_ids}, 200
 
