@@ -183,7 +183,7 @@ def main():
 	elif args.t == 'output' and args.v1:
 		set_process_output(args.project, args.pipeline, args.process, args.v1, args.v2, args.v3, args.v4, args.v5)
 	elif args.t == 'status':
-		set_process_status(args.project, args.pipeline, args.process)
+		get_process_status(args.project, args.pipeline, args.process)
 
 
 
