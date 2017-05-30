@@ -86,7 +86,7 @@ class Queue_Processor:
 		outputs_names = [];
 
 		workflow_job_name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
-		workflow_filepath = os.path.join(config['JOBS_FOLDER'], username + '_' + workflow_job_name +'.txt')
+		workflow_filepath = os.path.join(config['JOBS_FOLDER'], workflow[0]["username"] + '_' + workflow_job_name +'.txt')
 
 
 		for workflow in job_parameters:
