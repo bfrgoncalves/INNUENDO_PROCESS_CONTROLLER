@@ -128,7 +128,7 @@ class Queue_Processor:
 					
 
 					jobs_file.write(after_application_steps.replace("STEPID", str(count_workflows)).replace("SLURM_ARRAY_JOB_ID", "$SLURM_JOB_ID"))
-					jobs_file.write(status_definition.replace("STEPID", str(count_workflows)).replace("SLURM_ARRAY_JOB_ID", "$SLURM_JOB_ID") + ")")
+					jobs_file.write(status_definition.replace("STEPID", str(count_workflows)).replace("SLURM_ARRAY_JOB_ID", "$SLURM_JOB_ID") + "); ")
 					#break
 				'''workflow_filenames.append(workflow_filepath)
 				processes_ids.append(process_ids)
