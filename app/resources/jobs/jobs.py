@@ -99,11 +99,11 @@ class Job_queue(Resource):
 
 		args = job_get_parser.parse_args()
 		job_id = args.job_id
-		print job_id
+		print "JOB", job_id
 		commands = 'sh job_processing/get_job_status.sh ' + job_id
 		proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc1.communicate()
-		print stdout, len(stdout.split('\t'))
+		print "STDOUT", stdout, len(stdout.split('\t'))
 
 		results = [[],[]]
 		store_in_db = False
