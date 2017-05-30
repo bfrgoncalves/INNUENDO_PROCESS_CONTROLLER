@@ -26,8 +26,8 @@ def process_innuca(key_value_args, parameters, user_folder, workflow):
 	
 	prev_application_steps += 'srun echo $p_innuendo_input;'
 	
-	prev_application_steps += 'srun if [ "$p_innuendo_input" == "404" ]; then exit 1; fi;'
-	prev_application_steps += 'srun if [ "$p_innuendo_input" != "FirstProcess" ]; then exit 1; fi;'
+	prev_application_steps += 'if [ "$p_innuendo_input" == "404" ]; then exit 1; fi;'
+	prev_application_steps += 'if [ "$p_innuendo_input" != "FirstProcess" ]; then exit 1; fi;'
 
 	#prev_application_steps += ' python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 null -v2 null -v3 null -v4 null -v5 running -t output;'
 
@@ -82,8 +82,8 @@ def process_chewbbaca(key_value_args, parameters, user_folder, workflow):
 	
 	prev_application_steps += 'srun echo $p_innuendo_input;'
 
-	prev_application_steps += 'srun if [ "$p_innuendo_input" == "404" ]; then exit 1; fi;'
-	prev_application_steps += 'srun if [ "$p_innuendo_input" == "FirstProcess" ]; then exit 1; fi;'
+	prev_application_steps += 'if [ "$p_innuendo_input" == "404" ]; then exit 1; fi;'
+	prev_application_steps += 'if [ "$p_innuendo_input" == "FirstProcess" ]; then exit 1; fi;'
 
 	#prev_application_steps += ' python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 null -v2 null -v3 null -v4 null -v5 running -t output;'
 

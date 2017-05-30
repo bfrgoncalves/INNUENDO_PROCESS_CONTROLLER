@@ -113,7 +113,7 @@ class Queue_Processor:
 			key_value_args, softwarePath, language = setFilesByProgram(key_value_args, workflow)
 
 			if key_value_args != False:
-				key_value_args = [language, softwarePath] + key_value_args
+				key_value_args = ["srun", language, softwarePath] + key_value_args
 				with open(workflow_filepath, 'a') as jobs_file:
 					jobs_file.write(prev_application_steps)
 					jobs_file.write(' '.join(key_value_args))
