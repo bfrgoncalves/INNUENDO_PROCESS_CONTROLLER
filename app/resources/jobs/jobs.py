@@ -107,12 +107,20 @@ class Job_queue(Resource):
 		proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc1.communicate()
 		print "STDOUT", stdout, len(stdout.split('\t'))
+		go_to_pending = False
 
 		results = [[],[]]
 		store_in_db = False
 
+		if len(stdout.split('\t')) == 2:
+			print stdout.split('\t')[0]
+			if stdout.split('\t')[0].replace(".","_") == job_id:
+				stdout = job_id + '\tR'
+			else:
+				go_to_pending = True
 
-		if len(stdout.split('\t')) == 1:
+
+		if len(stdout.split('\t')) == 1 or go_to_pending == True:
 			commands = 'python job_processing/get_program_input.py --project ' + args.project_id + ' --pipeline ' + args.pipeline_id + ' --process ' + args.process_id + ' -t status'
 			#commands = 'sh job_processing/get_completed_jobs.sh ' + job_id.split('_')[0]
 			proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
