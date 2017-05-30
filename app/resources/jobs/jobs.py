@@ -121,11 +121,13 @@ class Job_queue(Resource):
 
 
 		if len(stdout.split('\t')) == 1 or go_to_pending == True:
+			print go_to_pending
 			commands = 'python job_processing/get_program_input.py --project ' + args.project_id + ' --pipeline ' + args.pipeline_id + ' --process ' + args.process_id + ' -t status'
 			#commands = 'sh job_processing/get_completed_jobs.sh ' + job_id.split('_')[0]
 			proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 			stdout, stderr = proc1.communicate()
 			#parts = stdout.split('\t')
+			print stdout, stderr
 
 			stdout = job_id + '\t' + stdout
 
