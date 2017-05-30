@@ -73,8 +73,29 @@ def get_process_input(project_id, pipeline_id, process_id):
 			sys.stdout.write(jsonResult[0]["file_3"].split('"')[1])
 		#print jsonResult["file3"]
 	except Exception as e:
-		print e
 		sys.stderr.write("404")
+
+def get_process_status(project_id, pipeline_id, process_id):
+
+	try:
+		procStr = localNSpace + "projects/" + str(project_id) + "/pipelines/" + str(pipeline_id) + "/processes/" + str(process_id)
+		queryString = "SELECT (str(?typelabel) as ?label) (str(?file1) as ?file_1) (str(?file2) as ?file_2) (str(?file3) as ?file_3) (str(?status) as ?statusStr) WHERE{<"+procStr+"> obo:RO_0002233 ?in. ?in a ?type.?type rdfs:label ?typelabel. OPTIONAL { <"+procStr+"> obo:NGS_0000097 ?status. ?in obo:NGS_0000092 ?file1; obo:NGS_0000093 ?file2; obo:NGS_0000094 ?file3; }}"
+		#queryString = "SELECT ?file1 ?file2 ?file3 ?type   WHERE {<"+procStr+"> obo:RO_0002233 ?in. ?in obo:NGS_0000092 ?file1.?in obo:NGS_0000093 ?file2.?in obo:NGS_0000094 ?file3. ?in a ?type}"
+		#print queryString
+		tupleQuery = dbconAg.prepareTupleQuery(QueryLanguage.SPARQL, queryString)
+		result = tupleQuery.evaluate()
+		
+		jsonResult=parseAgraphQueryRes(result,["statusStr"])
+
+		result.close()
+
+		if "true" in jsonResult[0]["statusStr"]:
+			#print "STATUS", jsonResult[0]["statusStr"]
+			sys.stdout.write("true")
+		else:
+			sys.stdout.write("false")
+	except Exception as e:
+		sys.stderr.write("false")
 
 
 
@@ -154,6 +175,8 @@ def main():
 		get_process_input(args.project, args.pipeline, args.process)
 	elif args.t == 'output' and args.v1:
 		set_process_output(args.project, args.pipeline, args.process, args.v1, args.v2, args.v3, args.v4, args.v5)
+	elif args.t == 'status':
+		set_process_status(args.project, args.pipeline, args.process)
 
 
 
