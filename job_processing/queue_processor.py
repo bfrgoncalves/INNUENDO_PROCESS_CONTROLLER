@@ -41,7 +41,7 @@ def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows, array_of_
 		count_tasks+=1
 		total_tasks+=1
 
-	with open("job_processing/sbatch_innuca.template", "r") as template_file:
+	'''with open("job_processing/sbatch_innuca.template", "r") as template_file:
 		with open("job_processing/sbatch_innuca_1.template", "w") as n_file:
 			for line in template_file:
 				if "#IFTRUE" in line:
@@ -49,7 +49,7 @@ def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows, array_of_
 						for x in wf_file:
 							n_file.write(x)
 				else:
-					n_file.write(line)
+					n_file.write(line)'''
 
 
 	#commands = ['sh','job_processing/launch_job.sh'] + [array_to_string, ','.join(array_tasks), str(total_tasks), ','.join(array_of_files), user_folder, array_of_process_ids, array_of_workflow_ids, array_of_out_names]
@@ -89,9 +89,9 @@ class Queue_Processor:
 		workflows_ids = [];
 		outputs_names = [];
 
-		workflow_job_name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
+		'''workflow_job_name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
 		workflow_filepath = os.path.join(config['JOBS_FOLDER'], job_parameters[0]["username"] + '_' + workflow_job_name +'.txt')
-		workflow_filenames.append(workflow_filepath)
+		workflow_filenames.append(workflow_filepath)'''
 
 
 
@@ -110,28 +110,22 @@ class Queue_Processor:
 			for x in files:
 				array_of_files.append(os.path.join(user_folder, config['FTP_FILES_FOLDER'],files[x]))
 
-			'''workflow_job_name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
-			workflow_filepath = os.path.join(config['JOBS_FOLDER'], username + '_' + workflow_job_name +'.txt')'''
+			workflow_job_name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
+			workflow_filepath = os.path.join(config['JOBS_FOLDER'], username + '_' + workflow_job_name +'.sh')
 			
 
 			key_value_args, prev_application_steps, after_application_steps, status_definition = process_parameters(parameters, user_folder, workflow)
 			key_value_args, softwarePath, language = setFilesByProgram(key_value_args, workflow)
 
 			if key_value_args != False:
-				#key_value_args = ["srun", language, softwarePath] + key_value_args
 				key_value_args = [language, softwarePath] + key_value_args
 				with open(workflow_filepath, 'a') as jobs_file:
-					jobs_file.write("srun $( "+prev_application_steps.replace("STEPID", str(count_workflows)).replace("SLURM_ARRAY_JOB_ID", "$SLURM_JOB_ID"))
-					jobs_file.write(' '.join(key_value_args).replace("STEPID", str(count_workflows)).replace("SLURM_ARRAY_JOB_ID", "$SLURM_JOB_ID"))
-					#jobs_file.write(prev_application_steps.replace("STEPID", str(count_workflows)).replace(";", "\n").replace("SLURM_ARRAY_JOB_ID", "$SLURM_JOB_ID"))
-					#jobs_file.write(' '.join(key_value_args).replace("STEPID", str(count_workflows)).replace(";", "\n").replace("SLURM_ARRAY_JOB_ID", "$SLURM_JOB_ID"))
-					
-
-					jobs_file.write(after_application_steps.replace("STEPID", str(count_workflows)).replace("SLURM_ARRAY_JOB_ID", "$SLURM_JOB_ID"))
-					jobs_file.write(status_definition.replace("STEPID", str(count_workflows)).replace("SLURM_ARRAY_JOB_ID", "$SLURM_JOB_ID") + " ); ")
-					#break
-				'''workflow_filenames.append(workflow_filepath)
-				processes_ids.append(process_ids)
+					jobs_file.write(prev_application_steps.replace("STEPID", str(count_workflows)).replace(";", "\n").replace("SLURM_ARRAY_JOB_ID", "$SLURM_JOB_ID"))
+					jobs_file.write(' '.join(key_value_args).replace("STEPID", str(count_workflows)).replace(";", "\n").replace("SLURM_ARRAY_JOB_ID", "$SLURM_JOB_ID"))
+					jobs_file.write(after_application_steps.replace("STEPID", str(count_workflows)).replace(";", "\n").replace("SLURM_ARRAY_JOB_ID", "$SLURM_JOB_ID"))
+					jobs_file.write(status_definition.replace("STEPID", str(count_workflows)).replace(";", "\n").replace("SLURM_ARRAY_JOB_ID", "$SLURM_JOB_ID"))
+				workflow_filenames.append(workflow_filepath)
+				'''processes_ids.append(process_ids)
 				workflows_ids.append(workflow_id)
 				outputs_names.append(output_name)'''
 

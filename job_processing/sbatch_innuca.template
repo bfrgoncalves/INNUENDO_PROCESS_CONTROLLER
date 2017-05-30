@@ -69,6 +69,11 @@ echo 'JOB PARAMETERS:'
 #RUN COMMAND
 #eval $real_command_to_use
 
+for job_file in "${array[@]}"
+do
+   srun $job_file
+done
+
 #IFTRUE
 
 
