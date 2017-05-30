@@ -15,10 +15,10 @@
 #SBATCH --mail-user=mickaelsilva@fm.ul.pt
 
 #Number of tasks
-#SBATCH --array=NUMBEROFTASKS
+# SBATCH --array=NUMBEROFTASKS
 
 #Simultaious tasks
-#SBATCH --ntasks=1
+# SBATCH --ntasks=1
 
 # run as user
 export PATH="/home/debian/.linuxbrew/bin:$PATH"
@@ -27,9 +27,9 @@ export PATH="/home/debian/ncbi-blast-2.6.0+/bin:$PATH"
 
 # run the application
 IFS='\#' read -r -a array <<< ARRAY_STRING
-IFS='\#' read -r -a array_of_processes <<< ARRAY_PROCESSES
-IFS='\#' read -r -a array_of_workflows <<< ARRAY_WORKFLOWS
-IFS='\#' read -r -a array_of_outputs <<< ARRAY_OUTPUTS
+#IFS='\#' read -r -a array_of_processes <<< ARRAY_PROCESSES
+#IFS='\#' read -r -a array_of_workflows <<< ARRAY_WORKFLOWS
+#IFS='\#' read -r -a array_of_outputs <<< ARRAY_OUTPUTS
 IFS=',' read -r -a files_to_transfer <<< FILES_TO_TRANSFER
 
 user_dir=USER_DIR
@@ -50,17 +50,20 @@ done
 
 
 echo 'JOB PARAMETERS FILE LOCATION:'
-echo ${array[$SLURM_ARRAY_TASK_ID]}
+#echo ${array[$SLURM_ARRAY_TASK_ID]}
+echo %s
 
-echo $(echo $SLURM_ARRAY_JOB_ID)_$SLURM_ARRAY_TASK_ID
+#echo $(echo $SLURM_ARRAY_JOB_ID)_$SLURM_ARRAY_TASK_ID
 
 #command_to_use=$(head -n 1 ${array[$SLURM_ARRAY_TASK_ID]})
-command_to_use=$(cat ${array[$SLURM_ARRAY_TASK_ID]})
+#command_to_use=$(cat ${array[$SLURM_ARRAY_TASK_ID]})
+command_to_use=$(cat ${array[%s]})
 
-real_command_to_use=$(echo "$command_to_use" | sed "s#SLURM_ARRAY_JOB_ID#$SLURM_ARRAY_JOB_ID#g")
+#real_command_to_use=$(echo "$command_to_use" | sed "s#SLURM_ARRAY_JOB_ID#$SLURM_ARRAY_JOB_ID#g")
+real_command_to_use=$(echo "$command_to_use" | sed "s#SLURM_ARRAY_JOB_ID#%s#g")
 
 echo 'JOB PARAMETERS:'
-echo $SLURM_ARRAY_TASK_ID
+#echo $SLURM_ARRAY_TASK_ID
 echo $real_command_to_use
 
 #RUN COMMAND
