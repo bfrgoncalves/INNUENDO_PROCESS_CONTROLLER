@@ -96,11 +96,13 @@ def get_process_status(project_id, pipeline_id, process_id):
 
 		if "true" in jsonResult[0]["statusStr"]:
 			#print "STATUS", jsonResult[0]["statusStr"]
-			sys.stdout.write("true")
+			sys.stdout.write("COMPLETED")
+		elif "None" in jsonResult[0]["statusStr"]:
+			sys.stdout.write("PD")
 		else:
-			sys.stdout.write("false")
+			sys.stdout.write("FAILED")
 	except Exception as e:
-		sys.stderr.write("false")
+		sys.stderr.write("NEUTRAL")
 
 
 
@@ -172,7 +174,7 @@ def main():
 	parser.add_argument('-v3', type=str, help='path value for file3', required=False)
 	parser.add_argument('-v4', type=str, help='path value for file4', required=False)
 	parser.add_argument('-v5', type=str, help='path value for status', required=False)
-	parser.add_argument('-t', type=str, help='type of set (input or output)', required=True)
+	parser.add_argument('-t', type=str, help='type of set (input, output or status)', required=True)
 
 	args = parser.parse_args()
 
