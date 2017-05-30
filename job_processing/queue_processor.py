@@ -118,10 +118,10 @@ class Queue_Processor:
 			if key_value_args != False:
 				key_value_args = ["srun", language, softwarePath] + key_value_args
 				with open(workflow_filepath, 'a') as jobs_file:
-					jobs_file.write(prev_application_steps.replace("STEPID", count_workflows))
+					jobs_file.write(prev_application_steps.replace("STEPID", str(count_workflows)))
 					jobs_file.write(' '.join(key_value_args))
-					jobs_file.write(after_application_steps.replace("STEPID", count_workflows))
-					jobs_file.write(status_definition.replace("STEPID", count_workflows))
+					jobs_file.write(after_application_steps.replace("STEPID", str(count_workflows)))
+					jobs_file.write(status_definition.replace("STEPID", str(count_workflows)))
 				'''workflow_filenames.append(workflow_filepath)
 				processes_ids.append(process_ids)
 				workflows_ids.append(workflow_id)
