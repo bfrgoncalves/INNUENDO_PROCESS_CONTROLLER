@@ -40,13 +40,13 @@ def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows, array_of_
 		count_tasks+=1
 		total_tasks+=1
 
-	with open("job_processing/sbatch_innuca.template", "r") as template_file:
+	'''with open("job_processing/sbatch_innuca.template", "r") as template_file:
 		with open("job_processing/sbatch_innuca_1.template", "w") as n_file:
 			for line in template_file:
 				if "#IFTRUE" in line:
 					n_file.write('if [ $? -eq 0 ]; then'+status_definition_true.replace("SLURM_ARRAY_JOB_ID","$(echo $SLURM_ARRAY_JOB_ID)")+' else'+status_definition_false.replace("SLURM_ARRAY_JOB_ID","$(echo $SLURM_ARRAY_JOB_ID)")+' fi')
 				else:
-					n_file.write(line)
+					n_file.write(line)'''
 
 
 	commands = ['sh','job_processing/launch_job.sh'] + [array_to_string, ','.join(array_tasks), str(total_tasks), ','.join(array_of_files), user_folder, array_of_process_ids, array_of_workflow_ids, array_of_out_names]
@@ -85,6 +85,9 @@ class Queue_Processor:
 		workflows_ids = [];
 		outputs_names = [];
 
+		workflow_job_name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
+		workflow_filepath = os.path.join(config['JOBS_FOLDER'], username + '_' + workflow_job_name +'.txt')
+
 
 		for workflow in job_parameters:
 
@@ -101,23 +104,24 @@ class Queue_Processor:
 			for x in files:
 				array_of_files.append(os.path.join(user_folder, config['FTP_FILES_FOLDER'],files[x]))
 
-			workflow_job_name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
-			workflow_filepath = os.path.join(config['JOBS_FOLDER'], username + '_' + workflow_job_name +'.txt')
+			'''workflow_job_name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
+			workflow_filepath = os.path.join(config['JOBS_FOLDER'], username + '_' + workflow_job_name +'.txt')'''
 			
 
-			key_value_args, prev_application_steps, after_application_steps, status_definition_true, status_definition_false, process_ids, workflow_id, output_name = process_parameters(parameters, user_folder, workflow)
+			key_value_args, prev_application_steps, after_application_steps, status_definition = process_parameters(parameters, user_folder, workflow)
 			key_value_args, softwarePath, language = setFilesByProgram(key_value_args, workflow)
 
 			if key_value_args != False:
 				key_value_args = [language, softwarePath] + key_value_args
-				with open(workflow_filepath, 'w') as jobs_file:
+				with open(workflow_filepath, 'a') as jobs_file:
 					jobs_file.write(prev_application_steps)
 					jobs_file.write(' '.join(key_value_args))
 					jobs_file.write(after_application_steps)
-				workflow_filenames.append(workflow_filepath)
+					jobs_file.write(status_definition)
+				'''workflow_filenames.append(workflow_filepath)
 				processes_ids.append(process_ids)
 				workflows_ids.append(workflow_id)
-				outputs_names.append(output_name)
+				outputs_names.append(output_name)'''
 
 		jobID = submitToSLURM(user_folder, workflow_filenames, count_workflows, array_of_files, status_definition_true, status_definition_false, processes_ids, workflows_ids, outputs_names)
 

@@ -22,12 +22,12 @@ def get_protocol_parameters(parameters):
 
 def process_innuca(key_value_args, parameters, user_folder, workflow):
 
-	prev_application_steps = ' p_innuendo_input=$(python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process $(echo ${array_of_processes[$SLURM_ARRAY_TASK_ID]}) -t input);'
+	prev_application_steps = 'srun p_innuendo_input=$(python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -t input);'
 	
-	prev_application_steps += ' echo $p_innuendo_input;'
+	prev_application_steps += 'srun echo $p_innuendo_input;'
 	
-	prev_application_steps += 'if [ "$p_innuendo_input" == "404" ]; then exit 1; fi;'
-	prev_application_steps += 'if [ "$p_innuendo_input" != "FirstProcess" ]; then exit 1; fi;'
+	prev_application_steps += 'srun if [ "$p_innuendo_input" == "404" ]; then exit 1; fi;'
+	prev_application_steps += 'srun if [ "$p_innuendo_input" != "FirstProcess" ]; then exit 1; fi;'
 
 	#prev_application_steps += ' python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 null -v2 null -v3 null -v4 null -v5 running -t output;'
 
@@ -47,24 +47,27 @@ def process_innuca(key_value_args, parameters, user_folder, workflow):
 	execfile("config.py", config)
 
 	#after_application_steps = '; python ' + config['FILETYPES_SOFTWARE']['INNUca'][0]['app_path'] + 'combine_reports.py -i ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID')
-	after_application_steps = '; mkdir ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/INNUca_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID;'
+	after_application_steps = '; srun mkdir ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/INNUca_SLURM_ARRAY_JOB_ID;'
 	#after_application_steps += ' ln -s $(cat ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/final_assembly.txt) ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca;' 
-	after_application_steps += ' ln -s ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/samples_report.*.json ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/run_info.json;' 
-	after_application_steps += ' ln -s ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/combine_samples_reports.*.json ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/run_stats.json;' 
+	after_application_steps += ' srun ln -s ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/samples_report.*.json ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID/run_info.json;' 
+	after_application_steps += ' srun ln -s ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/combine_samples_reports.*.json ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID/run_stats.json;' 
 
 	#MOVE ASSEMBly to job folder
-	after_application_steps += ' ln -s $(cat '+os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID')+'/*/final_assembly.txt) '+ os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/run_output.fasta;' 
+	after_application_steps += ' srun ln -s $(cat '+os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID')+'/*/final_assembly.txt) '+ os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID/run_output.fasta;' 
 
 	#ADD OUTPUT TO NGSONTO PROCESS
 	#after_application_steps += ' python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/run_info.json -v2 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/run_stats.json -v3 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/run_output.fasta -v4 ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_innuca.txt')+ '-v5  -t output;'
 	
 	#STATUS DEFINITION
 
-	status_definition_true = ' python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process $(echo ${array_of_processes[$SLURM_ARRAY_TASK_ID]}) -v1 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/$(echo ${array_of_workflows[$SLURM_ARRAY_TASK_ID]})_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/run_info.json -v2 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/$(echo ${array_of_workflows[$SLURM_ARRAY_TASK_ID]})_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/run_stats.json -v3 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/$(echo ${array_of_workflows[$SLURM_ARRAY_TASK_ID]})_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/$(echo ${array_of_outputs[$SLURM_ARRAY_TASK_ID]}) -v4 ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_$(echo ${array_of_workflows[$SLURM_ARRAY_TASK_ID]}).txt')+ ' -v5 true -t output;'
-	status_definition_false = ' python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process $(echo ${array_of_processes[$SLURM_ARRAY_TASK_ID]}) -v1 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/$(echo ${array_of_workflows[$SLURM_ARRAY_TASK_ID]})_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/run_info.json -v2 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/$(echo ${array_of_workflows[$SLURM_ARRAY_TASK_ID]})_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/run_stats.json -v3 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/$(echo ${array_of_workflows[$SLURM_ARRAY_TASK_ID]})_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/$(echo ${array_of_outputs[$SLURM_ARRAY_TASK_ID]}) -v4 ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_$(echo ${array_of_workflows[$SLURM_ARRAY_TASK_ID]}).txt')+ ' -v5 false -t output;'
+	status_definition = 'if [ $? -eq 0 ]; then'
+	status_definition += ' srun python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID/run_info.json -v2 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID/run_stats.json -v3 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID/run_output.fasta -v4 ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_INNUca.txt')+ ' -v5 true -t output;'
+	status_definition += ' else'
+	status_definition += ' srun python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID/run_info.json -v2 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID/run_stats.json -v3 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID/run_output.fasta -v4 ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_INNUca.txt')+ ' -v5 false -t output;'
+	#status_definition_false = ' srun python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID/run_info.json -v2 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID/run_stats.json -v3 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID/run_output.fasta -v4 ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_INNUca.txt')+ ' -v5 false -t output;'
 
 	print after_application_steps
-	return key_value_args, prev_application_steps, after_application_steps, status_definition_true, status_definition_false, workflow["process_id"], "INNUca", "run_output.fasta"
+	return key_value_args, prev_application_steps, after_application_steps, status_definition
 
 
 def process_chewbbaca(key_value_args, parameters, user_folder, workflow):
@@ -75,25 +78,25 @@ def process_chewbbaca(key_value_args, parameters, user_folder, workflow):
 	config = {}
 	execfile("config.py", config)
 
-	prev_application_steps = ' p_innuendo_input=$(python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process $(echo ${array_of_processes[$SLURM_ARRAY_TASK_ID]}) -t input);'
+	prev_application_steps = 'srun p_innuendo_input=$(python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -t input);'
 	
-	prev_application_steps += ' echo $p_innuendo_input;'
+	prev_application_steps += 'srun echo $p_innuendo_input;'
 
-	prev_application_steps += 'if [ "$p_innuendo_input" == "404" ]; then exit 1; fi;'
-	prev_application_steps += 'if [ "$p_innuendo_input" == "FirstProcess" ]; then exit 1; fi;'
+	prev_application_steps += 'srun if [ "$p_innuendo_input" == "404" ]; then exit 1; fi;'
+	prev_application_steps += 'srun if [ "$p_innuendo_input" == "FirstProcess" ]; then exit 1; fi;'
 
 	#prev_application_steps += ' python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 null -v2 null -v3 null -v4 null -v5 running -t output;'
 
-	prev_application_steps += 'find $p_innuendo_input > ' + user_folder + '/SLURM_ARRAY_JOB_ID/listGenomes.txt; '
+	prev_application_steps += 'srun find $p_innuendo_input > ' + user_folder + '/SLURM_ARRAY_JOB_ID/listGenomes.txt; '
 	#prev_application_steps += 'find ' + user_folder + '/SLURM_ARRAY_JOB_ID/*/*.fasta > ' + user_folder + '/SLURM_ARRAY_JOB_ID/listGenomes.txt; '
-	prev_application_steps += 'find ' + 'dependencies/chewBBACA/campy_scheme_2017/genes/*.fasta > ' + user_folder + '/SLURM_ARRAY_JOB_ID/listGenes.txt;'
-	prev_application_steps += 'mkdir ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/chewBBACA_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID; '
+	prev_application_steps += 'srun find ' + 'dependencies/chewBBACA/campy_scheme_2017/genes/*.fasta > ' + user_folder + '/SLURM_ARRAY_JOB_ID/listGenes.txt;'
+	prev_application_steps += 'srun mkdir ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/chewBBACA_SLURM_ARRAY_JOB_ID; '
 
 	key_value_args.append('-i')
 	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'listGenomes.txt'))
 
 	key_value_args.append('-o')
-	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID/chewBBACA_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID'))
+	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID/chewBBACA_SLURM_ARRAY_JOB_ID'))
 
 	key_value_args.append('-b')
 	key_value_args.append(config['BLAST_PATH'])
@@ -117,20 +120,22 @@ def process_chewbbaca(key_value_args, parameters, user_folder, workflow):
 	after_application_steps = ''
 
 	#MOVE RESULTS to job folder
-	after_application_steps += '; rm -rf dependencies/chewBBACA/campy_scheme_2017/genes/temp'
-	after_application_steps += '; mv ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID/chewBBACA_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID')+'/results_*/reportStatus.json '+ os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/run_info.json;'
-	after_application_steps += ' mv ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID/chewBBACA_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID')+'/results_*/results_alleles.json '+ os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/run_output.json;'
-	after_application_steps += ' mv ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID/chewBBACA_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID')+'/results_*/results_statistics.json '+ os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/run_stats.json;'
+	after_application_steps += '; srun rm -rf dependencies/chewBBACA/campy_scheme_2017/genes/temp'
+	after_application_steps += '; srun mv ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID/chewBBACA_SLURM_ARRAY_JOB_ID')+'/results_*/reportStatus.json '+ os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID/run_info.json;'
+	after_application_steps += ' srun mv ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID/chewBBACA_SLURM_ARRAY_JOB_ID')+'/results_*/results_alleles.json '+ os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID/run_output.json;'
+	after_application_steps += ' srun mv ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID/chewBBACA_SLURM_ARRAY_JOB_ID')+'/results_*/results_statistics.json '+ os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID/run_stats.json;'
 	
 	#ADD OUTPUT TO NGSONTO PROCESS
 	#after_application_steps += ' python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/run_info.json -v2 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/run_stats.json -v3 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/run_output.json -v4 ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_chewbbaca.txt')+ ' -t output;'
 
 	#STATUS DEFINITION
-	status_definition_true = ' python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process $(echo ${array_of_processes[$SLURM_ARRAY_TASK_ID]}) -v1 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/$(echo ${array_of_workflows[$SLURM_ARRAY_TASK_ID]})_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/run_info.json -v2 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/$(echo ${array_of_workflows[$SLURM_ARRAY_TASK_ID]})_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/run_stats.json -v3 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/$(echo ${array_of_workflows[$SLURM_ARRAY_TASK_ID]})_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/$(echo ${array_of_outputs[$SLURM_ARRAY_TASK_ID]}) -v4 ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_$(echo ${array_of_workflows[$SLURM_ARRAY_TASK_ID]}).txt')+ ' -v5 true -t output;'
-	status_definition_false = ' python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process $(echo ${array_of_processes[$SLURM_ARRAY_TASK_ID]}) -v1 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/$(echo ${array_of_workflows[$SLURM_ARRAY_TASK_ID]})_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/run_info.json -v2 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/$(echo ${array_of_workflows[$SLURM_ARRAY_TASK_ID]})_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/run_stats.json -v3 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/$(echo ${array_of_workflows[$SLURM_ARRAY_TASK_ID]})_SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID/$(echo ${array_of_outputs[$SLURM_ARRAY_TASK_ID]}) -v4 ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_$(echo ${array_of_workflows[$SLURM_ARRAY_TASK_ID]}).txt')+ ' -v5 false -t output;'
+	status_definition = 'if [ $? -eq 0 ]; then'
+	status_definition = ' srun python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID/run_info.json -v2 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID/run_stats.json -v3 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID/run_output.json -v4 ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_chewBBACA.txt')+ ' -v5 true -t output;'
+	status_definition += ' else'
+	status_definition = ' srun python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID/run_info.json -v2 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID/run_stats.json -v3 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID/run_output.json -v4 ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_chewBBACA.txt')+ ' -v5 false -t output;'
 
 	print after_application_steps
-	return key_value_args, prev_application_steps, after_application_steps, status_definition_true, status_definition_false, workflow["process_id"], "chewBBACA", "run_output.json"
+	return key_value_args, prev_application_steps, after_application_steps, status_definition
 	
 
 
@@ -149,7 +154,7 @@ def process_parameters(parameters, user_folder, workflow):
 	options = {'INNUca':process_innuca, 'chewBBACA':process_chewbbaca}
 
 	key_value_args = get_protocol_parameters(parameters)
-	key_value_args, prev_application_steps, after_application_steps, status_definition_true, status_definition_false, process_id, workflow_id, out_names = options[software](key_value_args, parameters, user_folder, workflow)
+	key_value_args, prev_application_steps, after_application_steps, status_definition = options[software](key_value_args, parameters, user_folder, workflow)
 
 
-	return key_value_args, prev_application_steps, after_application_steps, status_definition_true, status_definition_false, process_id, workflow_id, out_names
+	return key_value_args, prev_application_steps, after_application_steps, status_definition
