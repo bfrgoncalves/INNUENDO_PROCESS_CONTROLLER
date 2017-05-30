@@ -71,7 +71,7 @@ echo 'JOB PARAMETERS:'
 
 for job_file in "${array[@]}"
 do
-   srun $job_file
+   srun sh $job_file
 done
 
 #IFTRUE
