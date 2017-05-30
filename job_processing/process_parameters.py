@@ -22,7 +22,7 @@ def get_protocol_parameters(parameters):
 
 def process_innuca(key_value_args, parameters, user_folder, workflow):
 
-	prev_application_steps = ' p_innuendo_input=$(python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -t input);'
+	prev_application_steps = ' p_innuendo_input=$(python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process $(echo ${array_of_processes[$SLURM_ARRAY_TASK_ID]}) -t input);'
 	
 	prev_application_steps += ' echo $p_innuendo_input;'
 	
@@ -75,7 +75,7 @@ def process_chewbbaca(key_value_args, parameters, user_folder, workflow):
 	config = {}
 	execfile("config.py", config)
 
-	prev_application_steps = ' p_innuendo_input=$(python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -t input);'
+	prev_application_steps = ' p_innuendo_input=$(python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process $(echo ${array_of_processes[$SLURM_ARRAY_TASK_ID]}) -t input);'
 	
 	prev_application_steps += ' echo $p_innuendo_input;'
 
