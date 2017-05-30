@@ -19,7 +19,7 @@ TOTALTASKSPERNODE=TASKSPERNODE
 USER_D=USER_DIR
 FILESTOTRANSFER=FILES_TO_TRANSFER
 
-cat job_processing/sbatch_innuca_1.template | sed "s#$OLD#$1#1" > sbatch_innuca.sh
+cat job_processing/sbatch_innuca.template | sed "s#$OLD#$1#1" > sbatch_innuca.sh
 cat sbatch_innuca.sh | sed "s#$TASKNUMBER#$2#1" > sbatch_innuca_1.sh
 cat sbatch_innuca_1.sh | sed "s#$TOTALTASKSPERNODE#$3#1" > sbatch_innuca_2.sh
 cat sbatch_innuca_2.sh | sed "s#$FILESTOTRANSFER#$4#1" > sbatch_innuca.sh
