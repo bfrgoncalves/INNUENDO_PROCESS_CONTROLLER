@@ -63,6 +63,8 @@ def get_process_input(project_id, pipeline_id, process_id):
 
 		result.close()
 
+		print jsonResult
+
 		if "biosamples sample" in jsonResult[0]["label"]:
 			sys.stdout.write('FirstProcess')
 		#elif "false" in jsonResult[0]["statusStr"]:
@@ -73,6 +75,7 @@ def get_process_input(project_id, pipeline_id, process_id):
 			sys.stdout.write(jsonResult[0]["file_3"].split('"')[1])
 		#print jsonResult["file3"]
 	except Exception as e:
+		print e
 		sys.stderr.write("404")
 
 def get_process_status(project_id, pipeline_id, process_id):
