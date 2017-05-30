@@ -33,8 +33,8 @@ IFS='\#' read -r -a array <<< ARRAY_STRING
 IFS=',' read -r -a files_to_transfer <<< FILES_TO_TRANSFER
 
 user_dir=USER_DIR
-job_directory=$user_dir/$SLURM_ARRAY_JOB_ID
-reports_directory=$user_dir/$SLURM_ARRAY_JOB_ID/reports
+job_directory=$user_dir/$SLURM_JOB_ID
+reports_directory=$user_dir/$SLURM_JOB_ID/reports
 
 if [ ! -d "$job_directory" ]; then
 	mkdir $job_directory
