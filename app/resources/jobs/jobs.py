@@ -22,9 +22,6 @@ job_post_parser.add_argument('data', dest='data', type=str, required=True, help=
 job_get_parser = reqparse.RequestParser()
 job_get_parser.add_argument('job_id', dest='job_id', type=str, required=True, help="Job ID")
 job_get_parser.add_argument('username', dest='username', type=str, required=True, help="Username")
-job_get_parser.add_argument('pipeline_id', dest='pipeline_id', type=str, required=True, help="Pipeline identifier")
-job_get_parser.add_argument('project_id', dest='project_id', type=str, required=True, help="project id")
-job_get_parser.add_argument('process_id', dest='process_id', type=str, required=True, help="process id")
 #job_post_parser.add_argument('username', dest='username', type=str, required=True, help="Username")
 #job_post_parser.add_argument('files', dest='files', type=str, required=True, help="Files to use")
 #parameters -> workflow_id
@@ -119,13 +116,8 @@ class Job_queue(Resource):
 			if len(parts) == 0:
 				stdout = job_id + '\tFAILED'
 			else:
-				command = 'python job_processing/get_program_input.py --project ' + args.project_id + ' --pipeline ' + args.pipeline_id + ' --process '+args.process_id+' -t status';
-				proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-				stdout, stderr = proc1.communicate()
-
-				if "true" in stdout:
-					results = load_results_from_file(job_id, args.username)
-					store_in_db = True
+				results = load_results_from_file(job_id, args.username)
+				store_in_db = True
 
 		return {'stdout':stdout, 'store_in_db':store_in_db, 'results':results[0], 'paths':results[1], 'job_id': job_id}
 
