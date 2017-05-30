@@ -26,11 +26,11 @@ def setFilesByProgram(key_value_args, workflow):
 	else:
 		return False, False
 
-def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows, array_of_files, status_definition_true, status_definition_false, processes_ids, workflows_ids, outputs_names):
+def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows, array_of_files):
 	array_to_string = '\#'.join(workflow_path_array)
-	array_of_process_ids = '\#'.join(processes_ids)
-	array_of_workflow_ids = '\#'.join(workflows_ids)
-	array_of_out_names = '\#'.join(outputs_names)
+	#array_of_process_ids = '\#'.join(processes_ids)
+	#array_of_workflow_ids = '\#'.join(workflows_ids)
+	#array_of_out_names = '\#'.join(outputs_names)
 	array_tasks=[]
 	count_tasks=0
 	total_tasks=1
@@ -49,7 +49,8 @@ def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows, array_of_
 					n_file.write(line)'''
 
 
-	commands = ['sh','job_processing/launch_job.sh'] + [array_to_string, ','.join(array_tasks), str(total_tasks), ','.join(array_of_files), user_folder, array_of_process_ids, array_of_workflow_ids, array_of_out_names]
+	#commands = ['sh','job_processing/launch_job.sh'] + [array_to_string, ','.join(array_tasks), str(total_tasks), ','.join(array_of_files), user_folder, array_of_process_ids, array_of_workflow_ids, array_of_out_names]
+	commands = ['sh','job_processing/launch_job.sh'] + [array_to_string, ','.join(array_tasks), str(total_tasks), ','.join(array_of_files), user_folder]
 	proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	stdout, stderr = proc.communicate()
 	print stdout
@@ -123,7 +124,8 @@ class Queue_Processor:
 				workflows_ids.append(workflow_id)
 				outputs_names.append(output_name)'''
 
-		jobID = submitToSLURM(user_folder, workflow_filenames, count_workflows, array_of_files, status_definition_true, status_definition_false, processes_ids, workflows_ids, outputs_names)
+		#jobID = submitToSLURM(user_folder, workflow_filenames, count_workflows, array_of_files, status_definition_true, status_definition_false, processes_ids, workflows_ids, outputs_names)
+		jobID = submitToSLURM(user_folder, workflow_filenames, count_workflows, array_of_files)
 
 		#check job ids via squeue
 		#commands = 'squeue --job '+ jobID +' | sed "1d" | sed "s/ \+/\t/g" | cut -f2'
