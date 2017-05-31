@@ -175,6 +175,7 @@ class DownloadFilesResource(Resource):
 		args = download_file_get_parser.parse_args()
 		file_array = []
 		file_folder = os.path.join('/home/users/', args.username, config['FTP_FILES_FOLDER'], args.accession_numbers)
+		print file_folder
 		with open(file_folder, 'r') as file_to_send:
 			for line in file_to_send:
 				file_array.append(line)
