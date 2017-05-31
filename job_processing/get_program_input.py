@@ -158,6 +158,7 @@ def set_process_output(project_id, pipeline_id, process_id, run_info, run_stats,
 		dbconAg.remove(outputURI, runFileProp, None)
 		dbconAg.remove(outputURI, logFileProp, None)
 		dbconAg.remove(processURI, runStatusProp, None)
+		#dbconAg.remove(processURI, hasOutput, None)
 
 		#add outputs paths to process
 		stmt1 = dbconAg.createStatement(outputURI, runInfoProp, runInfo)
