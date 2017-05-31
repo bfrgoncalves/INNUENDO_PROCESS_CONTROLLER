@@ -7,7 +7,7 @@ def get_protocol_parameters(parameters):
 	key_value_args = []
 
 	for key, value in parameters.iteritems():
-		if key == '-i' or key == '-o':
+		if key == '-i' or key == '-o' or key == "chewBBACA_schema":
 			continue
 		else:
 			key_value_args.append(str(key))
@@ -82,6 +82,11 @@ def process_chewbbaca(key_value_args, parameters, user_folder, workflow):
 	#READ CONFIG FILE
 	config = {}
 	execfile("config.py", config)
+	schema_to_use = ""
+
+	for key, value in parameters.iteritems():
+		if key == "chewBBACA_schema":
+			schema_to_use = value
 
 	prev_application_steps = 'badstatus="404"; firstprocess="FirstProcess";'
 
@@ -98,8 +103,14 @@ def process_chewbbaca(key_value_args, parameters, user_folder, workflow):
 	#prev_application_steps += ' python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 null -v2 null -v3 null -v4 null -v5 running -t output;'
 
 	prev_application_steps += ' find $p_innuendo_input > ' + user_folder + '/SLURM_ARRAY_JOB_ID/listGenomes.txt; '
+
+
 	#prev_application_steps += 'find ' + user_folder + '/SLURM_ARRAY_JOB_ID/*/*.fasta > ' + user_folder + '/SLURM_ARRAY_JOB_ID/listGenomes.txt; '
-	prev_application_steps += ' find ' + 'dependencies/chewBBACA/campy_scheme_2017/genes/*.fasta > ' + user_folder + '/SLURM_ARRAY_JOB_ID/listGenes.txt; '
+	prev_application_steps += ' find ' + 'dependencies/chewBBACA/'+schema_to_use+'/*.fasta > ' + user_folder + '/SLURM_ARRAY_JOB_ID/listGenes.txt; '
+	
+	if schema_to_use == "schema_coli_enterobase_V3":
+		prev_application_steps += "awk 'NR==FNR{a[$0]=1;next}!a[$0]' "+ user_folder + "/SLURM_ARRAY_JOB_ID/ToDeleteLoci.txt "+ user_folder + "/SLURM_ARRAY_JOB_ID/listGenes.txt > "+ user_folder + "/SLURM_ARRAY_JOB_ID/listGenes.txt"; 
+
 	prev_application_steps += ' mkdir ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/chewBBACA_SLURM_ARRAY_JOB_ID_STEPID; '
 
 	key_value_args.append('-i')
