@@ -114,7 +114,9 @@ def get_process_status(project_id, pipeline_id, process_id):
 			sys.stdout.write("COMPLETED")
 		elif "None" in jsonResult[0]["statusStr"]:
 			sys.stdout.write("PD")
-		else:
+		elif "pending" in jsonResult[0]["statusStr"]:
+			sys.stdout.write("PD")
+		elif "failed" in jsonResult[0]["statusStr"]:
 			sys.stdout.write("FAILED")
 	except Exception as e:
 		sys.stderr.write("NEUTRAL")
@@ -176,6 +178,19 @@ def set_process_output(project_id, pipeline_id, process_id, run_info, run_stats,
 		#print "ERROR", e
 		sys.stdout.write("404")
 
+def set_process_pending(project_id, pipeline_id, process_id):
+	#change output to false
+	processURI = dbconAg.createURI(namespace=localNSpace+"projects/", localname=str(project_id)+"/pipelines/"+str(pipeline_id)+"/processes/"+str(process_id))
+	
+	runStatus = dbconAg.createLiteral(("pending"), datatype=XMLSchema.STRING)
+	runStatusProp = dbconAg.createURI(namespace=obo, localname="NGS_0000097")
+	
+	dbconAg.remove(processURI, runStatusProp, None)
+
+	stmt5 = dbconAg.createStatement(processURI, runStatusProp, runStatus)
+
+	dbconAg.add(stmt5)
+
 
 def main():
 
@@ -199,6 +214,8 @@ def main():
 		set_process_output(args.project, args.pipeline, args.process, args.v1, args.v2, args.v3, args.v4, args.v5)
 	elif args.t == 'status':
 		get_process_status(args.project, args.pipeline, args.process)
+	elif args.t == 'set_pending':
+		set_process_pending(args.project, args.pipeline, args.process)
 
 
 
