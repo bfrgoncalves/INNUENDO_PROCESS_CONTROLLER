@@ -108,6 +108,7 @@ def get_process_status(project_id, pipeline_id, process_id):
 		jsonResult=parseAgraphQueryRes(result,["statusStr"])
 
 		result.close()
+		print jsonResult
 
 		if "true" in jsonResult[0]["statusStr"]:
 			#print "STATUS", jsonResult[0]["statusStr"]
