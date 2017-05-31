@@ -106,10 +106,11 @@ def process_chewbbaca(key_value_args, parameters, user_folder, workflow):
 
 
 	#prev_application_steps += 'find ' + user_folder + '/SLURM_ARRAY_JOB_ID/*/*.fasta > ' + user_folder + '/SLURM_ARRAY_JOB_ID/listGenomes.txt; '
-	prev_application_steps += ' find ' + 'dependencies/chewBBACA/'+schema_to_use+'/*.fasta > ' + user_folder + '/SLURM_ARRAY_JOB_ID/listGenes.txt; '
+	prev_application_steps += 'find ' + 'dependencies/chewBBACA/'+schema_to_use+'/*.fasta > ' + user_folder + '/SLURM_ARRAY_JOB_ID/listGenes.txt; '
 	
 	if schema_to_use == "schema_coli_enterobase_V3":
-		prev_application_steps += "awk 'NR==FNR{a[$0]=1;next}!a[$0]' "+ user_folder + "/SLURM_ARRAY_JOB_ID/ToDeleteLoci.txt "+ user_folder + "/SLURM_ARRAY_JOB_ID/listGenes.txt > "+ user_folder + "/SLURM_ARRAY_JOB_ID/listGenes.txt"; 
+		prev_application_steps += "cp dependencies/chewBBACA/"+schema_to_use+"/ToDeleteLoci.txt "+ user_folder + "/SLURM_ARRAY_JOB_ID/ToDeleteLoci.txt; "; 
+		prev_application_steps += "awk 'NR==FNR{a[$0]=1;next}!a[$0]' "+ user_folder + "/SLURM_ARRAY_JOB_ID/ToDeleteLoci.txt "+ user_folder + "/SLURM_ARRAY_JOB_ID/listGenes.txt > "+ user_folder + "/SLURM_ARRAY_JOB_ID/listGenes.txt; "; 
 
 	prev_application_steps += ' mkdir ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/chewBBACA_SLURM_ARRAY_JOB_ID_STEPID; '
 
