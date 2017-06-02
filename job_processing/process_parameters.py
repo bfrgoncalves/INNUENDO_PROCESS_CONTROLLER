@@ -12,7 +12,7 @@ def get_protocol_parameters(parameters):
 		else:
 			key_value_args.append(str(key))
 
-			if len(value.split(' ')) > 1:
+			if len(value.split(' ')) > 1 && key != "--species":
 				key_value_args.append("'" + str(value) + "'")
 			else:
 				key_value_args.append(str(value))
