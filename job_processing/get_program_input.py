@@ -193,6 +193,10 @@ def set_process_pending(project_id, pipeline_id, process_id):
 #TO TALK WITH MICKAEL
 def set_process_input(project_id, pipeline_id, process_id, input_to_use):
 	#change output to false
+	pipelineURI = dbconAg.createURI(namespace=localNSpace+"projects/", localname=str(project_id)+"/pipelines/"+str(pipeline_id)+"/processes/"+str(process_id))
+	
+	queryString = "SELECT DISTINCT (STR(?in) as ?messageURI) WHERE {<http://ngsonto.net/api/v1.0/projects/50/pipelines/106> obo:BFO_0000051  ?proc. { ?proc obo:RO_0002233 ?in. ?in a <http://purl.obolibrary.org/obo/SO_0000150>. } UNION { ?proc obo:RO_0002234 ?in. ?in a input_to_use. }}"
+	
 	processURI = dbconAg.createURI(namespace=localNSpace+"projects/", localname=str(project_id)+"/pipelines/"+str(pipeline_id)+"/processes/"+str(process_id))
 	
 	runStatus = dbconAg.createLiteral((input_to_use), datatype=XMLSchema.STRING)

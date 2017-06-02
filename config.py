@@ -37,7 +37,7 @@ dcterms="http://purl.org/dc/terms/"
 edam ="http://edamontology.org#"
 localNSpace="http://ngsonto.net/api/v1.0/"
 
-pTypes =['dnaextraction', 'librarypreparation', 'qualityControl','sequencing', 'trimming', 'filtering','mapping', 'denovo', 'allelecall']
+pTypes =['dnaextraction', 'librarypreparation', 'qualityControl','sequencing', 'trimming', 'filtering','mapping', 'denovo', 'allelecall', 'pathotyping']
            
 protocolsTypes =['http://purl.obolibrary.org/obo/NGS_0000067','http://purl.obolibrary.org/obo/NGS_0000068', 'http://purl.obolibrary.org/obo/NGS_0000088',
            'http://purl.obolibrary.org/obo/NGS_0000072','http://purl.obolibrary.org/obo/NGS_0000065','http://purl.obolibrary.org/obo/NGS_0000066',
@@ -51,7 +51,13 @@ processMessages =['http://purl.obolibrary.org/obo/OBI_0001051' ,'http://purl.obo
  			'http://purl.obolibrary.org/obo/SO_0000150', 'http://purl.obolibrary.org/obo/SO_0000150', 'http://purl.obolibrary.org/obo/SO_0000150',
            'http://purl.obolibrary.org/obo/SO_0000149','http://purl.obolibrary.org/obo/SO_0000149','http://purl.obolibrary.org/obo/OBI_0001305']
 
+InputTypes = ['http://purl.obolibrary.org/obo/OBI_0000747','http://purl.obolibrary.org/obo/OBI_0001051', 'http://purl.obolibrary.org/obo/SO_0000150',
+          	'http://purl.obolibrary.org/obo/NGS_0000001','http://purl.obolibrary.org/obo/SO_0000150', 'http://purl.obolibrary.org/obo/SO_0000150',
+           'http://purl.obolibrary.org/obo/SO_0000150', 'http://purl.obolibrary.org/obo/SO_0000150','http://purl.obolibrary.org/obo/SO_0000149']
+
+
 
 protocolsTypes = dict(zip(pTypes, protocolsTypes))
 processTypes = dict(zip(pTypes, processTypes))
 processMessages = dict(zip(pTypes, processMessages))
+InputTypes = dict(zip(pTypes, InputTypes))

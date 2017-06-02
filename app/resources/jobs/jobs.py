@@ -72,7 +72,15 @@ def load_results_from_file(job_id, username):
 		try:
 			json_data = json.loads(data)
 		except ValueError:
-			json_data = {"stats": "Not JSON"}
+			if "PathoTyping" in i:
+				json_data = {}
+				count = 0
+				for line in data:
+					count += 1
+					json_data["result " + str(count)] = line
+
+			else:
+				json_data = {"stats": "Not JSON"}
 
 		if "run_output" in i:
 			array_of_results["run_output"] = json_data;

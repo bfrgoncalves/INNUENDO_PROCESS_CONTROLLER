@@ -28,7 +28,6 @@ def setFilesByProgram(key_value_args, workflow):
 
 def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows, array_of_files):
 	array_to_string = '\#'.join(workflow_path_array)
-	print "BAH", array_to_string
 	#array_of_process_ids = '\#'.join(processes_ids)
 	#array_of_workflow_ids = '\#'.join(workflows_ids)
 	#array_of_out_names = '\#'.join(outputs_names)
