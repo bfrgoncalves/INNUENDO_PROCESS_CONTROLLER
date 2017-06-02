@@ -25,7 +25,6 @@ job_get_parser.add_argument('project_id', dest='project_id', type=str, required=
 job_get_parser.add_argument('pipeline_id', dest='pipeline_id', type=str, required=True, help="pipeline_id ID")
 job_get_parser.add_argument('process_id', dest='process_id', type=str, required=True, help="process_id ID")
 job_get_parser.add_argument('username', dest='username', type=str, required=True, help="Username")
-job_get_parser.add_argument('strain_submitter', dest='strain_submitter', type=str, required=True, help="Username")
 #job_post_parser.add_argument('username', dest='username', type=str, required=True, help="Username")
 #job_post_parser.add_argument('files', dest='files', type=str, required=True, help="Files to use")
 #parameters -> workflow_id
@@ -69,7 +68,6 @@ def load_results_from_file(job_id, username):
 
 	for i in onlyfiles:
 		data = open(i).read()
-		print i
 		try:
 			json_data = json.loads(data)
 		except ValueError:
