@@ -73,11 +73,7 @@ def load_results_from_file(job_id, username):
 		except ValueError:
 			if "PathoTyping" in i:
 				json_data = {}
-				count = 0
-				for line in data:
-					count += 1
-					json_data["result " + str(count)] = line
-
+				json_data["result"] = data
 			else:
 				json_data = {"stats": "Not JSON"}
 
