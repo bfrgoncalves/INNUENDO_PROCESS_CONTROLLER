@@ -11,13 +11,13 @@ JOBS_FOLDER = 'job_processing/parameters_files'
 FTP_FILES_FOLDER = 'ftp'
 
 #BLAST PATH
-BLAST_PATH = '/home/innuendo/sandbox/ncbi-blast-2.5.0+/bin/blastp'
+BLAST_PATH = '/home/debian/ncbi-blast-2.6.0+/bin/blastp'
 
 #Available applications
 APPLICATIONS_ARRAY = ['INNUca', 'chewBBACA', 'PathoTyping']
 FILETYPES_SOFTWARE = {'INNUca': [{'language':'python', '-f': '.fastq', 'app_path': 'dependencies/INNUca/', 'path': 'dependencies/INNUca/INNUca.py'}], 'chewBBACA':[{'language': 'python', '-f': 'fasta', 'app_path': 'dependencies/chewBBACA/', 'path': 'dependencies/chewBBACA/allelecall/BBACA.py'}, 'PathoTyping':[{'language': 'python', '-f': '.fastq', 'app_path': 'dependencies/patho_typing/', 'path': 'dependencies/patho_typing/patho_typing.py'}]}
 
-SERVER_IP = '10.105.84.253'
+SERVER_IP = '137.205.71.118'
 
 ##################  agraph  ############################################
 
