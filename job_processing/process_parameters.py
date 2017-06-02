@@ -28,6 +28,10 @@ def process_innuca(key_value_args, parameters, user_folder, workflow):
 	
 	prev_application_steps += ' echo $p_innuendo_input;'
 
+	prev_application_steps += ' if [ "$p_innuendo_input" = "$badstatus" ]; echo "An error as occuried when running the analysis. Try again." > ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_INNUca.txt') + ";"
+
+	prev_application_steps += ' if [ "$p_innuendo_input" = "$badstatus" ]; python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID_STEPID/run_info.json -v2 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID_STEPID/run_stats.json -v3 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID_STEPID/run_output.json -v4 ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_INNUca.txt')+ ' -v5 false -t output; fi;'
+
 	prev_application_steps += ' if [ "$p_innuendo_input" = "$badstatus" ]; then exit 1; fi;'
 	prev_application_steps += ' if [ "$p_innuendo_input" != "$firstprocess" ]; then exit 1; fi;'
 
@@ -75,6 +79,59 @@ def process_innuca(key_value_args, parameters, user_folder, workflow):
 	return key_value_args, prev_application_steps, after_application_steps, status_definition
 
 
+def process_pathotyping(key_value_args, parameters, user_folder, workflow):
+
+	prev_application_steps = 'badstatus="404"; firstprocess="FirstProcess";'
+
+	prev_application_steps += ' p_innuendo_input=$(python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -t input);'
+	
+	prev_application_steps += ' echo $p_innuendo_input;'
+
+	prev_application_steps += ' if [ "$p_innuendo_input" = "$badstatus" ]; echo "An error as occuried when running the analysis. Try again." > ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_PathoTyping.txt') + ";"
+
+	prev_application_steps += ' if [ "$p_innuendo_input" = "$badstatus" ]; python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/PathoTyping_SLURM_ARRAY_JOB_ID_STEPID/run_info.json -v2 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/PathoTyping_SLURM_ARRAY_JOB_ID_STEPID/run_stats.json -v3 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/PathoTyping_SLURM_ARRAY_JOB_ID_STEPID/run_output.json -v4 ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_PathoTyping.txt')+ ' -v5 false -t output; fi;'
+
+	prev_application_steps += ' if [ "$p_innuendo_input" = "$badstatus" ]; then exit 1; fi;'
+	prev_application_steps += ' if [ "$p_innuendo_input" != "$firstprocess" ]; then exit 1; fi;'
+
+	prev_application_steps += ' python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -t set_pending;'
+
+	prev_application_steps += ' $files_to_use=$(python job_processing/get_fq_on_dir.py ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + ');'
+	#prev_application_steps += ' python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 null -v2 null -v3 null -v4 null -v5 running -t output;'
+
+	#Program input
+	key_value_args.append('-f')
+	key_value_args.append("$files_to_use")
+	#key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', '*R2*q.gz'))
+
+	key_value_args.append('-o')
+	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID'))
+
+	#SPECIES are set on the protocol
+
+
+	#Log of the program run
+	key_value_args.append('>')
+	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_PathoTyping.txt'))
+
+	config = {}
+	execfile("config.py", config)
+
+	after_application_steps = '; mkdir ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/PathoTyping_SLURM_ARRAY_JOB_ID_STEPID;'
+	after_application_steps += ' ln -s ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/patho_typing.report.txt ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/PathoTyping_SLURM_ARRAY_JOB_ID_STEPID/run_output.txt;' 
+
+	#STATUS DEFINITION
+
+	status_definition = ' if [ $? -eq 0 ];then '
+	status_definition += ' python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 "" -v2 "" -v3 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/PathoTyping_SLURM_ARRAY_JOB_ID_STEPID/run_output.txt -v4 ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_PathoTyping.txt')+ ' -v5 true -t output;'
+	status_definition += ' else '
+	status_definition += ' python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 "" -v2 "" -v3 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/PathoTyping_SLURM_ARRAY_JOB_ID_STEPID/run_output.txt -v4 ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_PathoTyping.txt')+ ' -v5 false -t output;'
+	status_definition += ' fi;'
+
+	print after_application_steps
+	return key_value_args, prev_application_steps, after_application_steps, status_definition
+
+
 def process_chewbbaca(key_value_args, parameters, user_folder, workflow):
 	#list of genomes
 	#list of genes
@@ -93,7 +150,11 @@ def process_chewbbaca(key_value_args, parameters, user_folder, workflow):
 	prev_application_steps += ' p_innuendo_input=$(python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -t input);'
 	
 	prev_application_steps += ' echo $p_innuendo_input;'
-	prev_application_steps += ' echo SLURM_ARRAY_JOB_ID;'
+	#prev_application_steps += ' echo SLURM_ARRAY_JOB_ID;'
+
+	prev_application_steps += ' if [ "$p_innuendo_input" = "$badstatus" ]; echo "An error as occuried when running the analysis. Try again." > ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_chewBBACA.txt') + ";"
+
+	prev_application_steps += ' if [ "$p_innuendo_input" = "$badstatus" ]; python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_STEPID/run_info.json -v2 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_STEPID/run_stats.json -v3 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_STEPID/run_output.json -v4 ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_chewBBACA.txt')+ ' -v5 false -t output; fi;'
 
 	prev_application_steps += ' if [ "$p_innuendo_input" = "$badstatus" ]; then exit 1; fi;'
 	prev_application_steps += ' if [ "$p_innuendo_input" = "$firstprocess" ]; then exit 1; fi;'
@@ -176,13 +237,13 @@ def process_parameters(parameters, user_folder, workflow):
 	config = {}
 	execfile("config.py", config)
 
-	options = {'INNUca':process_innuca, 'chewBBACA':process_chewbbaca}
+	options = {'INNUca':process_innuca, 'chewBBACA':process_chewbbaca, 'PathoTyping':process_pathotyping}
 
 	wf_params = json.loads(workflow['parameters'])
 	if wf_params['used Software'] in config['APPLICATIONS_ARRAY']:
 		software = wf_params['used Software']
 
-	options = {'INNUca':process_innuca, 'chewBBACA':process_chewbbaca}
+	#options = {'INNUca':process_innuca, 'chewBBACA':process_chewbbaca}
 
 	key_value_args = get_protocol_parameters(parameters)
 	key_value_args, prev_application_steps, after_application_steps, status_definition = options[software](key_value_args, parameters, user_folder, workflow)

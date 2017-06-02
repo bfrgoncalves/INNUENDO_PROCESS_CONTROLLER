@@ -93,7 +93,6 @@ def get_process_input(project_id, pipeline_id, process_id):
 		dbconAg.add(stmt5)
 
 
-
 def get_process_status(project_id, pipeline_id, process_id):
 
 	try:
@@ -115,7 +114,7 @@ def get_process_status(project_id, pipeline_id, process_id):
 			sys.stdout.write("PD")
 		elif "pending" in jsonResult[0]["statusStr"]:
 			sys.stdout.write("PD")
-		elif "failed" in jsonResult[0]["statusStr"]:
+		elif "false" in jsonResult[0]["statusStr"]:
 			sys.stdout.write("FAILED")
 	except Exception as e:
 		sys.stderr.write("NEUTRAL")
@@ -191,6 +190,20 @@ def set_process_pending(project_id, pipeline_id, process_id):
 
 	dbconAg.add(stmt5)
 
+#TO TALK WITH MICKAEL
+def set_process_input(project_id, pipeline_id, process_id, input_to_use):
+	#change output to false
+	processURI = dbconAg.createURI(namespace=localNSpace+"projects/", localname=str(project_id)+"/pipelines/"+str(pipeline_id)+"/processes/"+str(process_id))
+	
+	runStatus = dbconAg.createLiteral((input_to_use), datatype=XMLSchema.STRING)
+	runStatusProp = dbconAg.createURI(namespace=obo, localname="NGS_0000097") 
+	
+	dbconAg.remove(processURI, runStatusProp, None)
+
+	stmt5 = dbconAg.createStatement(processURI, runStatusProp, runStatus)
+
+	dbconAg.add(stmt5)
+
 
 def main():
 
@@ -204,6 +217,7 @@ def main():
 	parser.add_argument('-v3', type=str, help='path value for file3', required=False)
 	parser.add_argument('-v4', type=str, help='path value for file4', required=False)
 	parser.add_argument('-v5', type=str, help='path value for status', required=False)
+	parser.add_argument('-i', type=str, help='input to set', required=False)
 	parser.add_argument('-t', type=str, help='type of set (input, output or status)', required=True)
 
 	args = parser.parse_args()
@@ -216,6 +230,8 @@ def main():
 		get_process_status(args.project, args.pipeline, args.process)
 	elif args.t == 'set_pending':
 		set_process_pending(args.project, args.pipeline, args.process)
+	elif args.t == 'set_input':
+		set_process_input(args.project, args.pipeline, args.process, args.i)
 
 
 
