@@ -98,7 +98,7 @@ def process_pathotyping(key_value_args, parameters, user_folder, workflow):
 
 	prev_application_steps += ' $files_to_use=$(python job_processing/get_fq_on_dir.py ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + ');'
 	#prev_application_steps += ' python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 null -v2 null -v3 null -v4 null -v5 running -t output;'
-
+	prev_application_steps += ' echo $files_to_use;'
 	#Program input
 	key_value_args.append('-f')
 	key_value_args.append("$files_to_use")
