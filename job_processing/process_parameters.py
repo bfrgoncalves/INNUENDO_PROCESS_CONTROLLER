@@ -28,7 +28,7 @@ def process_innuca(key_value_args, parameters, user_folder, workflow):
 	
 	prev_application_steps += ' echo $p_innuendo_input;'
 
-	prev_application_steps += ' if [ "$p_innuendo_input" = "$badstatus" ]; echo "An error as occuried when running the analysis. Try again." > ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_INNUca.txt') + ";"
+	prev_application_steps += ' if [ "$p_innuendo_input" = "$badstatus" ]; echo "An error as occuried when running the analysis. Try again." > ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_INNUca.txt') + "; fi;"
 
 	prev_application_steps += ' if [ "$p_innuendo_input" = "$badstatus" ]; python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID_STEPID/run_info.json -v2 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID_STEPID/run_stats.json -v3 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/INNUca_SLURM_ARRAY_JOB_ID_STEPID/run_output.json -v4 ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_INNUca.txt')+ ' -v5 false -t output; fi;'
 
@@ -87,7 +87,7 @@ def process_pathotyping(key_value_args, parameters, user_folder, workflow):
 	
 	prev_application_steps += ' echo $p_innuendo_input;'
 
-	prev_application_steps += ' if [ "$p_innuendo_input" = "$badstatus" ]; echo "An error as occuried when running the analysis. Try again." > ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_PathoTyping.txt') + ";"
+	prev_application_steps += ' if [ "$p_innuendo_input" = "$badstatus" ]; echo "An error as occuried when running the analysis. Try again." > ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_PathoTyping.txt') + "; fi;"
 
 	prev_application_steps += ' if [ "$p_innuendo_input" = "$badstatus" ]; python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/PathoTyping_SLURM_ARRAY_JOB_ID_STEPID/run_info.json -v2 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/PathoTyping_SLURM_ARRAY_JOB_ID_STEPID/run_stats.json -v3 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/PathoTyping_SLURM_ARRAY_JOB_ID_STEPID/run_output.json -v4 ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_PathoTyping.txt')+ ' -v5 false -t output; fi;'
 
@@ -152,7 +152,7 @@ def process_chewbbaca(key_value_args, parameters, user_folder, workflow):
 	prev_application_steps += ' echo $p_innuendo_input;'
 	#prev_application_steps += ' echo SLURM_ARRAY_JOB_ID;'
 
-	prev_application_steps += ' if [ "$p_innuendo_input" = "$badstatus" ]; echo "An error as occuried when running the analysis. Try again." > ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_chewBBACA.txt') + ";"
+	prev_application_steps += ' if [ "$p_innuendo_input" = "$badstatus" ]; echo "An error as occuried when running the analysis. Try again." > ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_chewBBACA.txt') + "; fi;"
 
 	prev_application_steps += ' if [ "$p_innuendo_input" = "$badstatus" ]; python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_STEPID/run_info.json -v2 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_STEPID/run_stats.json -v3 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_STEPID/run_output.json -v4 ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_chewBBACA.txt')+ ' -v5 false -t output; fi;'
 
