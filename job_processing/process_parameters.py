@@ -121,11 +121,10 @@ def process_pathotyping(key_value_args, parameters, user_folder, workflow):
 	after_application_steps += ' ln -s ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/patho_typing.report.txt ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/PathoTyping_SLURM_ARRAY_JOB_ID_STEPID/PathoTyping_run_output.txt;' 
 
 	#STATUS DEFINITION
-
 	status_definition = ' if [ $? -eq 0 ];then '
-	status_definition += ' python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 "" -v2 "" -v3 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/PathoTyping_SLURM_ARRAY_JOB_ID_STEPID/PathoTyping_run_output.txt -v4 ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_PathoTyping.txt')+ ' -v5 true -t output;'
+	status_definition += ' python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/PathoTyping_SLURM_ARRAY_JOB_ID_STEPID/run_info.json -v2 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/PathoTyping_SLURM_ARRAY_JOB_ID_STEPID/run_stats.json -v3 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/PathoTyping_SLURM_ARRAY_JOB_ID_STEPID/PathoTyping_run_output.txt -v4 ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_PathoTyping.txt')+ ' -v5 true -t output;'
 	status_definition += ' else '
-	status_definition += ' python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 "" -v2 "" -v3 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/PathoTyping_SLURM_ARRAY_JOB_ID_STEPID/PathoTyping_run_output.txt -v4 ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_PathoTyping.txt')+ ' -v5 false -t output;'
+	status_definition += ' python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/PathoTyping_SLURM_ARRAY_JOB_ID_STEPID/run_info.json -v2 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/PathoTyping_SLURM_ARRAY_JOB_ID_STEPID/run_stats.json -v3 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/PathoTyping_SLURM_ARRAY_JOB_ID_STEPID/PathoTyping_run_output.txt -v4 ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_PathoTyping.txt')+ ' -v5 false -t output;'
 	status_definition += ' fi;'
 
 	print after_application_steps
