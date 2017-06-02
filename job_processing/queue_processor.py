@@ -101,13 +101,16 @@ class Queue_Processor:
 			parameters = json.loads(workflow['parameters'])['used Parameter']
 			files = json.loads(workflow['files'])
 			username = workflow['username']
+			strain_submitter = workflow['strain_submitter']
 
 			array_of_files = []
 
+			print strain_submitter
 			user_folder = '/home/users/' + username
+			submitter_folder = '/home/users/' + strain_submitter
 
 			for x in files:
-				array_of_files.append(os.path.join(user_folder, config['FTP_FILES_FOLDER'],files[x]))
+				array_of_files.append(os.path.join(submitter_folder, config['FTP_FILES_FOLDER'],files[x]))
 
 			workflow_job_name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
 			workflow_filepath = os.path.join(config['JOBS_FOLDER'], username + '_' + workflow_job_name +'.sh')
