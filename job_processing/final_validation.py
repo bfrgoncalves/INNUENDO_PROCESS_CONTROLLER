@@ -61,11 +61,12 @@ def validate_innuca(procedure, file_path):
 
 def validate_chewbbaca(procedure, file_path):
 
-	with open(file_path, 'r') as info_file:
+	with open(file_path, 'r') as chewBBACA_info_file:
 		for line in info_file:
 			json_file = json.loads(line)
-			for key, val in json_file.iteritems():
-				return val["pass_qc"]
+			print json_file["run_output.fasta"]
+			#for key, val in json_file.iteritems():
+			#	return val["pass_qc"]
 
 
 def main():
@@ -85,6 +86,10 @@ def main():
 			sys.stdout.write("WARNING")
 	elif args.procedure == 'chewBBACA':
 		status = validate_chewbbaca(args.procedure, args.file_path_to_validate)
+		if str(status) == str("True"):
+			sys.stdout.write("True")
+		else:
+			sys.stdout.write("WARNING")
 	elif args.procedure == 'PathoTyping':
 		status = validate_pathotyping(args.procedure, args.file_path_to_validate)
 
