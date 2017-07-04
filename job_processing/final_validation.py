@@ -61,10 +61,24 @@ def validate_innuca(procedure, file_path):
 
 def validate_chewbbaca(procedure, file_path):
 
+	allele_classes_to_ignore = {'LNF': '0', 'INF-': '', 'NIPHEM': '0', 'NIPH': '0', 'LOTSC': '0', 'PLOT3': '0', 'PLOT5': '0', 'ALM': '0', 'ASM': '0'}
+
 	with open(file_path, 'r') as chewBBACA_info_file:
 		for line in chewBBACA_info_file:
 			json_file = json.loads(line)
 			print json_file["run_output.fasta"]
+			to_string = ",".join(json_file["run_output.fasta"])
+			for k,v in allele_classes_to_ignore.iteritems():
+				to_string = to_string.replace(k,v)
+			to_array = to_string.split(",")
+
+			count_missing = 0
+			for x in to_array:
+				if x == "0":
+					count_missing += 1
+
+			percentage_missing = (count_missing/len(to_array))
+			print percentage_missing
 			#for key, val in json_file.iteritems():
 			#	return val["pass_qc"]
 
