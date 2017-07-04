@@ -41,21 +41,20 @@ pTypes =['dnaextraction', 'librarypreparation', 'qualityControl','sequencing', '
            
 protocolsTypes =['http://purl.obolibrary.org/obo/NGS_0000067','http://purl.obolibrary.org/obo/NGS_0000068', 'http://purl.obolibrary.org/obo/NGS_0000088',
            'http://purl.obolibrary.org/obo/NGS_0000072','http://purl.obolibrary.org/obo/NGS_0000065','http://purl.obolibrary.org/obo/NGS_0000066',
-           'http://purl.obolibrary.org/obo/NGS_0000071','http://purl.obolibrary.org/obo/NGS_0000070','http://purl.obolibrary.org/obo/NGS_0000090']
+           'http://purl.obolibrary.org/obo/NGS_0000071','http://purl.obolibrary.org/obo/NGS_0000070','http://purl.obolibrary.org/obo/NGS_0000090', 'http://purl.obolibrary.org/obo/NGS_0000100']
 
 processTypes = ['http://purl.obolibrary.org/obo/OBI_0000257','http://purl.obolibrary.org/obo/OBI_0000711', 'http://edamontology.org/operation_3218',
            'http://purl.obolibrary.org/obo/OBI_0000626','http://edamontology.org/operation_0369', 'http://purl.obolibrary.org/obo/NGS_0000008',
-           'http://edamontology.org/operation_0523', 'http://edamontology.org/operation_0524','http://purl.obolibrary.org/obo/OBI_0000435']
+           'http://edamontology.org/operation_0523', 'http://edamontology.org/operation_0524', 'http://purl.obolibrary.org/obo/NGS_0000098', 'http://purl.obolibrary.org/obo/NGS_0000099']
            
 processMessages =['http://purl.obolibrary.org/obo/OBI_0001051' ,'http://purl.obolibrary.org/obo/NGS_0000001', 'http://purl.obolibrary.org/obo/SO_0000150',
  			'http://purl.obolibrary.org/obo/SO_0000150', 'http://purl.obolibrary.org/obo/SO_0000150', 'http://purl.obolibrary.org/obo/SO_0000150',
-           'http://purl.obolibrary.org/obo/SO_0000149','http://purl.obolibrary.org/obo/SO_0000149','http://purl.obolibrary.org/obo/OBI_0001305']
+           'http://purl.obolibrary.org/obo/SO_0000149','http://purl.obolibrary.org/obo/SO_0000149','http://purl.obolibrary.org/obo/OBI_0001305','http://purl.obolibrary.org/obo/OBI_0001305']
+
 
 InputTypes = ['http://purl.obolibrary.org/obo/OBI_0000747','http://purl.obolibrary.org/obo/OBI_0001051', 'http://purl.obolibrary.org/obo/SO_0000150',
-          	'http://purl.obolibrary.org/obo/NGS_0000001','http://purl.obolibrary.org/obo/SO_0000150', 'http://purl.obolibrary.org/obo/SO_0000150',
-           'http://purl.obolibrary.org/obo/SO_0000150', 'http://purl.obolibrary.org/obo/SO_0000150','http://purl.obolibrary.org/obo/SO_0000149']
-
-
+           'http://purl.obolibrary.org/obo/NGS_0000001','http://purl.obolibrary.org/obo/SO_0000150', 'http://purl.obolibrary.org/obo/SO_0000150',
+           'http://purl.obolibrary.org/obo/SO_0000150', 'http://purl.obolibrary.org/obo/SO_0000150','http://purl.obolibrary.org/obo/SO_0000149','http://purl.obolibrary.org/obo/OBI_0000747']
 
 protocolsTypes = dict(zip(pTypes, protocolsTypes))
 processTypes = dict(zip(pTypes, processTypes))

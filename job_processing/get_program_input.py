@@ -93,6 +93,9 @@ def get_process_input(project_id, pipeline_id, process_id):
 		dbconAg.add(stmt5)
 
 
+	#queryString="SELECT DISTINCT (STR(?in) as ?messageURI) WHERE{<http://ngsonto.net/api/v1.0/projects/50/pipelines/106> obo:BFO_0000051  ?proc.{ ?proc obo:RO_0002233 ?in. ?in a <http://purl.obolibrary.org/obo/SO_0000150>. } UNION { ?proc obo:RO_0002234 ?in. ?in a <http://purl.obolibrary.org/obo/SO_0000150>. }}"
+
+
 def get_process_status(project_id, pipeline_id, process_id):
 
 	try:
@@ -114,6 +117,8 @@ def get_process_status(project_id, pipeline_id, process_id):
 			sys.stdout.write("PD")
 		elif "pending" in jsonResult[0]["statusStr"]:
 			sys.stdout.write("PD")
+		elif "warning" in jsonResult[0]["statusStr"]:
+			sys.stdout.write("WARNING")
 		elif "false" in jsonResult[0]["statusStr"]:
 			sys.stdout.write("FAILED")
 	except Exception as e:
