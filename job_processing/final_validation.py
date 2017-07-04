@@ -29,6 +29,8 @@ AG_REPOSITORY = config["AG_REPOSITORY"]
 AG_USER = config["AG_USER"]
 AG_PASSWORD = config["AG_PASSWORD"]
 
+print config
+
 wg_headers_correspondece = config["cg_headers_correspondece"]
 cg_headers_correspondece = config["cg_headers_correspondece"]
 
@@ -65,7 +67,7 @@ def validate_innuca(procedure, file_path):
 def validate_chewbbaca(procedure, file_path, specie):
 
 	allele_classes_to_ignore = {'LNF': '0', 'INF-': '', 'NIPHEM': '0', 'NIPH': '0', 'LOTSC': '0', 'PLOT3': '0', 'PLOT5': '0', 'ALM': '0', 'ASM': '0'}
-	
+
 	core_profile = []
 
 	with open(file_path, 'r') as chewBBACA_info_file:
