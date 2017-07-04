@@ -29,6 +29,9 @@ AG_REPOSITORY = config["AG_REPOSITORY"]
 AG_USER = config["AG_USER"]
 AG_PASSWORD = config["AG_PASSWORD"]
 
+wg_headers_correspondece = config["cg_headers_correspondece"]
+cg_headers_correspondece = config["cg_headers_correspondece"]
+
 from queryParse2Json import parseAgraphStatementsRes,parseAgraphQueryRes
 
 #setup agraph
@@ -59,15 +62,29 @@ def validate_innuca(procedure, file_path):
 				return val["pass_qc"]
 
 
-def validate_chewbbaca(procedure, file_path):
+def validate_chewbbaca(procedure, file_path, specie):
 
 	allele_classes_to_ignore = {'LNF': '0', 'INF-': '', 'NIPHEM': '0', 'NIPH': '0', 'LOTSC': '0', 'PLOT3': '0', 'PLOT5': '0', 'ALM': '0', 'ASM': '0'}
+	
+	core_profile = []
 
 	with open(file_path, 'r') as chewBBACA_info_file:
 		for line in chewBBACA_info_file:
 			json_file = json.loads(line)
-			print json_file["run_output.fasta"]
-			to_string = ",".join(json_file["run_output.fasta"])
+			profile = json_file["run_output.fasta"]
+			headers = json_file["header"]
+
+			with open(core_headers_correspondece[specie], 'r') as reader:
+				for i, line in enumerate(reader):
+					count_core+=1
+					if line.rstrip() == "FILE":
+						continue
+					else:
+						include_index = headers.index(line.rstrip())
+						if include_index > -1:
+							core_profile.append(profile[include_index])
+			
+			to_string = ",".join(core_profile)
 			for k,v in allele_classes_to_ignore.iteritems():
 				to_string = to_string.replace(k,v)
 			to_array = to_string.split(",")
@@ -89,6 +106,7 @@ def main():
 
 	parser.add_argument('--file_path_to_validate', type=str, help='File to be used as validation', required=True)
 	parser.add_argument('--procedure', type=str, help='File to be used as validation', required=True)
+	parser.add_argument('--specie', type=str, help='Species to apply and make correpondence with chewbbaca core gene list', required=False)
 
 	args = parser.parse_args()
 
@@ -98,8 +116,8 @@ def main():
 			sys.stdout.write("True")
 		else:
 			sys.stdout.write("WARNING")
-	elif args.procedure == 'chewBBACA':
-		status = validate_chewbbaca(args.procedure, args.file_path_to_validate)
+	elif args.procedure == 'chewBBACA' and args.specie:
+		status = validate_chewbbaca(args.procedure, args.file_path_to_validate, args.specie)
 		if str(status) == str("True"):
 			sys.stdout.write("True")
 		else:

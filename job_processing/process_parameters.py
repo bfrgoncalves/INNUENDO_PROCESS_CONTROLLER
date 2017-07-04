@@ -7,7 +7,7 @@ def get_protocol_parameters(parameters):
 	key_value_args = []
 
 	for key, value in parameters.iteritems():
-		if key == '-i' or key == '-o' or key == "chewBBACA_schema":
+		if key == '-i' or key == '-o' or key == "chewBBACA_schema" or key == "chewBBACA_specie":
 			continue
 		else:
 			key_value_args.append(str(key))
@@ -150,6 +150,8 @@ def process_chewbbaca(key_value_args, parameters, user_folder, workflow):
 	for key, value in parameters.iteritems():
 		if key == "chewBBACA_schema":
 			schema_to_use = value
+		elif key == "chewBBACA_specie":
+			specie_to_apply = value
 
 	prev_application_steps = 'badstatus="404"; firstprocess="FirstProcess";'
 
@@ -227,7 +229,13 @@ def process_chewbbaca(key_value_args, parameters, user_folder, workflow):
 
 	#STATUS DEFINITION
 	status_definition = ' if [ $? -eq 0 ]; then '
+	status_definition += ' validation_status=$(python job_processing/final_validation.py --file_path_to_validate ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_STEPID/run_output.json' + ' --procedure chewBBACA --species'+specie_to_apply+');'
+	status_definition += ' echo $validation_status;'
+	status_definition += ' if [ "$validation_status" = "$warning" ]; then '
+	status_definition += ' python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_STEPID/run_info.json -v2 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_STEPID/run_stats.json -v3 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_STEPID/run_output.json -v4 ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_chewBBACA.txt')+ ' -v5 warning -t output;'
+	status_definition += ' else '
 	status_definition += ' python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_STEPID/run_info.json -v2 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_STEPID/run_stats.json -v3 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_STEPID/run_output.json -v4 ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_chewBBACA.txt')+ ' -v5 true -t output;'
+	status_definition += ' fi;'
 	status_definition += ' else '
 	status_definition += ' python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_STEPID/run_info.json -v2 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_STEPID/run_stats.json -v3 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_STEPID/run_output.json -v4 ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_chewBBACA.txt')+ ' -v5 false -t output;'
 	status_definition += ' fi;'
