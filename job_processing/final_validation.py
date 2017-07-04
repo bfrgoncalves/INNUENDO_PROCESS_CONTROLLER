@@ -62,7 +62,7 @@ def validate_innuca(procedure, file_path):
 def validate_chewbbaca(procedure, file_path):
 
 	with open(file_path, 'r') as chewBBACA_info_file:
-		for line in info_file:
+		for line in chewBBACA_info_file:
 			json_file = json.loads(line)
 			print json_file["run_output.fasta"]
 			#for key, val in json_file.iteritems():
