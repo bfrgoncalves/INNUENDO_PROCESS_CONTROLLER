@@ -52,7 +52,7 @@ from franz.openrdf.model import URI
 
 def validate_innuca(procedure, file_path):
 
-	with open(file_path, r) as info_file:
+	with open(file_path, 'r') as info_file:
 		for line in reader:
 			json_file = json.loads(line)
 			print json_file
