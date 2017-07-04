@@ -68,6 +68,7 @@ def validate_chewbbaca(procedure, file_path, specie):
 	allele_classes_to_ignore = {'LNF': '0', 'INF-': '', 'NIPHEM': '0', 'NIPH': '0', 'LOTSC': '0', 'PLOT3': '0', 'PLOT5': '0', 'ALM': '0', 'ASM': '0'}
 
 	core_profile = []
+	count_core = 0
 
 	with open(file_path, 'r') as chewBBACA_info_file:
 		for line in chewBBACA_info_file:
