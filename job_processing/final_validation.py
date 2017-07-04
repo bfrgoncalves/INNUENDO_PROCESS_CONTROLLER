@@ -97,7 +97,10 @@ def validate_chewbbaca(procedure, file_path, specie):
 					count_missing += 1
 
 			percentage_missing = (float(count_missing)/float(len(to_array)))
-			print percentage_missing
+			if percentage_missing < 0.05:
+				return True
+			else:
+				return False
 			#for key, val in json_file.iteritems():
 			#	return val["pass_qc"]
 
