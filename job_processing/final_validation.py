@@ -55,9 +55,8 @@ def validate_innuca(procedure, file_path):
 	with open(file_path, 'r') as info_file:
 		for line in info_file:
 			json_file = json.loads(line)
-			print json_file
 			for key, val in json_file.iteritems():
-				print val["pass_qc"]
+				return val["pass_qc"]
 
 
 
@@ -73,6 +72,10 @@ def main():
 
 	if args.procedure == 'INNUca':
 		status = validate_innuca(args.procedure, args.file_path_to_validate)
+		if str(status) == str("True"):
+			sys.stdout.write("True")
+		else:
+			sys.stdout.write("WARNING")
 	elif args.procedure == 'chewBBACA':
 		status = validate_chewbbaca(args.procedure, args.file_path_to_validate)
 	elif args.procedure == 'PathoTyping':
