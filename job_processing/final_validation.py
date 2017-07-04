@@ -13,8 +13,6 @@ from franz.openrdf.sail.allegrographserver import AllegroGraphServer
 from franz.openrdf.repository.repository import Repository
 from franz.miniclient import repository
 
-from config import core_headers_correspondece, wg_headers_correspondece
-
 #READ CONFIG FILE
 config = {}
 execfile("config.py", config)
@@ -33,8 +31,8 @@ AG_PASSWORD = config["AG_PASSWORD"]
 
 print core_headers_correspondece
 
-#wg_headers_correspondece = config["cg_headers_correspondece"]
-#cg_headers_correspondece = config["cg_headers_correspondece"]
+wg_headers_correspondece = config["wg_headers_correspondece"]
+core_headers_correspondece = config["core_headers_correspondece"]
 
 from queryParse2Json import parseAgraphStatementsRes,parseAgraphQueryRes
 
