@@ -59,6 +59,13 @@ def validate_innuca(procedure, file_path):
 				return val["pass_qc"]
 
 
+def validate_chewbbaca(procedure, file_path):
+
+	with open(file_path, 'r') as info_file:
+		for line in info_file:
+			json_file = json.loads(line)
+			for key, val in json_file.iteritems():
+				return val["pass_qc"]
 
 
 def main():
