@@ -29,7 +29,6 @@ AG_REPOSITORY = config["AG_REPOSITORY"]
 AG_USER = config["AG_USER"]
 AG_PASSWORD = config["AG_PASSWORD"]
 
-print core_headers_correspondece
 
 wg_headers_correspondece = config["wg_headers_correspondece"]
 core_headers_correspondece = config["core_headers_correspondece"]
