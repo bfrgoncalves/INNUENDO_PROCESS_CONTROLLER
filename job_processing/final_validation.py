@@ -71,12 +71,12 @@ def main():
 
 	args = parser.parse_args()
 
-	if procedure == 'INNUca':
-		status = validate_innuca(procedure, file_path_to_validate)
-	elif procedure == 'chewBBACA':
-		status = validate_chewbbaca(procedure, file_path_to_validate)
-	elif procedure == 'PathoTyping':
-		status = validate_pathotyping(procedure, file_path_to_validate)
+	if args.procedure == 'INNUca':
+		status = validate_innuca(args.procedure, args.file_path_to_validate)
+	elif args.procedure == 'chewBBACA':
+		status = validate_chewbbaca(args.procedure, args.file_path_to_validate)
+	elif args.procedure == 'PathoTyping':
+		status = validate_pathotyping(args.procedure, args.file_path_to_validate)
 
 
 
