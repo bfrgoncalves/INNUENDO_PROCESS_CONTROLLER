@@ -177,7 +177,6 @@ def set_process_output(project_id, pipeline_id, process_id, run_info, run_stats,
 		dbconAg.add(stmt4)
 		dbconAg.add(stmt5)
 		
-		sys.stdout.write("202")
 	except Exception as e:
 		#print "ERROR", e
 		sys.stdout.write("404")
