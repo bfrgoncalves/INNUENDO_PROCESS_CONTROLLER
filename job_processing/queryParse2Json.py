@@ -1,10 +1,11 @@
 import json
+import sys
 
 #query parsers aux functions
 def parseAgraphQueryRes(result,listValuesToGet):
 	resultList=[]
 	for bindingSet in result:
-			print bindingSet
+			sys.stderr.write(bindingSet)
 			auxDict={}
 			
 			for elem in listValuesToGet:
