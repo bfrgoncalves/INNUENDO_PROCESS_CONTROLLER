@@ -6,6 +6,7 @@ import shlex
 import json
 import random
 import string
+import random
 from process_parameters import process_parameters
 
 #READ CONFIG FILE
@@ -35,6 +36,8 @@ def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows, array_of_
 	count_tasks=0
 	total_tasks=1
 
+	random_sbatch_number = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
+
 	for a in range(0, numberOfWorkflows):
 		array_tasks.append(str(count_tasks))
 		count_tasks+=1
@@ -52,7 +55,7 @@ def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows, array_of_
 
 
 	#commands = ['sh','job_processing/launch_job.sh'] + [array_to_string, ','.join(array_tasks), str(total_tasks), ','.join(array_of_files), user_folder, array_of_process_ids, array_of_workflow_ids, array_of_out_names]
-	commands = ['sh','job_processing/launch_job.sh'] + [array_to_string, ','.join(array_of_files), user_folder]
+	commands = ['sh','job_processing/launch_job.sh'] + [array_to_string, ','.join(array_of_files), user_folder, str(random_sbatch_number)]
 	proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	stdout, stderr = proc.communicate()
 	print stdout
