@@ -59,6 +59,7 @@ def get_process_input(project_id, pipeline_id, process_id):
 		tupleQuery = dbconAg.prepareTupleQuery(QueryLanguage.SPARQL, queryString)
 		result = tupleQuery.evaluate()
 		
+		sys.stderr.write(str(result))
 		jsonResult=parseAgraphQueryRes(result,["file_3", "label", "statusStr"])
 
 		result.close()
