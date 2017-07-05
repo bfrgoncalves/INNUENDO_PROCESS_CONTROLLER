@@ -59,17 +59,10 @@ def get_process_input(project_id, pipeline_id, process_id):
 		tupleQuery = dbconAg.prepareTupleQuery(QueryLanguage.SPARQL, queryString)
 		result = tupleQuery.evaluate()
 
-		sys.stderr.write(str(result))
-		#jsonResult=parseAgraphQueryRes(result,["file_3", "label", "statusStr"])
-		jsonResult=parseAgraphQueryRes(result,["label"])
+		jsonResult=parseAgraphQueryRes(result,["file_3", "label", "statusStr"])
+		#jsonResult=parseAgraphQueryRes(result,["label"])
 
 		result.close()
-
-		'''if str(process_id) == "2":
-			print procStr
-			print jsonResult'''
-		sys.stderr.write(queryString)
-		sys.stderr.write(str(jsonResult))
 
 		if "biosamples sample" in jsonResult[0]["label"]:
 			sys.stdout.write('FirstProcess')
@@ -81,7 +74,6 @@ def get_process_input(project_id, pipeline_id, process_id):
 			sys.stdout.write(jsonResult[0]["file_3"].split('"')[1])
 		#print jsonResult["file3"]
 	except Exception as e:
-		sys.stderr.write(str(e))
 		sys.stderr.write("404")
 
 		#change output to false
