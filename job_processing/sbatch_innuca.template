@@ -35,17 +35,19 @@ IFS=',' read -r -a files_to_transfer <<< FILES_TO_TRANSFER
 
 user_dir=USER_DIR
 job_directory=$user_dir/$SLURM_JOB_ID
+reads_directory=$job_directory/reads
 reports_directory=$user_dir/$SLURM_JOB_ID/reports
 
 if [ ! -d "$job_directory" ]; then
 	mkdir $job_directory
+	mkdir $reads_directory
 	#mkdir $reports_directory
 fi
 
 for f in "${files_to_transfer[@]}"
 do
-   echo "ln -s $user_dir/$f $job_directory/${f##*/}"
-   ln -s $f $job_directory/${f##*/}
+   echo "ln -s $f $reads_directory/${f##*/}"
+   ln -s $f $reads_directory/${f##*/}
 done
 
 

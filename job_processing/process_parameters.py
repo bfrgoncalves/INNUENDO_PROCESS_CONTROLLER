@@ -40,7 +40,7 @@ def process_innuca(key_value_args, parameters, user_folder, workflow):
 	#prev_application_steps += ' python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 null -v2 null -v3 null -v4 null -v5 running -t output;'
 
 	key_value_args.append('-i')
-	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID'))
+	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID',"reads"))
 
 	key_value_args.append('-o')
 	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID'))
@@ -103,7 +103,7 @@ def process_pathotyping(key_value_args, parameters, user_folder, workflow):
 
 	prev_application_steps += ' python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -t set_pending;'
 
-	prev_application_steps += ' files_to_use=$(python job_processing/get_fq_on_dir.py ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + ');'
+	prev_application_steps += ' files_to_use=$(python job_processing/get_fq_on_dir.py ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'reads') + ');'
 	#prev_application_steps += ' python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 null -v2 null -v3 null -v4 null -v5 running -t output;'
 	prev_application_steps += ' echo $files_to_use;'
 	#Program input
