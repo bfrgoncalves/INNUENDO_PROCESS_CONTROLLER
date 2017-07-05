@@ -128,6 +128,7 @@ def process_pathotyping(key_value_args, parameters, user_folder, workflow):
 
 	after_application_steps = '; mkdir ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/PathoTyping_SLURM_ARRAY_JOB_ID_STEPID;'
 	after_application_steps += ' ln -s ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/patho_typing.report.txt ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/PathoTyping_SLURM_ARRAY_JOB_ID_STEPID/PathoTyping_run_output.txt;' 
+	after_application_steps += ' ls ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/patho_typing.report.txt;'
 
 	#STATUS DEFINITION
 	status_definition = ' if [ $? -eq 0 ];then '
