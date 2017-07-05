@@ -8,7 +8,7 @@ REDIS_URL = 'redis://localhost:6379'
 JOBS_FOLDER = 'job_processing/parameters_files'
 
 #Files folder (FTP)
-FTP_FILES_FOLDER = 'ftp'
+FTP_FILES_FOLDER = 'ftp/files'
 
 #BLAST PATH
 BLAST_PATH = '/home/debian/ncbi-blast-2.6.0+/bin/blastp'
