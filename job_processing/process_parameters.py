@@ -114,6 +114,8 @@ def process_pathotyping(key_value_args, parameters, user_folder, workflow):
 	key_value_args.append('-o')
 	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID'))
 
+	key_value_args.append('--trueCoverage')
+
 	#SPECIES are set on the protocol
 
 
