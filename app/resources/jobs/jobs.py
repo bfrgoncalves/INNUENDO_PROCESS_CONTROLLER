@@ -145,7 +145,6 @@ class Job_queue(Resource):
 					store_in_db = False
 				else:
 					store_in_db = True
-				print store_in_db
 
 			'''if len(parts) == 0:
 				stdout = job_id + '\tFAILED'
