@@ -141,7 +141,8 @@ class Job_queue(Resource):
 			if "COMPLETED" in stdout or "WARNING" in stdout or "FAILED" in stdout:
 				print "COMPLETED"
 				results = load_results_from_file(job_id, args.username)
-				store_in_db = True
+				if len(results[1].keys()) store_in_db = False
+				else store_in_db = True
 
 			'''if len(parts) == 0:
 				stdout = job_id + '\tFAILED'
