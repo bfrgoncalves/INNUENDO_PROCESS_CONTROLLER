@@ -73,10 +73,9 @@ def load_results_from_file(job_id, username):
 			json_data = json.loads(data)
 		except ValueError:
 			if "PathoTyping" in i or "Pathotyping" in i:
-				try{
+				try:
 					json_data = {}
 					json_data["result"] = data
-				}
 				except Exception:
 					json_data = {"stats": "Not JSON"}
 			else:
