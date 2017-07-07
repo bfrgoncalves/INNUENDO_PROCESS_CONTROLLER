@@ -68,13 +68,17 @@ def load_results_from_file(job_id, username):
 	print "##################################################"
 
 	for i in onlyfiles:
-		data = open(i).read()
 		try:
+			data = open(i).read()
 			json_data = json.loads(data)
 		except ValueError:
-			if "PathoTyping" in i:
-				json_data = {}
-				json_data["result"] = data
+			if "PathoTyping" in i or "Pathotyping" in i:
+				try{
+					json_data = {}
+					json_data["result"] = data
+				}
+				except Exception:
+					json_data = {"stats": "Not JSON"}
 			else:
 				json_data = {"stats": "Not JSON"}
 
