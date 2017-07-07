@@ -71,7 +71,7 @@ def load_results_from_file(job_id, username):
 		try:
 			data = open(i).read()
 			json_data = json.loads(data)
-		except ValueError:
+		except Exception:
 			if "PathoTyping" in i or "Pathotyping" in i:
 				try:
 					json_data = {}
