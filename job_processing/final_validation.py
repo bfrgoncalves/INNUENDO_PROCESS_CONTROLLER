@@ -117,11 +117,11 @@ def main():
 
 	if args.procedure == 'INNUca':
 		status = validate_innuca(args.procedure, args.file_path_to_validate)
-		if str(status) == "true":
+		if str(status) == "PASS":
 			sys.stdout.write("True")
-		elif str(status) == "warning":
+		elif str(status) == "WARNING":
 			sys.stdout.write("WARNING")
-		elif str(status) == "false":
+		elif str(status) == "FAIL":
 			sys.stdout.write("FAILED")
 	elif args.procedure == 'chewBBACA' and args.specie:
 		status = validate_chewbbaca(args.procedure, args.file_path_to_validate, args.specie)
