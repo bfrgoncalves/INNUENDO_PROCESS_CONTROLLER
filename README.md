@@ -1,18 +1,12 @@
-# INNUENDO_PROCESS_CONTROLLER
-Application controller source code
+## INNUENDO_PROCESS_CONTROLLER
+Backbone structure of the job management system. It allows jobs submission to slurm and it processes their outputs.
 
-Backbone structure of the job management system
+1. [Install SLURM](#install_slurm)
+2. [Install dependencies](#install_dependencies)
+    * INNUca
+    * chewBBACA
+    * Pathotyping
 
-DONE UNTIL NOW:
-	- API route to submit jobs
-	- Worker defined
+> #### Install SLURM
 
-TO DO:
-	- Access to user storage
-	- run jobs
-	- Output in desired format
-
-Test:
-	- Install INNUca on dependencies folder
-	- install redis
-	- Install rq
+> #### Install dependencies
