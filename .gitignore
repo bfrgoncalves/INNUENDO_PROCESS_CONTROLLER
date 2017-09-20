@@ -1,3 +1,5 @@
 flask/
 dependencies/
 config.py
+.idea/
+.DS_Store

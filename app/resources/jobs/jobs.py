@@ -18,6 +18,7 @@ import glob
 
 job_post_parser = reqparse.RequestParser()
 job_post_parser.add_argument('data', dest='data', type=str, required=True, help="Job Parameters")
+job_post_parser.add_argument('current_specie', dest='current_specie', type=str, required=True, help="Current Specie")
 
 job_get_parser = reqparse.RequestParser()
 job_get_parser.add_argument('job_id', dest='job_id', type=str, required=True, help="Job ID")
@@ -99,9 +100,10 @@ class Job_queue(Resource):
 	def post(self):
 		args = job_post_parser.parse_args()
 		job_parameters = args.data
-		print job_parameters
+		current_specie = args.current_specie
+		print job_parameters, current_specie
 		innuendo_processor = Queue_Processor()
-		jobID = innuendo_processor.insert_job(job_parameters=job_parameters)
+		jobID = innuendo_processor.insert_job(job_parameters=job_parameters, current_specie=current_specie)
 
 		return {'jobID':jobID}, 200
 
