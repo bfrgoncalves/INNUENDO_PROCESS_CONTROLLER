@@ -102,6 +102,7 @@ class Job_queue(Resource):
 		args = job_post_parser.parse_args()
 		job_parameters = args.data
 		current_specie = args.current_specie
+		sampleName = args.sampleName
 		print job_parameters, current_specie
 		innuendo_processor = Queue_Processor()
 		jobID = innuendo_processor.insert_job(job_parameters=job_parameters, current_specie=current_specie, sampleName=sampleName)
