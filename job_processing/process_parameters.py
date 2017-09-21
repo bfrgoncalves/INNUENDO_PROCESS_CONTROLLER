@@ -20,7 +20,7 @@ def get_protocol_parameters(parameters):
 	return key_value_args
 
 
-def process_innuca(key_value_args, parameters, user_folder, workflow, current_specie):
+def process_innuca(key_value_args, parameters, user_folder, workflow, current_specie, workflow_name, sampleName):
 
 	prev_application_steps = 'badstatus="404"; firstprocess="FirstProcess";warning="WARNING";failed="FAILED";'
 
@@ -90,7 +90,7 @@ def process_innuca(key_value_args, parameters, user_folder, workflow, current_sp
 	return key_value_args, prev_application_steps, after_application_steps, status_definition
 
 
-def process_pathotyping(key_value_args, parameters, user_folder, workflow, current_specie):
+def process_pathotyping(key_value_args, parameters, user_folder, workflow, current_specie, workflow_name, sampleName):
 
 	prev_application_steps = 'badstatus="404"; firstprocess="FirstProcess";'
 
@@ -145,7 +145,7 @@ def process_pathotyping(key_value_args, parameters, user_folder, workflow, curre
 	return key_value_args, prev_application_steps, after_application_steps, status_definition
 
 
-def process_chewbbaca(key_value_args, parameters, user_folder, workflow, current_specie):
+def process_chewbbaca(key_value_args, parameters, user_folder, workflow, current_specie, workflow_name, sampleName):
 	#list of genomes
 	#list of genes
 
@@ -229,7 +229,8 @@ def process_chewbbaca(key_value_args, parameters, user_folder, workflow, current
 	status_definition += ' python job_processing/get_program_input.py --project ' + workflow["project_id"] + ' --pipeline ' + workflow["pipeline_id"] + ' --process ' + workflow["process_id"] + ' -v1 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_STEPID/run_info.json -v2 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_STEPID/run_stats.json -v3 ' + os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_STEPID/run_output.json -v4 ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID', 'log_output_chewBBACA.txt')+ ' -v5 true -t output;'
 
 	#TEST trigger classification
-	status_definition += ' curl -X GET "http://'+config["FRONTEND_SERVER_IP"]+'/app/api/v1.0/jobs/classify?job_id=SLURM_ARRAY_JOB_ID,database_to_include='+current_specie+'";'
+	status_definition += ' curl -L -X GET "http://'+config["FRONTEND_SERVER_IP"]+'/app/api/v1.0/jobs/?database_to_include='+ current_specie +'&job_id=SLURM_ARRAY_JOB_ID_STEPID&pipeline_id=' + workflow["pipeline_id"] + '&procedure_name='+ workflow_name +'&process_id=' + workflow["process_id"] + '&process_position=' + workflow["process_id"] + '&project_id=' + workflow["project_id"] + '&sample_name='+sampleName+'";'
+	status_definition += ' curl -L -X GET "http://'+config["FRONTEND_SERVER_IP"]+'/app/api/v1.0/jobs/classify?job_id=SLURM_ARRAY_JOB_ID_STEPID,database_to_include='+current_specie+'";'
 
 	status_definition += ' fi;'
 	status_definition += ' else '
@@ -240,7 +241,7 @@ def process_chewbbaca(key_value_args, parameters, user_folder, workflow, current
 
 
 
-def process_parameters(parameters, user_folder, workflow, current_specie):
+def process_parameters(parameters, user_folder, workflow, current_specie, workflow_name, sampleName):
 
 	#READ CONFIG FILE
 	config = {}
@@ -255,7 +256,7 @@ def process_parameters(parameters, user_folder, workflow, current_specie):
 	#options = {'INNUca':process_innuca, 'chewBBACA':process_chewbbaca}
 
 	key_value_args = get_protocol_parameters(parameters)
-	key_value_args, prev_application_steps, after_application_steps, status_definition = options[software](key_value_args, parameters, user_folder, workflow, current_specie)
+	key_value_args, prev_application_steps, after_application_steps, status_definition = options[software](key_value_args, parameters, user_folder, workflow, current_specie, workflow_name, sampleName)
 
 
 	return key_value_args, prev_application_steps, after_application_steps, status_definition
