@@ -81,7 +81,7 @@ def extract_ids(job_out):
 
 class Queue_Processor:
 
-	def process_job(self, job_parameters, current_specie, sampleName):
+	def process_job(self, job_parameters, current_specie, sampleName, current_user_name, current_user_id):
 		key_value_args = []
 		job_parameters = json.loads(job_parameters)
 
@@ -120,7 +120,7 @@ class Queue_Processor:
 			workflow_filepath = os.path.join(config['JOBS_FOLDER'], username + '_' + workflow_job_name +'.sh')
 			
 
-			key_value_args, prev_application_steps, after_application_steps, status_definition = process_parameters(parameters, user_folder, workflow, current_specie, workflow_name, sampleName)
+			key_value_args, prev_application_steps, after_application_steps, status_definition = process_parameters(parameters, user_folder, workflow, current_specie, workflow_name, sampleName, current_user_name, current_user_id)
 			key_value_args, softwarePath, language = setFilesByProgram(key_value_args, workflow)
 
 			if key_value_args != False:
@@ -180,9 +180,9 @@ class Queue_Processor:
 
 	
 
-	def insert_job(self, job_parameters, current_specie, sampleName):
+	def insert_job(self, job_parameters, current_specie, sampleName, current_user_name, current_user_id):
 		#Insert jobs in queue
-		jobID, code = self.process_job(job_parameters, current_specie, sampleName)
+		jobID, code = self.process_job(job_parameters, current_specie, sampleName, current_user_name, current_user_id)
 		return jobID
 
 	
