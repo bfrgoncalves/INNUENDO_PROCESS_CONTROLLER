@@ -105,7 +105,7 @@ class Queue_Processor:
 			files = json.loads(workflow['files'])
 			username = workflow['username']
 			strain_submitter = workflow['strain_submitter']
-			workflow_name = workflow['name']
+			workflow_name = json.loads(workflow)['name']
 
 			array_of_files = []
 
