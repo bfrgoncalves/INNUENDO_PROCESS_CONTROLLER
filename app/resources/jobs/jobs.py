@@ -29,6 +29,7 @@ job_get_parser.add_argument('project_id', dest='project_id', type=str, required=
 job_get_parser.add_argument('pipeline_id', dest='pipeline_id', type=str, required=True, help="pipeline_id ID")
 job_get_parser.add_argument('process_id', dest='process_id', type=str, required=True, help="process_id ID")
 job_get_parser.add_argument('username', dest='username', type=str, required=True, help="Username")
+job_get_parser.add_argument('from_process_controller', dest='from_process_controller', type=str, required=True, help="from_process_controller")
 #job_post_parser.add_argument('username', dest='username', type=str, required=True, help="Username")
 #job_post_parser.add_argument('files', dest='files', type=str, required=True, help="Files to use")
 #parameters -> workflow_id
@@ -117,6 +118,7 @@ class Job_queue(Resource):
 
 		args = job_get_parser.parse_args()
 		job_id = args.job_id
+		from_process_controller = from_process_controller
 		print "JOB", job_id
 		commands = 'sh job_processing/get_job_status.sh ' + job_id.split("_")[0]
 		proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -127,7 +129,7 @@ class Job_queue(Resource):
 		results = [[],[]]
 		store_in_db = False
 
-		if len(stdout.split('\t')) == 2:
+		if len(stdout.split('\t')) == 2 and from_process_controller != 'true':
 			print stdout.split('\t')[0]
 			if stdout.split('\t')[0].replace(".","_") == job_id:
 				stdout = job_id + '\tR'
@@ -135,7 +137,7 @@ class Job_queue(Resource):
 				go_to_pending = True
 
 
-		if len(stdout.split('\t')) == 1 or go_to_pending == True:
+		if len(stdout.split('\t')) == 1 or go_to_pending == True or from_process_controller == 'true':
 			print go_to_pending
 			print '--project ' + args.project_id + ' --pipeline ' + args.pipeline_id + ' --process ' + args.process_id + ' -t status'
 			commands = 'python job_processing/get_program_input.py --project ' + args.project_id + ' --pipeline ' + args.pipeline_id + ' --process ' + args.process_id + ' -t status'
