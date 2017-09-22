@@ -118,7 +118,7 @@ class Job_queue(Resource):
 
 		args = job_get_parser.parse_args()
 		job_id = args.job_id
-		from_process_controller = from_process_controller
+		from_process_controller = args.from_process_controller
 		print "JOB", job_id
 		commands = 'sh job_processing/get_job_status.sh ' + job_id.split("_")[0]
 		proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
