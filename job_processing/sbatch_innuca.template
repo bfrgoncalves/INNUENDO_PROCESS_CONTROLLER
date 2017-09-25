@@ -5,6 +5,11 @@
 # set the number of nodes
 #SBATCH --nodes=1
 
+
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem-per-cpu=3GB
+
 # set name of job
 #SBATCH --job-name=template_name
 
@@ -12,19 +17,16 @@
 #SBATCH --mail-type=ALL
 
 # send mail to this address
-#SBATCH --mail-user=mickaelsilva@fm.ul.pt
+#SBATCH --mail-user=innuendo@mail.com
 
 #Number of tasks
 # SBATCH --array=NUMBEROFTASKS
 
-#Simultaious tasks
-# SBATCH --ntasks=1
-
 # run as user
-export PATH="/home/debian/.linuxbrew/bin:$PATH"
-export PATH="/home/debian/.linuxbrew/Cellar/mlst/2.8/bin:$PATH"
-export PATH="/home/debian/ncbi-blast-2.6.0+/bin:$PATH"
-export PATH="/home/debian/sandbox/INNUENDO_PROCESS_CONTROLLER/dependencies/ReMatCh:$PATH"
+export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+export PATH="/home/linuxbrew/.linuxbrew/Cellar/mlst/2.8/bin:$PATH"
+export PATH="/home/ubuntu/ncbi-blast-2.6.0+/bin:$PATH"
+export PATH="/home/ubuntu/sandbox/INNUENDO_PROCESS_CONTROLLER/dependencies/ReMatCh:$PATH"
 
 # run the application
 IFS='\#' read -r -a array <<< ARRAY_STRING
@@ -74,7 +76,7 @@ echo 'JOB PARAMETERS:'
 
 for job_file in "${array[@]}"
 do
-   srun sh $job_file $SLURM_JOB_ID
+   srun --nodes=1 --ntasks=1 --cpus-per-task=$SLURM_CPUS_PER_TASK sh $job_file $SLURM_JOB_ID
 done
 
 #IFTRUE
