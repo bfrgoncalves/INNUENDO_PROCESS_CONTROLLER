@@ -139,6 +139,9 @@ class Queue_Processor:
 				outputs_names.append(output_name)'''
 				jobID, task_numbers = submitToSLURM(user_folder, workflow_filenames, count_workflows, array_of_files)
 
+				for t in task_numbers:
+					task_ids.append(jobID + "_" + t)
+
 		#jobID, task_numbers = submitToSLURM(user_folder, workflow_filenames, count_workflows, array_of_files)
 
 		#check job ids via squeue
@@ -147,9 +150,6 @@ class Queue_Processor:
 		'''commands = 'sh job_processing/get_number_of_jobs.sh ' + jobID
 		proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc1.communicate()'''
-
-				for t in task_numbers:
-					task_ids.append(jobID + "_" + t)
 
 		'''if stderr == '':
 			task_ids = extract_ids(stdout)'''
