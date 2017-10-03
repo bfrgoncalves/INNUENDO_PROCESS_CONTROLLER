@@ -123,6 +123,9 @@ class Queue_Processor:
 			key_value_args, prev_application_steps, after_application_steps, status_definition = process_parameters(parameters, user_folder, workflow, current_specie, workflow_name, sampleName, current_user_name, current_user_id)
 			key_value_args, softwarePath, language = setFilesByProgram(key_value_args, workflow)
 
+			#TEST SUBMIT ONLY ONE SBATCH PER PROCEDURE
+			workflow_filenames = []
+
 			if key_value_args != False:
 				key_value_args = [language, softwarePath] + key_value_args
 				with open(workflow_filepath, 'a') as jobs_file:
@@ -134,9 +137,9 @@ class Queue_Processor:
 				'''processes_ids.append(process_ids)
 				workflows_ids.append(workflow_id)
 				outputs_names.append(output_name)'''
+				jobID, task_numbers = submitToSLURM(user_folder, workflow_filenames, count_workflows, array_of_files)
 
-		#jobID = submitToSLURM(user_folder, workflow_filenames, count_workflows, array_of_files, status_definition_true, status_definition_false, processes_ids, workflows_ids, outputs_names)
-		jobID, task_numbers = submitToSLURM(user_folder, workflow_filenames, count_workflows, array_of_files)
+		#jobID, task_numbers = submitToSLURM(user_folder, workflow_filenames, count_workflows, array_of_files)
 
 		#check job ids via squeue
 		#commands = 'squeue --job '+ jobID +' | sed "1d" | sed "s/ \+/\t/g" | cut -f2'
