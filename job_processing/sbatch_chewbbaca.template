@@ -5,8 +5,9 @@
 # set the number of nodes
 #SBATCH --nodes=1
 
+
 # set partition
-#SBATCH --partition=others
+#SBATCH --partition=chewBBACA
 # SBATCH --ntasks=1
 # SBATCH --cpus=4
 # SBATCH --mem=8GB
@@ -16,7 +17,7 @@
 #SBATCH --ntasks-per-node=1
 
 # set name of job
-#SBATCH --job-name=template_name
+#SBATCH --job-name=chewbbaca
 
 # mail alert at start, end and abortion of execution
 #SBATCH --mail-type=ALL

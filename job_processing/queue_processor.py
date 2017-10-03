@@ -27,14 +27,14 @@ def setFilesByProgram(key_value_args, workflow):
 	else:
 		return False, False
 
-def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows, array_of_files):
+def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows, array_of_files, software, dependency_id):
 	array_to_string = '\#'.join(workflow_path_array)
-	#array_of_process_ids = '\#'.join(processes_ids)
-	#array_of_workflow_ids = '\#'.join(workflows_ids)
-	#array_of_out_names = '\#'.join(outputs_names)
+
 	array_tasks=[]
 	count_tasks=0
 	total_tasks=1
+
+	has_dependency = False
 
 	random_sbatch_number = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
 
@@ -43,25 +43,25 @@ def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows, array_of_
 		count_tasks+=1
 		total_tasks+=1
 
-	'''with open("job_processing/sbatch_innuca.template", "r") as template_file:
-		with open("job_processing/sbatch_innuca_1.template", "w") as n_file:
-			for line in template_file:
-				if "#IFTRUE" in line:
-					with open(workflow_path_array[0], "r") as wf_file:
-						for x in wf_file:
-							n_file.write(x)
-				else:
-					n_file.write(line)'''
 
+	#launch different template depending on the procedure (case of dependencies)
+	if software == "chewBBACA":
+		to_dependency = '1'
+		if dependency_id != None:
+			to_dependency = dependency_id
+		commands = ['sh','job_processing/launch_job_chewbbaca.sh'] + [array_to_string, ','.join(array_of_files), user_folder, str(random_sbatch_number), to_dependency]
+	else:
+		commands = ['sh','job_processing/launch_job.sh'] + [array_to_string, ','.join(array_of_files), user_folder, str(random_sbatch_number)]
 
-	#commands = ['sh','job_processing/launch_job.sh'] + [array_to_string, ','.join(array_tasks), str(total_tasks), ','.join(array_of_files), user_folder, array_of_process_ids, array_of_workflow_ids, array_of_out_names]
-	commands = ['sh','job_processing/launch_job.sh'] + [array_to_string, ','.join(array_of_files), user_folder, str(random_sbatch_number)]
+	if software == "INNUca":
+		has_dependency = True
+
 	proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	stdout, stderr = proc.communicate()
 	print stdout
 	jobID = stdout.split(' ')
 	jobID = jobID[-1].strip('\n')
-	return jobID, array_tasks
+	return jobID, array_tasks, has_dependency
 
 def extract_ids(job_out):
 	job_out = job_out.split('\n')
@@ -90,12 +90,15 @@ class Queue_Processor:
 		processes_ids = [];
 		workflows_ids = [];
 		outputs_names = [];
+		dependency_id = None;
 
 		'''workflow_job_name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
 		workflow_filepath = os.path.join(config['JOBS_FOLDER'], job_parameters[0]["username"] + '_' + workflow_job_name +'.txt')
 		workflow_filenames.append(workflow_filepath)'''
 
 		task_ids = []
+
+		INNUca_dependency = False
 
 		for workflow in job_parameters:
 
@@ -120,6 +123,10 @@ class Queue_Processor:
 			workflow_filepath = os.path.join(config['JOBS_FOLDER'], username + '_' + workflow_job_name +'.sh')
 			
 
+			wf_params = json.loads(workflow['parameters'])
+			if wf_params['used Software'] in config['APPLICATIONS_ARRAY']:
+				software = wf_params['used Software']
+
 			key_value_args, prev_application_steps, after_application_steps, status_definition = process_parameters(parameters, user_folder, workflow, current_specie, workflow_name, sampleName, current_user_name, current_user_id)
 			key_value_args, softwarePath, language = setFilesByProgram(key_value_args, workflow)
 
@@ -137,7 +144,10 @@ class Queue_Processor:
 				'''processes_ids.append(process_ids)
 				workflows_ids.append(workflow_id)
 				outputs_names.append(output_name)'''
-				jobID, task_numbers = submitToSLURM(user_folder, workflow_filenames, count_workflows, array_of_files)
+				jobID, task_numbers, has_dependency = submitToSLURM(user_folder, workflow_filenames, count_workflows, array_of_files, software, dependency_id)
+
+				if has_dependency == True:
+					dependency_id = jobID
 
 				for t in task_numbers:
 					task_ids.append(jobID + "_" + t)
