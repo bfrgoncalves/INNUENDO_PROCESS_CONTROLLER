@@ -95,7 +95,7 @@ class Queue_Processor:
 		workflow_filepath = os.path.join(config['JOBS_FOLDER'], job_parameters[0]["username"] + '_' + workflow_job_name +'.txt')
 		workflow_filenames.append(workflow_filepath)'''
 
-
+		task_ids = []
 
 		for workflow in job_parameters:
 
@@ -148,10 +148,8 @@ class Queue_Processor:
 		proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc1.communicate()'''
 
-		task_ids = []
-
-		for t in task_numbers:
-			task_ids.append(jobID + "_" + t)
+				for t in task_numbers:
+					task_ids.append(jobID + "_" + t)
 
 		'''if stderr == '':
 			task_ids = extract_ids(stdout)'''
