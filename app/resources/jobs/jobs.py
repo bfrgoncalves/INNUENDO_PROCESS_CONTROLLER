@@ -36,6 +36,7 @@ job_get_parser.add_argument('from_process_controller', dest='from_process_contro
 
 file_get_parser = reqparse.RequestParser()
 file_get_parser.add_argument('username', dest='username', type=str, required=True, help="Username")
+file_get_parser.add_argument('homedir', dest='homedir', type=str, required=True, help="Home dir")
 
 download_file_get_parser = reqparse.RequestParser()
 download_file_get_parser.add_argument('username', dest='username', type=str, required=True, help="Username")
@@ -173,7 +174,7 @@ class FilesResource(Resource):
 	def get(self):
 
 		args = file_get_parser.parse_args()
-		files_folder = os.path.join('/home/users/', args.username, config['FTP_FILES_FOLDER'], '*.gz')
+		files_folder = os.path.join(args.homedir, config['FTP_FILES_FOLDER'], '*.gz')
 		v_files = []
 		for fl in glob.glob(files_folder):
 		    #print os.path.basename(fl)
