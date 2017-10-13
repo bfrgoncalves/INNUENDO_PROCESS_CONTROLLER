@@ -22,6 +22,7 @@ job_post_parser.add_argument('current_specie', dest='current_specie', type=str, 
 job_post_parser.add_argument('sampleName', dest='sampleName', type=str, required=True, help="Sample Name")
 job_post_parser.add_argument('current_user_name', dest='current_user_name', type=str, required=True, help="Current user name")
 job_post_parser.add_argument('current_user_id', dest='current_user_id', type=str, required=True, help="current user id")
+job_post_parser.add_argument('homedir', dest='homedir', type=str, required=True, help="home dir")
 
 job_get_parser = reqparse.RequestParser()
 job_get_parser.add_argument('job_id', dest='job_id', type=str, required=True, help="Job ID")
@@ -29,6 +30,7 @@ job_get_parser.add_argument('project_id', dest='project_id', type=str, required=
 job_get_parser.add_argument('pipeline_id', dest='pipeline_id', type=str, required=True, help="pipeline_id ID")
 job_get_parser.add_argument('process_id', dest='process_id', type=str, required=True, help="process_id ID")
 job_get_parser.add_argument('username', dest='username', type=str, required=True, help="Username")
+job_get_parser.add_argument('homedir', dest='homedir', type=str, required=True, help="Home dir")
 job_get_parser.add_argument('from_process_controller', dest='from_process_controller', type=str, required=True, help="from_process_controller")
 #job_post_parser.add_argument('username', dest='username', type=str, required=True, help="Username")
 #job_post_parser.add_argument('files', dest='files', type=str, required=True, help="Files to use")
@@ -48,8 +50,8 @@ download_file_get_parser.add_argument('accession_numbers', dest='accession_numbe
 config = {}
 execfile("config.py", config)
 
-def load_results_from_file(job_id, username):
-	user_folder = '/home/users/' + username + '/' + job_id.split('_')[0] + '/*_' + job_id.split('_')[0] + "_" + str(int(job_id.split('_')[1]) + 1) + '/*.*'
+def load_results_from_file(job_id, homedir):
+	user_folder = os.path.join(homedir, '/' + job_id.split('_')[0] + '/*_' + job_id.split('_')[0] + "_" + str(int(job_id.split('_')[1]) + 1) + '/*.*')
 	print user_folder
 
 	onlyfiles = [f for f in glob.glob(user_folder)]
@@ -109,9 +111,9 @@ class Job_queue(Resource):
 		sampleName = args.sampleName
 		current_user_name = args.current_user_name
 		current_user_id = args.current_user_id
-		print job_parameters, current_specie, current_user_name, current_user_id
+		print job_parameters, current_specie, current_user_name, current_user_id, args.homedir
 		innuendo_processor = Queue_Processor()
-		jobID = innuendo_processor.insert_job(job_parameters=job_parameters, current_specie=current_specie, sampleName=sampleName, current_user_name=current_user_name, current_user_id=current_user_id)
+		jobID = innuendo_processor.insert_job(job_parameters=job_parameters, current_specie=current_specie, sampleName=sampleName, current_user_name=current_user_name, current_user_id=current_user_id, homedir=args.homedir)
 
 		return {'jobID':jobID}, 200
 
@@ -154,7 +156,7 @@ class Job_queue(Resource):
 
 			if "COMPLETED" in stdout or "WARNING" in stdout or "FAILED" in stdout:
 				print "COMPLETED"
-				results = load_results_from_file(job_id, args.username)
+				results = load_results_from_file(job_id, args.homedir)
 				if len(results[1].keys()) == 0:
 					store_in_db = False
 				else:

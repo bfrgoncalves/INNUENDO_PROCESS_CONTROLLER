@@ -81,7 +81,7 @@ def extract_ids(job_out):
 
 class Queue_Processor:
 
-	def process_job(self, job_parameters, current_specie, sampleName, current_user_name, current_user_id):
+	def process_job(self, job_parameters, current_specie, sampleName, current_user_name, current_user_id, homedir):
 		key_value_args = []
 		job_parameters = json.loads(job_parameters)
 
@@ -112,9 +112,12 @@ class Queue_Processor:
 
 			array_of_files = []
 
-			print strain_submitter
-			user_folder = '/home/users/' + username
-			submitter_folder = '/home/users/' + strain_submitter
+			print strain_submitter, homedir
+			user_folder = homedir
+			submitter_folder = strain_submitter
+
+			#user_folder = '/home/users/' + username
+			#submitter_folder = '/home/users/' + strain_submitter
 
 			for x in files:
 				array_of_files.append(os.path.join(submitter_folder, config['FTP_FILES_FOLDER'],files[x]))
@@ -191,9 +194,9 @@ class Queue_Processor:
 
 	
 
-	def insert_job(self, job_parameters, current_specie, sampleName, current_user_name, current_user_id):
+	def insert_job(self, job_parameters, current_specie, sampleName, current_user_name, current_user_id, homedir):
 		#Insert jobs in queue
-		jobID, code = self.process_job(job_parameters, current_specie, sampleName, current_user_name, current_user_id)
+		jobID, code = self.process_job(job_parameters, current_specie, sampleName, current_user_name, current_user_id, homedir)
 		return jobID
 
 	
