@@ -52,7 +52,7 @@ execfile("config.py", config)
 
 def load_results_from_file(job_id, homedir):
 	print homedir
-	user_folder = os.path.join(homedir, '/' + job_id.split('_')[0] + '/*_' + job_id.split('_')[0] + "_" + str(int(job_id.split('_')[1]) + 1) + '/*.*')
+	user_folder = os.path.join(homedir, job_id.split('_')[0] + '/*_' + job_id.split('_')[0] + "_" + str(int(job_id.split('_')[1]) + 1) + '/*.*')
 	print user_folder
 
 	onlyfiles = [f for f in glob.glob(user_folder)]
