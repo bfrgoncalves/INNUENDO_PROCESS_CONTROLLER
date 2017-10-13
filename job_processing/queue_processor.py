@@ -130,7 +130,7 @@ class Queue_Processor:
 			if wf_params['used Software'] in config['APPLICATIONS_ARRAY']:
 				software = wf_params['used Software']
 
-			key_value_args, prev_application_steps, after_application_steps, status_definition = process_parameters(parameters, user_folder, workflow, current_specie, workflow_name, sampleName, current_user_name, current_user_id)
+			key_value_args, prev_application_steps, after_application_steps, status_definition = process_parameters(parameters, user_folder, workflow, current_specie, workflow_name, sampleName, current_user_name, current_user_id, homedir)
 			key_value_args, softwarePath, language = setFilesByProgram(key_value_args, workflow)
 
 			#TEST SUBMIT ONLY ONE SBATCH PER PROCEDURE
