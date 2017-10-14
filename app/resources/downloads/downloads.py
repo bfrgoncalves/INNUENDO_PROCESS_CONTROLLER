@@ -30,8 +30,8 @@ class DownloadResults(Resource):
 		args = file_get_parser.parse_args()
 		try:
 			response = send_file(args.file_path, as_attachment=True)
-			#response.headers.add('Access-Control-Allow-Origin', '*')
-			#response.headers.add('Content-Type', 'application/force-download')
+			response.headers.add('Access-Control-Allow-Origin', '*')
+			response.headers.add('Content-Type', 'application/force-download')
 			return response
 		except Exception as e:
 			print e
