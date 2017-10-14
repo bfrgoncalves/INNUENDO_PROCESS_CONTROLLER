@@ -35,6 +35,7 @@ export PATH="/mnt/innuendo_linuxbrew/bin:$PATH"
 export PATH="/mnt/innuendo_linuxbrew/Cellar/mlst/2.8/bin:$PATH"
 export PATH="/mnt/INNUENDO_PROCESS_CONTROLLER/dependencies/ncbi-blast-2.6.0+/bin:$PATH"
 export PATH="/mnt/INNUENDO_PROCESS_CONTROLLER/dependencies/ReMatCh:$PATH"
+export PATH="/mnt/INNUENDO_PROCESS_CONTROLLER/dependencies/Prodigal-2.6.3:$PATH"
 export PYTHONPATH=/mnt/innuendo_agraph_client_python/src:$PYTHONPATH
 
 # run the application
