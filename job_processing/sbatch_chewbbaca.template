@@ -31,10 +31,11 @@
 # SBATCH --array=NUMBEROFTASKS
 
 # run as user
-export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
-export PATH="/home/linuxbrew/.linuxbrew/Cellar/mlst/2.8/bin:$PATH"
-export PATH="/home/ubuntu/ncbi-blast-2.6.0+/bin:$PATH"
-export PATH="/home/ubuntu/sandbox/INNUENDO_PROCESS_CONTROLLER/dependencies/ReMatCh:$PATH"
+export PATH="/mnt/innuendo_linuxbrew/bin:$PATH"
+export PATH="/mnt/innuendo_linuxbrew/Cellar/mlst/2.8/bin:$PATH"
+export PATH="/mnt/INNUENDO_PROCESS_CONTROLLER/dependencies/ncbi-blast-2.6.0+/bin:$PATH"
+export PATH="/mnt/INNUENDO_PROCESS_CONTROLLER/dependencies/ReMatCh:$PATH"
+export PYTHONPATH=/mnt/innuendo_agraph_client_python/src:$PYTHONPATH
 
 # run the application
 IFS='\#' read -r -a array <<< ARRAY_STRING
