@@ -197,8 +197,8 @@ def process_chewbbaca(key_value_args, parameters, user_folder, workflow, current
 	key_value_args.append('-g')
 	key_value_args.append(os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID','listGenes.txt'))
 
-	key_value_args.append('--cpu')
-	key_value_args.append('6')
+	#key_value_args.append('--cpu')
+	#key_value_args.append('6')
 
 	#force proceed if already exist chewBBACA files before running
 	key_value_args.append('--fc')
