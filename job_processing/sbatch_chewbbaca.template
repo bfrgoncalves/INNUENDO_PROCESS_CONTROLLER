@@ -9,11 +9,12 @@
 # set partition
 #SBATCH --partition=chewBBACA
 #SBATCH --dependency=afterany:DEPENDENCY
+#SBATCH --workdir=/mnt/INNUENDO_PROCESS_CONTROLLER
 # SBATCH --ntasks=1
 # SBATCH --cpus=4
 # SBATCH --mem=8GB
 
-#SBATCH --cpus-per-task=4
+#SBATCH --cpus-per-task=8
 #SBATCH --mem-per-cpu=2GB
 #SBATCH --ntasks-per-node=1
 
