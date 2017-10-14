@@ -184,6 +184,8 @@ def process_chewbbaca(key_value_args, parameters, user_folder, workflow, current
 
 	prev_application_steps += ' find $p_innuendo_input > ' + user_folder + '/SLURM_ARRAY_JOB_ID/listGenomes.txt; '
 
+	prev_application_steps += "cp dependencies/chewBBACA/"+schema_to_use+" ~/; ";
+	
 	prev_application_steps += "cp dependencies/chewBBACA/"+schema_to_use+"/listGenes.txt "+ user_folder + "/SLURM_ARRAY_JOB_ID/listGenes.txt; ";
 
 	prev_application_steps += ' mkdir ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/chewBBACA_SLURM_ARRAY_JOB_ID_STEPID; '
