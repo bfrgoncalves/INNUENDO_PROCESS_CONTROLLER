@@ -10,7 +10,10 @@ def get_protocol_parameters(parameters):
 		if key == '-i' or key == '-o' or key == "chewBBACA_schema" or key == "chewBBACA_specie":
 			continue
 		else:
-			key_value_args.append(str(key))
+			if str(key) == "--cp":
+				key_value_args.append(str("--cpu"))
+			else:
+				key_value_args.append(str(key))
 
 			if len(value.split(' ')) > 1 and key != "--species":
 				key_value_args.append("'" + str(value) + "'")
