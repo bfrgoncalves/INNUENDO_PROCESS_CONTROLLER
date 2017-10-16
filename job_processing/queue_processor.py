@@ -27,7 +27,7 @@ def setFilesByProgram(key_value_args, workflow):
 	else:
 		return False, False
 
-def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows, array_of_files, software, dependency_id):
+def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows, array_of_files, software, dependency_id, slurm_cpus):
 	array_to_string = '\#'.join(workflow_path_array)
 
 	array_tasks=[]
@@ -49,9 +49,9 @@ def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows, array_of_
 		to_dependency = '1'
 		if dependency_id != None:
 			to_dependency = dependency_id
-		commands = ['sh','job_processing/launch_job_chewbbaca.sh'] + [array_to_string, ','.join(array_of_files), user_folder, str(random_sbatch_number), to_dependency]
+		commands = ['sh','job_processing/launch_job_chewbbaca.sh'] + [array_to_string, ','.join(array_of_files), user_folder, str(random_sbatch_number), to_dependency, slurm_cpus]
 	else:
-		commands = ['sh','job_processing/launch_job.sh'] + [array_to_string, ','.join(array_of_files), user_folder, str(random_sbatch_number)]
+		commands = ['sh','job_processing/launch_job.sh'] + [array_to_string, ','.join(array_of_files), user_folder, str(random_sbatch_number), slurm_cpus]
 
 	if software == "INNUca":
 		has_dependency = True
@@ -110,7 +110,12 @@ class Queue_Processor:
 			strain_submitter = workflow['strain_submitter']
 			workflow_name = json.loads(workflow['parameters'])['name']
 
-			print json.loads(workflow['parameters'])
+			if json.loads(workflow['parameters'])['SLURM CPUs'] != "" and json.loads(workflow['parameters'])['SLURM CPUs'] != None:
+				slurm_cpus = json.loads(workflow['parameters'])['SLURM CPUs']
+			else:
+				slurm_cpus = config["DEFAULT_SLURM_CPUS"]
+
+			print json.loads(workflow['parameters'])['SLURM CPUs']
 
 			array_of_files = []
 
@@ -149,7 +154,7 @@ class Queue_Processor:
 				'''processes_ids.append(process_ids)
 				workflows_ids.append(workflow_id)
 				outputs_names.append(output_name)'''
-				jobID, task_numbers, has_dependency = submitToSLURM(user_folder, workflow_filenames, count_workflows, array_of_files, software, dependency_id)
+				jobID, task_numbers, has_dependency = submitToSLURM(user_folder, workflow_filenames, count_workflows, array_of_files, software, dependency_id, slurm_cpus)
 
 				if has_dependency == True:
 					dependency_id = jobID
