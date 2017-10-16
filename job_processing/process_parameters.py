@@ -220,11 +220,11 @@ def process_chewbbaca(key_value_args, parameters, user_folder, workflow, current
 	#MOVE RESULTS to job folder
 	after_application_steps += '; rm -rf dependencies/chewBBACA/campy_scheme_2017/genes/temp;'
 	
-	#MOVE UPDATED SCHEMA TO SHARED FOLDER
-	after_application_steps += "cp -r ~/"+schema_to_use+" dependencies/chewBBACA/"+schema_to_use+"_new; ";
-	after_application_steps += "rm -rf dependencies/chewBBACA/"+schema_to_use+"; ";
-	after_application_steps += "mv dependencies/chewBBACA/"+schema_to_use+"_new dependencies/chewBBACA/"+schema_to_use+"; ";
-	after_application_steps += "rm -rf ~/"+schema_to_use+"; ";
+	#MOVE UPDATED SCHEMA TO SHARED FOLDER - NEEDS TESTING!!
+	#after_application_steps += "cp -r ~/"+schema_to_use+" dependencies/chewBBACA/"+schema_to_use+"_new; ";
+	#after_application_steps += "rm -rf dependencies/chewBBACA/"+schema_to_use+"; ";
+	#after_application_steps += "mv dependencies/chewBBACA/"+schema_to_use+"_new dependencies/chewBBACA/"+schema_to_use+"; ";
+	#after_application_steps += "rm -rf ~/"+schema_to_use+"; ";
 	
 	after_application_steps += ' mv ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID/chewBBACA_SLURM_ARRAY_JOB_ID')+'/results_*/reportStatus.json '+ os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_STEPID/run_info.json;'
 	after_application_steps += ' mv ' +os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID/chewBBACA_SLURM_ARRAY_JOB_ID')+'/results_*/results_alleles.json '+ os.path.join(str(user_folder),"SLURM_ARRAY_JOB_ID") + '/chewBBACA_SLURM_ARRAY_JOB_ID_STEPID/run_output.json;'
