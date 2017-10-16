@@ -110,12 +110,10 @@ class Queue_Processor:
 			strain_submitter = workflow['strain_submitter']
 			workflow_name = json.loads(workflow['parameters'])['name']
 
-			if json.loads(workflow['parameters'])['SLURM CPUs'] != "" and json.loads(workflow['parameters'])['SLURM CPUs'] != None:
+			if 'SLURM CPUs' in json.loads(workflow['parameters']) and json.loads(workflow['parameters'])['SLURM CPUs'] != "" and json.loads(workflow['parameters'])['SLURM CPUs'] != None:
 				slurm_cpus = json.loads(workflow['parameters'])['SLURM CPUs']
 			else:
 				slurm_cpus = config["DEFAULT_SLURM_CPUS"]
-
-			print json.loads(workflow['parameters'])['SLURM CPUs']
 
 			array_of_files = []
 
