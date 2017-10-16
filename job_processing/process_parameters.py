@@ -221,7 +221,7 @@ def process_chewbbaca(key_value_args, parameters, user_folder, workflow, current
 	after_application_steps += '; rm -rf dependencies/chewBBACA/campy_scheme_2017/genes/temp;'
 	
 	#MOVE UPDATED SCHEMA TO SHARED FOLDER
-	after_application_steps += "mv ~/"+schema_to_use+" dependencies/chewBBACA/"+schema_to_use+"_new; ";
+	after_application_steps += "cp -r ~/"+schema_to_use+" dependencies/chewBBACA/"+schema_to_use+"_new; ";
 	after_application_steps += "rm -rf dependencies/chewBBACA/"+schema_to_use+"; ";
 	after_application_steps += "mv dependencies/chewBBACA/"+schema_to_use+"_new dependencies/chewBBACA/"+schema_to_use+"; ";
 	
