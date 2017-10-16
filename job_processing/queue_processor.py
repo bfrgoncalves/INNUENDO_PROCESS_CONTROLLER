@@ -110,6 +110,8 @@ class Queue_Processor:
 			strain_submitter = workflow['strain_submitter']
 			workflow_name = json.loads(workflow['parameters'])['name']
 
+			print json.loads(workflow['parameters'])
+
 			array_of_files = []
 
 			print strain_submitter, homedir
