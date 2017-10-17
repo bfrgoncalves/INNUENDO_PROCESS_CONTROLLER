@@ -19,4 +19,4 @@ api.add_resource(DownloadFilesResource, '/jobs/download/')
 api.add_resource(DownloadResults, '/jobs/results/download/')
 
 #get files from user
-api.add_resource(CopyChewSchema, '/jobs/schema/copy')
+api.add_resource(CopyChewSchema, '/jobs/schema/copy/')
