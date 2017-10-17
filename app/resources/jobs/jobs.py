@@ -217,14 +217,17 @@ class CopyChewSchema(Resource):
 		cwd = os.getcwd()
 		print cwd
 		commands = ['cp','./dependencies/chewBBACA/chewBBACA_schemas_on_compute/'+args.schema_to_copy, 'dependencies/chewBBACA/chewBBACA_schemas/'+args.schema_to_copy+'_new']
+		print commands
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
 		print stdout
 		commands = ['rm','-rf', './dependencies/chewBBACA/chewBBACA_schemas/'+args.schema_to_copy]
+		print commands
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
 		print stdout
 		commands = ['mv','./dependencies/chewBBACA/chewBBACA_schemas/'+args.schema_to_copy+'_new', 'dependencies/chewBBACA/chewBBACA_schemas/'+args.schema_to_copy]
+		print commands
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
 		print stdout
