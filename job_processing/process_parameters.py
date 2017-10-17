@@ -184,9 +184,9 @@ def process_chewbbaca(key_value_args, parameters, user_folder, workflow, current
 
 	prev_application_steps += ' find $p_innuendo_input > ' + user_folder + '/SLURM_ARRAY_JOB_ID/listGenomes.txt; '
 
-	prev_application_steps += "cp -r dependencies/chewBBACA/"+schema_to_use+" ~/; ";
+	prev_application_steps += "cp -r dependencies/chewBBACA/chewBBACA_schemas/"+schema_to_use+" ~/; ";
 	
-	prev_application_steps += "cp dependencies/chewBBACA/"+schema_to_use+"/listGenes.txt "+ user_folder + "/SLURM_ARRAY_JOB_ID/listGenes.txt; ";
+	prev_application_steps += "cp dependencies/chewBBACA/chewBBACA_schemas/"+schema_to_use+"/listGenes.txt "+ user_folder + "/SLURM_ARRAY_JOB_ID/listGenes.txt; ";
 
 	prev_application_steps += ' mkdir ' + os.path.join(str(user_folder),'SLURM_ARRAY_JOB_ID') + '/chewBBACA_SLURM_ARRAY_JOB_ID_STEPID; '
 
@@ -221,6 +221,7 @@ def process_chewbbaca(key_value_args, parameters, user_folder, workflow, current
 	after_application_steps += '; rm -rf dependencies/chewBBACA/campy_scheme_2017/genes/temp;'
 	
 	#MOVE UPDATED SCHEMA TO SHARED FOLDER - NEEDS TESTING!!
+	after_application_steps += ' sleep 15; curl -L -X GET "http://'+config["SERVER_IP"]+'/jobs/schema/copy/?schema_to_copy='+schema_to_use+';'
 	#after_application_steps += "cp -r ~/"+schema_to_use+" dependencies/chewBBACA/"+schema_to_use+"_new; ";
 	#after_application_steps += "rm -rf dependencies/chewBBACA/"+schema_to_use+"; ";
 	#after_application_steps += "mv dependencies/chewBBACA/"+schema_to_use+"_new dependencies/chewBBACA/"+schema_to_use+"; ";

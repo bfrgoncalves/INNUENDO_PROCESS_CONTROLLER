@@ -44,6 +44,9 @@ download_file_get_parser = reqparse.RequestParser()
 download_file_get_parser.add_argument('username', dest='username', type=str, required=True, help="Username")
 download_file_get_parser.add_argument('accession_numbers', dest='accession_numbers', type=str, required=True, help="Accession numbers")
 
+copy_schema_get_parser = reqparse.RequestParser()
+copy_schema_get_parser.add_argument('schema_to_copy', dest='schema_to_copy', type=str, required=True, help="chewBBACA schema to copy")
+
 #get workflow, get protocols, get protocol parameters, run process
 
 #READ CONFIG FILE
@@ -205,6 +208,26 @@ class DownloadFilesResource(Resource):
 				file_array.append(line)
 		
 		return {'output':file_array}, 200
+
+
+class CopyChewSchema(Resource):
+
+	def get(self):
+		args = copy_schema_get_parser.parse_args()
+		
+		commands = ['cp','./dependencies/chewBBACA/chewBBACA_schemas_on_compute/'+args.schema_to_copy, 'dependencies/chewBBACA/chewBBACA_schemas/'+args.schema_to_copy+'_new']
+		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		stdout, stderr = proc.communicate()
+		print stdout
+		commands = ['rm','-rf', './dependencies/chewBBACA/chewBBACA_schemas/'+args.schema_to_copy]
+		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		stdout, stderr = proc.communicate()
+		print stdout
+		commands = ['mv','./dependencies/chewBBACA/chewBBACA_schemas/'+args.schema_to_copy+'_new', 'dependencies/chewBBACA/chewBBACA_schemas/'+args.schema_to_copy]
+		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		stdout, stderr = proc.communicate()
+		print stdout
+		return 200
 
 
 
