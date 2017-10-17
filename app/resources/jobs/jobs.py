@@ -216,7 +216,7 @@ class CopyChewSchema(Resource):
 		args = copy_schema_get_parser.parse_args()
 		cwd = os.getcwd()
 		print cwd
-		commands = ['cp','./dependencies/chewBBACA/chewBBACA_schemas_on_compute/'+args.schema_to_copy, 'dependencies/chewBBACA/chewBBACA_schemas/'+args.schema_to_copy+'_new']
+		commands = ['cp', '-r', './dependencies/chewBBACA/chewBBACA_schemas_on_compute/'+args.schema_to_copy, './dependencies/chewBBACA/chewBBACA_schemas/'+args.schema_to_copy+'_new']
 		print commands
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
@@ -226,7 +226,7 @@ class CopyChewSchema(Resource):
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
 		print stdout
-		commands = ['mv','./dependencies/chewBBACA/chewBBACA_schemas/'+args.schema_to_copy+'_new', 'dependencies/chewBBACA/chewBBACA_schemas/'+args.schema_to_copy]
+		commands = ['mv','./dependencies/chewBBACA/chewBBACA_schemas/'+args.schema_to_copy+'_new', './dependencies/chewBBACA/chewBBACA_schemas/'+args.schema_to_copy]
 		print commands
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
