@@ -6,7 +6,7 @@
 #SBATCH --nodes=1
 
 # set partition
-#SBATCH --partition=compute-1
+#SBATCH --partition=base
 #SBATCH --workdir=/mnt/INNUENDO_PROCESS_CONTROLLER
 
 #SBATCH --cpus-per-task=SLURMCPUS
