@@ -160,6 +160,8 @@ class Queue_Processor:
 				for t in task_numbers:
 					task_ids.append(jobID + "_" + t)
 
+			count_workflows = 0;
+
 		#jobID, task_numbers = submitToSLURM(user_folder, workflow_filenames, count_workflows, array_of_files)
 
 		#check job ids via squeue
