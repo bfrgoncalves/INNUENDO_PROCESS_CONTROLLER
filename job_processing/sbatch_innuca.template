@@ -17,10 +17,9 @@
 #SBATCH --job-name=template_name
 
 # mail alert at start, end and abortion of execution
-#SBATCH --mail-type=ALL
-
+# SBATCH --mail-type=ALL
 # send mail to this address
-#SBATCH --mail-user=innuendo@mail.com
+# SBATCH --mail-user=innuendo@mail.com
 
 #Number of tasks
 # SBATCH --array=NUMBEROFTASKS
