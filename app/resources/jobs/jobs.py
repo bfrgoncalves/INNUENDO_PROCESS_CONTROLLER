@@ -181,13 +181,13 @@ class Job_queue(Resource):
 			all_results.append(results[0])
 			all_paths.append(results[1])
 
-			print len(all_std_out), len(store_jobs_in_db), len(all_results), len(all_paths)
+			'''if len(parts) == 0:
+				stdout = job_id + '\tFAILED'
+			else:
+				results = load_results_from_file(job_id, args.username)
+				store_in_db = True'''
 
-				'''if len(parts) == 0:
-					stdout = job_id + '\tFAILED'
-				else:
-					results = load_results_from_file(job_id, args.username)
-					store_in_db = True'''
+		print len(all_std_out), len(store_jobs_in_db), len(all_results), len(all_paths)
 
 		return {'stdout':all_std_out, 'store_in_db':store_jobs_in_db, 'results':all_results, 'paths':all_paths, 'job_id': job_ids}
 		#return {'stdout':stdout, 'store_in_db':','.join(store_jobs_in_db), 'results':results[0], 'paths':results[1], 'job_id': ",".join(job_ids)}
