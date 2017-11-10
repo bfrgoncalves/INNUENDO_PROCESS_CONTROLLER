@@ -1,6 +1,6 @@
 from app import app
 from flask.ext.restful import Api, Resource, reqparse, abort, fields, marshal_with #filters data according to some fields
-from flask import jsonify
+from flask import jsonify, request
 
 from job_processing.queue_processor import Queue_Processor
 
@@ -231,4 +231,15 @@ class CopyChewSchema(Resource):
 		return 200
 
 
+class SetNGSOntoOutput(Resource):
+
+	def post(self):
+		parameters = request.json
+		print parameters
+		commands = ["python", "job_processing/get_program_input.py", "--project", parameters["project_id"], "--pipeline", parameters["pipeline_id"], "--process", parameters["process_id"], "-v1", parameters["runInfo"], "-v2", parameters["runStats"], "-v3", parameters["runStats"], "-v4", parameters["runResults"], "-v5", parameters["status"], "-t", paramaters["map_type"]]
+		print commands
+		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		stdout, stderr = proc.communicate()
+		print stdout
+		return 200
 
