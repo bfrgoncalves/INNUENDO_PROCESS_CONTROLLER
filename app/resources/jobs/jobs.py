@@ -115,7 +115,7 @@ class Job_queue(Resource):
 		sampleName = args.sampleName
 		current_user_name = args.current_user_name
 		current_user_id = args.current_user_id
-		print job_parameters, current_specie, current_user_name, current_user_id, args.homedir
+
 		innuendo_processor = Queue_Processor()
 		jobID = innuendo_processor.insert_job(job_parameters=job_parameters, current_specie=current_specie, sampleName=sampleName, current_user_name=current_user_name, current_user_id=current_user_id, homedir=args.homedir)
 

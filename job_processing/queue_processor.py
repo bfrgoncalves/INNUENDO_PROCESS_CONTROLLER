@@ -90,15 +90,19 @@ class Queue_Processor:
 		processes_ids = [];
 		workflows_ids = [];
 		outputs_names = [];
+		nextflow_tags = [];
 		dependency_id = None;
 
-		'''workflow_job_name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
-		workflow_filepath = os.path.join(config['JOBS_FOLDER'], job_parameters[0]["username"] + '_' + workflow_job_name +'.txt')
-		workflow_filenames.append(workflow_filepath)'''
 
 		task_ids = []
 
+		#To send to nextflow generator
+		project_id = ""
+		pipeline_id = ""
+
 		INNUca_dependency = False
+
+		random_pip_name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
 
 		for workflow in job_parameters:
 
@@ -109,20 +113,29 @@ class Queue_Processor:
 			username = workflow['username']
 			strain_submitter = workflow['strain_submitter']
 			workflow_name = json.loads(workflow['parameters'])['name']
+			nextflow_tag = json.loads(workflow['parameters'])['Nextflow Tag']
+			project_id = workflow['project_id']
+			pipeline_id = workflow['pipeline_id']
+			process_id = workflow['process_id']
 
-			if 'SLURM CPUs' in json.loads(workflow['parameters']) and json.loads(workflow['parameters'])['SLURM CPUs'] != "" and json.loads(workflow['parameters'])['SLURM CPUs'] != None:
-				slurm_cpus = json.loads(workflow['parameters'])['SLURM CPUs']
+			random_tag = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
+
+			nextflow_tags.append(nextflow_tag)
+			task_ids.append(random_tag)
+
+			#RUN Nextflow GENERATOR
+			print nextflow_tags, random_pip_name
+
+			'''
+			if 'CPUs' in json.loads(workflow['parameters']) and json.loads(workflow['parameters'])['CPUs'] != "" and json.loads(workflow['parameters'])['CPUs'] != None:
+				slurm_cpus = json.loads(workflow['parameters'])['CPUs']
 			else:
 				slurm_cpus = config["DEFAULT_SLURM_CPUS"]
 
 			array_of_files = []
 
-			print strain_submitter, homedir
 			user_folder = homedir
 			submitter_folder = strain_submitter
-
-			#user_folder = '/home/users/' + username
-			#submitter_folder = '/home/users/' + strain_submitter
 
 			for x in files:
 				array_of_files.append(os.path.join(submitter_folder, config['FTP_FILES_FOLDER'],files[x]))
@@ -149,9 +162,7 @@ class Queue_Processor:
 					jobs_file.write(after_application_steps.replace("STEPID", str(count_workflows)).replace("SLURM_ARRAY_JOB_ID", "$1"))
 					jobs_file.write(status_definition.replace("STEPIDMINUS1", str(count_workflows-1)).replace("STEPID", str(count_workflows)).replace("SLURM_ARRAY_JOB_ID", "$1"))
 				workflow_filenames.append(workflow_filepath)
-				'''processes_ids.append(process_ids)
-				workflows_ids.append(workflow_id)
-				outputs_names.append(output_name)'''
+
 				jobID, task_numbers, has_dependency = submitToSLURM(user_folder, workflow_filenames, count_workflows, array_of_files, software, dependency_id, slurm_cpus)
 
 				if has_dependency == True:
@@ -162,17 +173,13 @@ class Queue_Processor:
 
 			count_workflows = 0;
 
-		#jobID, task_numbers = submitToSLURM(user_folder, workflow_filenames, count_workflows, array_of_files)
+			'''
 
-		#check job ids via squeue
-		#commands = 'squeue --job '+ jobID +' | sed "1d" | sed "s/ \+/\t/g" | cut -f2'
-		#print commands.split(' ')
-		'''commands = 'sh job_processing/get_number_of_jobs.sh ' + jobID
-		proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		stdout, stderr = proc1.communicate()'''
+		#RUN NEXTFLOW
 
-		'''if stderr == '':
-			task_ids = extract_ids(stdout)'''
+		print config["JOBS_ROOT_SET_OUTPUT"]
+		print project_id, pipeline_id
+
 
 		return {'task_ids':task_ids}, 200
 
