@@ -132,7 +132,7 @@ class Queue_Processor:
 			array_of_files = []
 
 			for x in files:
-				array_of_files.append(os.path.join(submitter_folder, config['FTP_FILES_FOLDER'],files[x]))
+				array_of_files.append(os.path.join(strain_submitter, config['FTP_FILES_FOLDER'],files[x]))
 			#processes_ids.append(processes_ids)
 
 
