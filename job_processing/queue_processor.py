@@ -178,7 +178,7 @@ class Queue_Processor:
 		#RUN Nextflow GENERATOR
 		print nextflow_tags, random_pip_name
 
-		commands = ['python3','dependencies/nextflow_generator.py'] + ["-t", " ".join(nextflow_tags), "-o", random_pip_name]
+		commands = ['python3','dependencies/innuca-nf/nextflow_generator.py'] + ["-t", " ".join(nextflow_tags), "-o", random_pip_name]
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
 		print stdout
