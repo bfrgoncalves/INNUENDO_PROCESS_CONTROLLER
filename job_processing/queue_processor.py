@@ -126,7 +126,7 @@ class Queue_Processor:
 
 			random_tag = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
 
-			nextflow_tags.append(nextflow_tag+":"+processes_id)
+			nextflow_tags.append(nextflow_tag+":"+process_id)
 			task_ids.append(random_tag)
 
 			array_of_files = []
