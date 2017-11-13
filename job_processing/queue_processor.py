@@ -182,6 +182,7 @@ class Queue_Processor:
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
 		print stdout
+		print stderr
 
 
 		#RUN NEXTFLOW
