@@ -102,7 +102,7 @@ class Queue_Processor:
 
 		INNUca_dependency = False
 
-		random_pip_name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
+		random_pip_name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8)) + ".nf"
 
 		for workflow in job_parameters:
 
@@ -122,9 +122,9 @@ class Queue_Processor:
 
 			nextflow_tags.append(nextflow_tag)
 			task_ids.append(random_tag)
+			processes_ids.append(processes_ids)
 
-			#RUN Nextflow GENERATOR
-			print nextflow_tags, random_pip_name
+
 
 			'''
 			if 'CPUs' in json.loads(workflow['parameters']) and json.loads(workflow['parameters'])['CPUs'] != "" and json.loads(workflow['parameters'])['CPUs'] != None:
@@ -175,7 +175,17 @@ class Queue_Processor:
 
 			'''
 
+		#RUN Nextflow GENERATOR
+		print nextflow_tags, random_pip_name
+
+		commands = ['python3','dependencies/nextflow_generator.py'] + ["-t", " ".join(nextflow_tags), "-o", random_pip_name]
+		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		stdout, stderr = proc.communicate()
+		print stdout
+
+
 		#RUN NEXTFLOW
+
 
 		print config["JOBS_ROOT_SET_OUTPUT"]
 		print project_id, pipeline_id
