@@ -122,7 +122,7 @@ class Queue_Processor:
 			nexflow_user_dir = os.path.join(homedir,"jobs", pipeline_id)
 
 			if not os.path.exists(nexflow_user_dir):
-    			os.makedirs(nexflow_user_dir)
+				os.makedirs(nexflow_user_dir)
 
 			random_tag = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
 
