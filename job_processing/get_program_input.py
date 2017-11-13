@@ -120,6 +120,36 @@ def get_process_status(project_id, pipeline_id, process_id):
 		sys.stdout.write("NEUTRAL")
 
 
+def set_unique_prop_output(project_id, pipeline_id, process_id, property, property_value):
+
+	output_prop_to_type = {"run_info":"NGS_0000092", "run_output":"NGS_0000093", "run_stats":"NGS_0000094", "log_file":"NGS_0000096", "status":"NGS_0000097"}
+
+	try:
+		#Agraph
+		processURI = dbconAg.createURI(namespace=localNSpace+"projects/", localname=str(project_id)+"/pipelines/"+str(pipeline_id)+"/processes/"+str(process_id))
+
+		#get output URI from process
+		hasOutput = dbconAg.createURI(namespace=obo, localname="RO_0002234")
+		statements = dbconAg.getStatements(processURI, hasOutput, None)
+		outputURI=parseAgraphStatementsRes(statements)
+		statements.close()
+
+		outputURI = dbconAg.createURI(outputURI[0]['obj'])
+
+		runInfo = dbconAg.createLiteral((args.property_value), datatype=XMLSchema.STRING)
+		runInfoProp = dbconAg.createURI(namespace=obo, localname=output_prop_to_type[args.property])
+
+
+		dbconAg.remove(outputURI, runInfoProp, None)
+
+		#add outputs paths to process
+		stmt1 = dbconAg.createStatement(outputURI, runInfoProp, runInfo)
+
+		#send to allegro
+		dbconAg.add(stmt1)
+
+	except Exception as e:
+		sys.stdout.write("404")
 
 def set_process_output(project_id, pipeline_id, process_id, run_info, run_stats, output, log_file, status):
 
@@ -221,12 +251,15 @@ def main():
 	parser.add_argument('-v4', type=str, help='path value for file4', required=False)
 	parser.add_argument('-v5', type=str, help='path value for status', required=False)
 	parser.add_argument('-i', type=str, help='input to set', required=False)
-	parser.add_argument('-t', type=str, help='type of set (input, output or status)', required=True)
+	parser.add_argument('-t', type=str, help='type of set (input, output, status, set_pending, set_input)', required=True)
+	parser.add_argument('-u', type=str, help='set unique property')
 
 	args = parser.parse_args()
 
 	if args.t == 'input' and not args.v1:
 		get_process_input(args.project, args.pipeline, args.process)
+	elif args.t == 'output' and args.u:
+		set_unique_prop_output(args.project, args.pipeline, args.process, args.u, args.v1)
 	elif args.t == 'output' and args.v1:
 		set_process_output(args.project, args.pipeline, args.process, args.v1, args.v2, args.v3, args.v4, args.v5)
 	elif args.t == 'status':

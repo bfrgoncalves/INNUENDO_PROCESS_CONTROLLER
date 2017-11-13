@@ -236,10 +236,22 @@ class SetNGSOntoOutput(Resource):
 	def post(self):
 		parameters = request.json
 		print parameters
-		commands = ["python", "job_processing/get_program_input.py", "--project", parameters["project_id"], "--pipeline", parameters["pipeline_id"], "--process", parameters["process_id"], "-v1", parameters["runInfo"], "-v2", parameters["runStats"], "-v3", parameters["runStats"], "-v4", parameters["runResults"], "-v5", parameters["status"], "-t", paramaters["map_type"]]
+		commands = ["python", "job_processing/get_program_input.py", "--project", parameters["project_id"], "--pipeline", parameters["pipeline_id"], "--process", parameters["process_id"], "-v1", parameters["run_info"], "-v2", parameters["run_stats"], "-v3", parameters["run_output"], "-v4", parameters["log_file"], "-v5", parameters["status"], "-t", paramaters["type"]]
 		print commands
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
 		print stdout
 		return 200
+
+	def put(self):
+		parameters = request.json
+		print parameters
+		commands = ["python", "job_processing/get_program_input.py", "--project", parameters["project_id"], "--pipeline", parameters["pipeline_id"], "--process", parameters["process_id"], "-u", parameters["run_property"], "-v1", parameters["run_property_value"], "-t", paramaters["type"]]
+		print commands
+		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		stdout, stderr = proc.communicate()
+		print stdout
+		return 200
+
+		project_id, pipeline_id, process_id, run_property, run_property_value, type
 

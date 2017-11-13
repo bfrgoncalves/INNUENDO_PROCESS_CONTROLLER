@@ -99,6 +99,7 @@ class Queue_Processor:
 		#To send to nextflow generator
 		project_id = ""
 		pipeline_id = ""
+		nexflow_user_dir = ""
 
 		INNUca_dependency = False
 
@@ -118,11 +119,16 @@ class Queue_Processor:
 			pipeline_id = workflow['pipeline_id']
 			process_id = workflow['process_id']
 
+			nexflow_user_dir = os.path.join(homedir,"jobs", pipeline_id)
+
+			if not os.path.exists(nexflow_user_dir):
+    			os.makedirs(nexflow_user_dir)
+
 			random_tag = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
 
-			nextflow_tags.append(nextflow_tag)
+			nextflow_tags.append(nextflow_tag+":"+processes_id)
 			task_ids.append(random_tag)
-			processes_ids.append(processes_ids)
+			#processes_ids.append(processes_ids)
 
 
 
@@ -176,9 +182,11 @@ class Queue_Processor:
 			'''
 
 		#RUN Nextflow GENERATOR
-		print nextflow_tags, random_pip_name
+		nextflow_file_location = os.path.join(nexflow_user_dir, random_pip_name)
+		cwd = os.getcwd()
 
-		commands = ['python3','dependencies/innuca-nf/nextflow_generator.py'] + ["-t"] + nextflow_tags + ["-o", random_pip_name]
+		commands = ['python3','dependencies/innuca-nf/nextflow_generator.py'] + ["-t"] + nextflow_tags + ["-o", os.path.join(nexflow_user_dir, nextflow_file_location)]
+		print commands
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
 		print stdout
@@ -186,11 +194,12 @@ class Queue_Processor:
 
 
 		#RUN NEXTFLOW
-
-
-		print config["JOBS_ROOT_SET_OUTPUT"]
-		print project_id, pipeline_id
-
+		commands = ['sh', 'job_processing/bash_scripts/nextflow_executor.sh', nexflow_user_dir, nextflow_file_location, project_id, pipeline_id, config["JOBS_ROOT_SET_OUTPUT"], cwd]
+		print commands
+		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		stdout, stderr = proc.communicate()
+		print stdout
+		print stderr
 
 		return {'task_ids':task_ids}, 200
 
