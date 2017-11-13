@@ -128,6 +128,11 @@ class Queue_Processor:
 
 			nextflow_tags.append(nextflow_tag+":"+processes_id)
 			task_ids.append(random_tag)
+
+			array_of_files = []
+
+			for x in files:
+				array_of_files.append(os.path.join(submitter_folder, config['FTP_FILES_FOLDER'],files[x]))
 			#processes_ids.append(processes_ids)
 
 
@@ -194,7 +199,7 @@ class Queue_Processor:
 
 
 		#RUN NEXTFLOW
-		commands = ['sh', 'job_processing/bash_scripts/nextflow_executor.sh', nexflow_user_dir, nextflow_file_location, project_id, pipeline_id, config["JOBS_ROOT_SET_OUTPUT"], cwd]
+		commands = ['sh', 'job_processing/bash_scripts/nextflow_executor.sh', nexflow_user_dir, nextflow_file_location, project_id, pipeline_id, config["JOBS_ROOT_SET_OUTPUT"], array_of_files[0], array_of_files[1]]
 		print commands
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
