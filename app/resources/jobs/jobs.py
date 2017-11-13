@@ -34,6 +34,15 @@ job_get_parser.add_argument('homedir', dest='homedir', type=str, required=True, 
 job_get_parser.add_argument('from_process_controller', dest='from_process_controller', type=str, required=True, help="from_process_controller")
 #job_post_parser.add_argument('username', dest='username', type=str, required=True, help="Username")
 #job_post_parser.add_argument('files', dest='files', type=str, required=True, help="Files to use")
+
+
+job_put_parser = reqparse.RequestParser()
+job_put_parser.add_argument('project_id', dest='project_id', type=str, required=True, help="project_id ID")
+job_put_parser.add_argument('pipeline_id', dest='pipeline_id', type=str, required=True, help="pipeline_id ID")
+job_put_parser.add_argument('process_id', dest='process_id', type=str, required=True, help="process_id ID")
+job_put_parser.add_argument('run_property', dest='run_property', type=str, required=True, help="Username")
+job_put_parser.add_argument('run_property_value', dest='run_property_value', type=str, required=True, help="Username")
+job_put_parser.add_argument('type', dest='type', type=str, required=True, help="Username")
 #parameters -> workflow_id
 
 file_get_parser = reqparse.RequestParser()
@@ -234,6 +243,7 @@ class CopyChewSchema(Resource):
 class SetNGSOntoOutput(Resource):
 
 	def post(self):
+
 		parameters = request.json
 		print parameters
 		commands = ["python", "job_processing/get_program_input.py", "--project", parameters["project_id"], "--pipeline", parameters["pipeline_id"], "--process", parameters["process_id"], "-v1", parameters["run_info"], "-v2", parameters["run_stats"], "-v3", parameters["run_output"], "-v4", parameters["log_file"], "-v5", parameters["status"], "-t", paramaters["type"]]
