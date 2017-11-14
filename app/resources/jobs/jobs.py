@@ -254,12 +254,12 @@ class SetNGSOntoOutput(Resource):
 		return 200
 
 	def put(self):
-		parameters = request.get_json()
+		parameters = request.json
 		print parameters
 		print type(parameters)
-		parameters = json.load('"'+parameters+'"')
-		print type(parameters)
-		print parameters
+		parameters_json = json.loads('"'+parameters+'"')
+		print type(parameters_json)
+		print parameters_json
 		commands = ["python", "job_processing/get_program_input.py", "--project", parameters["project_id"], "--pipeline", parameters["pipeline_id"], "--process", parameters["process_id"], "-u", parameters["run_property"], "-v1", parameters["run_property_value"], "-t", parameters["type"]]
 		print commands
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
