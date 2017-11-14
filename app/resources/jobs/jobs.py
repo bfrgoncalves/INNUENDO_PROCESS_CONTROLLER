@@ -135,7 +135,8 @@ class Job_queue(Resource):
 		args = job_get_parser.parse_args()
 		job_id = args.job_id
 		from_process_controller = args.from_process_controller
-		print "JOB", job_id
+		
+		'''print "JOB", job_id
 		commands = 'sh job_processing/get_job_status.sh ' + job_id.split("_")[0]
 		proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc1.communicate()
@@ -175,11 +176,23 @@ class Job_queue(Resource):
 				else:
 					store_in_db = True
 
-			'''if len(parts) == 0:
+			if len(parts) == 0:
 				stdout = job_id + '\tFAILED'
 			else:
 				results = load_results_from_file(job_id, args.username)
-				store_in_db = True'''
+				store_in_db = True
+		'''
+
+		print '--project ' + args.project_id + ' --pipeline ' + args.pipeline_id + ' --process ' + args.process_id + ' -t status'
+		commands = 'python job_processing/get_program_input.py --project ' + args.project_id + ' --pipeline ' + args.pipeline_id + ' --process ' + args.process_id + ' -t status'
+		#commands = 'sh job_processing/get_completed_jobs.sh ' + job_id.split('_')[0]
+		proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		stdout, stderr = proc1.communicate()
+		#parts = stdout.split('\t')
+		print stdout, stderr
+		results = [[],[]]
+
+		stdout = job_id + '\t' + stdout
 
 		return {'stdout':stdout, 'store_in_db':store_in_db, 'results':results[0], 'paths':results[1], 'job_id': job_id}
 
