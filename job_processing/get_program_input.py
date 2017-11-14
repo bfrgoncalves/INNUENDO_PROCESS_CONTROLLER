@@ -105,8 +105,6 @@ def get_process_status(project_id, pipeline_id, process_id):
 
 		result.close()
 
-		print jsonResult[0]["statusStr"]
-
 		if "pass" in jsonResult[0]["statusStr"]:
 			#print "STATUS", jsonResult[0]["statusStr"]
 			sys.stdout.write("COMPLETED")
@@ -133,7 +131,6 @@ def set_unique_prop_output(project_id, pipeline_id, process_id, property_type, p
 	
 	try:
 		for p,v in zip(property_types, property_values):
-			print project_id, pipeline_id, process_id, p, v
 			#Agraph
 			processURI = dbconAg.createURI(namespace=localNSpace+"projects/", localname=str(project_id)+"/pipelines/"+str(pipeline_id)+"/processes/"+str(process_id))
 
