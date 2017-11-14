@@ -105,16 +105,18 @@ def get_process_status(project_id, pipeline_id, process_id):
 
 		result.close()
 
-		if "true" in jsonResult[0]["statusStr"]:
+		if "pass" in jsonResult[0]["statusStr"]:
 			#print "STATUS", jsonResult[0]["statusStr"]
 			sys.stdout.write("COMPLETED")
 		elif "None" in jsonResult[0]["statusStr"]:
 			sys.stdout.write("PD")
+		elif "running" in jsonResult[0]["statusStr"]:
+			sys.stdout.write("RUNNING")
 		elif "pending" in jsonResult[0]["statusStr"]:
 			sys.stdout.write("PD")
 		elif "warning" in jsonResult[0]["statusStr"]:
 			sys.stdout.write("WARNING")
-		elif "false" in jsonResult[0]["statusStr"]:
+		elif "fail" in jsonResult[0]["statusStr"]:
 			sys.stdout.write("FAILED")
 	except Exception as e:
 		sys.stdout.write("NEUTRAL")
@@ -145,7 +147,8 @@ def set_unique_prop_output(project_id, pipeline_id, process_id, property_type, p
 			runInfoProp = dbconAg.createURI(namespace=obo, localname=output_prop_to_type[p])
 
 
-			dbconAg.remove(outputURI, runInfoProp, None)
+			if p != "log_file":
+				dbconAg.remove(outputURI, runInfoProp, None)
 
 			#add outputs paths to process
 			stmt1 = dbconAg.createStatement(outputURI, runInfoProp, runInfo)
@@ -189,8 +192,8 @@ def set_process_output(project_id, pipeline_id, process_id, run_info, run_stats,
 		dbconAg.remove(outputURI, runInfoProp, None)
 		dbconAg.remove(outputURI, runStatsProp, None)
 		dbconAg.remove(outputURI, runFileProp, None)
-		dbconAg.remove(outputURI, logFileProp, None)
-		dbconAg.remove(processURI, runStatusProp, None)
+		#dbconAg.remove(outputURI, logFileProp, None)
+		dbconAg.remove(outputURI, runStatusProp, None)
 		#dbconAg.remove(processURI, hasOutput, None)
 
 		#add outputs paths to process
