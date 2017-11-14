@@ -194,9 +194,6 @@ class Queue_Processor:
 		print commands
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
-		print stdout
-		print stderr
-
 
 		#RUN NEXTFLOW
 		commands = ['sh', 'job_processing/bash_scripts/nextflow_executor.sh', nexflow_user_dir, nextflow_file_location, project_id, pipeline_id, config["JOBS_ROOT_SET_OUTPUT"], array_of_files[0], array_of_files[1]]
