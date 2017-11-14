@@ -23,4 +23,4 @@ fi
 
 ln -s $6 ${1}/data
 ln -s $7 ${1}/data
-nextflow run $2 --projectId=$3  --pipelineId=$4 --platformHTTP=$5 -profile slurm
+nextflow run $2 --projectId=$3  --pipelineId=$4 --platformHTTP=$5 -profile oneida &
