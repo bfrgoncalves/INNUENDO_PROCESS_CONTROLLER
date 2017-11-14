@@ -124,30 +124,34 @@ def set_unique_prop_output(project_id, pipeline_id, process_id, property_type, p
 
 	output_prop_to_type = {"run_info":"NGS_0000092", "run_output":"NGS_0000093", "run_stats":"NGS_0000094", "log_file":"NGS_0000096", "status":"NGS_0000097"}
 
+	property_types = property_type.split(",")
+	property_values = property_value.split(",")
+	
 	try:
-		print project_id, pipeline_id, process_id, property_type, property_value
-		#Agraph
-		processURI = dbconAg.createURI(namespace=localNSpace+"projects/", localname=str(project_id)+"/pipelines/"+str(pipeline_id)+"/processes/"+str(process_id))
+		for p,v in zip(property_types, property_values):
+			print project_id, pipeline_id, process_id, p, v
+			#Agraph
+			processURI = dbconAg.createURI(namespace=localNSpace+"projects/", localname=str(project_id)+"/pipelines/"+str(pipeline_id)+"/processes/"+str(process_id))
 
-		#get output URI from process
-		hasOutput = dbconAg.createURI(namespace=obo, localname="RO_0002234")
-		statements = dbconAg.getStatements(processURI, hasOutput, None)
-		outputURI=parseAgraphStatementsRes(statements)
-		statements.close()
+			#get output URI from process
+			hasOutput = dbconAg.createURI(namespace=obo, localname="RO_0002234")
+			statements = dbconAg.getStatements(processURI, hasOutput, None)
+			outputURI=parseAgraphStatementsRes(statements)
+			statements.close()
 
-		outputURI = dbconAg.createURI(outputURI[0]['obj'])
+			outputURI = dbconAg.createURI(outputURI[0]['obj'])
 
-		runInfo = dbconAg.createLiteral((property_value), datatype=XMLSchema.STRING)
-		runInfoProp = dbconAg.createURI(namespace=obo, localname=output_prop_to_type[property_type])
+			runInfo = dbconAg.createLiteral((v), datatype=XMLSchema.STRING)
+			runInfoProp = dbconAg.createURI(namespace=obo, localname=output_prop_to_type[p])
 
 
-		dbconAg.remove(outputURI, runInfoProp, None)
+			dbconAg.remove(outputURI, runInfoProp, None)
 
-		#add outputs paths to process
-		stmt1 = dbconAg.createStatement(outputURI, runInfoProp, runInfo)
+			#add outputs paths to process
+			stmt1 = dbconAg.createStatement(outputURI, runInfoProp, runInfo)
 
-		#send to allegro
-		dbconAg.add(stmt1)
+			#send to allegro
+			dbconAg.add(stmt1)
 
 	except Exception as e:
 		sys.stdout.write("404")
