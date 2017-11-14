@@ -125,6 +125,7 @@ def set_unique_prop_output(project_id, pipeline_id, process_id, property, proper
 	output_prop_to_type = {"run_info":"NGS_0000092", "run_output":"NGS_0000093", "run_stats":"NGS_0000094", "log_file":"NGS_0000096", "status":"NGS_0000097"}
 
 	try:
+		print project_id, pipeline_id, process_id, property, property_value
 		#Agraph
 		processURI = dbconAg.createURI(namespace=localNSpace+"projects/", localname=str(project_id)+"/pipelines/"+str(pipeline_id)+"/processes/"+str(process_id))
 
