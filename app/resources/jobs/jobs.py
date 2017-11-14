@@ -193,6 +193,7 @@ class Job_queue(Resource):
 		results = [[],[]]
 
 		stdout = job_id + '\t' + stdout
+		store_in_db = False
 
 		return {'stdout':stdout, 'store_in_db':store_in_db, 'results':results[0], 'paths':results[1], 'job_id': job_id}
 
