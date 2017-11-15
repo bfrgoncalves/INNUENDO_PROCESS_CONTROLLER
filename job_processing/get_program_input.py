@@ -105,6 +105,8 @@ def get_process_status(project_id, pipeline_id, process_id):
 
 		result.close()
 
+		print jsonResult
+
 		if "pass" in jsonResult[0]["statusStr"]:
 			#print "STATUS", jsonResult[0]["statusStr"]
 			sys.stdout.write("COMPLETED")
