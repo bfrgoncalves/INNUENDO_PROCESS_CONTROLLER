@@ -105,7 +105,7 @@ def get_process_status(project_id, pipeline_id, process_id):
 
 		result.close()
 
-		print len(jsonResult)
+		print jsonResult
 		
 		if len(jsonResult) == 0:
 			sys.stdout.write("PD")
