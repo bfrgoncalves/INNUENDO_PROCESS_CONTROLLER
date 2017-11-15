@@ -105,13 +105,15 @@ def get_process_status(project_id, pipeline_id, process_id):
 
 		result.close()
 
+		print jsonResult[0]["statusStr"]
+
 		if "pass" in jsonResult[0]["statusStr"]:
 			#print "STATUS", jsonResult[0]["statusStr"]
 			sys.stdout.write("COMPLETED")
 		elif "None" in jsonResult[0]["statusStr"]:
 			sys.stdout.write("PD")
 		elif "running" in jsonResult[0]["statusStr"]:
-			sys.stdout.write("RUNNING")
+			sys.stdout.write("R")
 		elif "pending" in jsonResult[0]["statusStr"]:
 			sys.stdout.write("PD")
 		elif "warning" in jsonResult[0]["statusStr"]:
