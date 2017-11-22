@@ -118,13 +118,15 @@ def get_process_status(project_id, pipeline_id, process_id):
 			sys.stdout.write("WARNING")
 		elif "fail" in jsonResult[0]["statusStr"]:
 			sys.stdout.write("FAILED")
+		elif "error" in jsonResult[0]["statusStr"]:
+			sys.stdout.write("FAILED")
 	except Exception as e:
 		sys.stdout.write("NEUTRAL")
 
 
 def set_unique_prop_output(project_id, pipeline_id, process_id, property_type, property_value):
 
-	output_prop_to_type = {"run_info":"NGS_0000092", "run_output":"NGS_0000093", "run_stats":"NGS_0000094", "log_file":"NGS_0000096", "status":"NGS_0000097"}
+	output_prop_to_type = {"run_info":"NGS_0000092", "run_output":"NGS_0000093", "warnings":"NGS_0000094", "log_file":"NGS_0000096", "status":"NGS_0000097"}
 
 	property_types = property_type.split(",")
 	property_values = property_value.split(",")
