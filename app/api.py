@@ -1,7 +1,7 @@
 from app import app
 from flask.ext.restful import Api
 
-from resources.jobs.jobs import Job_queue, FilesResource, DownloadFilesResource, CopyChewSchema, SetNGSOntoOutput, Job_Reports
+from resources.jobs.jobs import Job_queue, FilesResource, DownloadFilesResource, CopyChewSchema, SetNGSOntoOutput
 from resources.downloads.downloads import DownloadResults
 
 #Setup API
