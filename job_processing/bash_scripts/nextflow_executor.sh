@@ -10,10 +10,14 @@ echo $3
 echo $4
 #Post URL
 echo $5
-#File 1
+#Sample Name
 echo $6
-#File 2
+#File 1
 echo $7
+#File 2
+echo $8
+#Reports HTTP route
+echo $9
 
 cd $1
 
@@ -23,4 +27,4 @@ fi
 
 ln -s $6 ${1}/data
 ln -s $7 ${1}/data
-nextflow run $2 --projectId=$3  --pipelineId=$4 --platformHTTP=$5 -profile oneida &
+nextflow run $2 --projectId=$3  --pipelineId=$4 --platformHTTP=$5 --sampleName=$6 --reportHTTP=$9 -profile oneida &
