@@ -22,6 +22,8 @@ echo $9
 echo $10
 #user_id
 echo $11
+#species_name
+echo $12
 
 cd $1
 
@@ -31,4 +33,4 @@ fi
 
 ln -s $6 ${1}/data
 ln -s $7 ${1}/data
-nextflow run $2 --projectId=$3  --pipelineId=$4 --platformHTTP=$5 --sampleName=$6 --reportHTTP=$9 --currentUserName=$10 --currentUserId=$11 -profile oneida &
+nextflow run $2 --projectId=$3  --pipelineId=$4 --platformHTTP=$5 --sampleName=$6 --reportHTTP=$9 --currentUserName=$10 --currentUserId=$11 --species=$12 -profile oneida &
