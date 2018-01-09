@@ -35,6 +35,6 @@ if [ ! -d "data" ]; then
 	mkdir data
 fi
 
-ln -s $6 ${1}/data
 ln -s $7 ${1}/data
+ln -s $8 ${1}/data
 nextflow run $2 --projectId=$3  --pipelineId=$4 --platformHTTP=$5 --sampleName=$6 --reportHTTP=$9 --currentUserName=$10 --currentUserId=$11 --species=$12 -profile $14 --genomeSize=$13 -resume &
