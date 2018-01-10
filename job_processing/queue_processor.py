@@ -95,6 +95,7 @@ class Queue_Processor:
 
 
 		task_ids = []
+		processIDs = []
 
 		#To send to nextflow generator
 		project_id = ""
@@ -128,6 +129,7 @@ class Queue_Processor:
 
 			nextflow_tags.append(nextflow_tag+":"+process_id)
 			task_ids.append(random_tag)
+			processIDs.append(process_id)
 
 			array_of_files = []
 
@@ -148,7 +150,7 @@ class Queue_Processor:
 		print commands
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-		return {'task_ids':task_ids}, 200
+		return {'task_ids':task_ids, 'process_ids': processIDs}, 200
 
 	
 
