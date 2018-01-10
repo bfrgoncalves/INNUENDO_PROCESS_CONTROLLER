@@ -133,58 +133,6 @@ class Queue_Processor:
 
 			for x in files:
 				array_of_files.append(os.path.join(strain_submitter, config['FTP_FILES_FOLDER'],files[x]))
-			#processes_ids.append(processes_ids)
-
-
-
-			'''
-			if 'CPUs' in json.loads(workflow['parameters']) and json.loads(workflow['parameters'])['CPUs'] != "" and json.loads(workflow['parameters'])['CPUs'] != None:
-				slurm_cpus = json.loads(workflow['parameters'])['CPUs']
-			else:
-				slurm_cpus = config["DEFAULT_SLURM_CPUS"]
-
-			array_of_files = []
-
-			user_folder = homedir
-			submitter_folder = strain_submitter
-
-			for x in files:
-				array_of_files.append(os.path.join(submitter_folder, config['FTP_FILES_FOLDER'],files[x]))
-
-			workflow_job_name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
-			workflow_filepath = os.path.join(config['JOBS_FOLDER'], username + '_' + workflow_job_name +'.sh')
-			
-
-			wf_params = json.loads(workflow['parameters'])
-			if wf_params['used Software'] in config['APPLICATIONS_ARRAY']:
-				software = wf_params['used Software']
-
-			key_value_args, prev_application_steps, after_application_steps, status_definition = process_parameters(parameters, user_folder, workflow, current_specie, workflow_name, sampleName, current_user_name, current_user_id, homedir)
-			key_value_args, softwarePath, language = setFilesByProgram(key_value_args, workflow)
-
-			#TEST SUBMIT ONLY ONE SBATCH PER PROCEDURE
-			workflow_filenames = []
-
-			if key_value_args != False:
-				key_value_args = [language, softwarePath] + key_value_args
-				with open(workflow_filepath, 'a') as jobs_file:
-					jobs_file.write(prev_application_steps.replace("STEPID", str(count_workflows)).replace("SLURM_ARRAY_JOB_ID", "$1"))
-					jobs_file.write(' '.join(key_value_args).replace("STEPID", str(count_workflows)).replace("SLURM_ARRAY_JOB_ID", "$1"))
-					jobs_file.write(after_application_steps.replace("STEPID", str(count_workflows)).replace("SLURM_ARRAY_JOB_ID", "$1"))
-					jobs_file.write(status_definition.replace("STEPIDMINUS1", str(count_workflows-1)).replace("STEPID", str(count_workflows)).replace("SLURM_ARRAY_JOB_ID", "$1"))
-				workflow_filenames.append(workflow_filepath)
-
-				jobID, task_numbers, has_dependency = submitToSLURM(user_folder, workflow_filenames, count_workflows, array_of_files, software, dependency_id, slurm_cpus)
-
-				if has_dependency == True:
-					dependency_id = jobID
-
-				for t in task_numbers:
-					task_ids.append(jobID + "_" + t)
-
-			count_workflows = 0;
-
-			'''
 
 		#RUN Nextflow GENERATOR
 		nextflow_file_location = os.path.join(nexflow_user_dir, random_pip_name)
