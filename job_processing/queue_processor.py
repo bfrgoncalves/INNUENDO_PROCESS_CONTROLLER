@@ -85,14 +85,13 @@ class Queue_Processor:
 		key_value_args = []
 		job_parameters = json.loads(job_parameters)
 
-		count_workflows = 0;
-		workflow_filenames = [];
-		processes_ids = [];
-		workflows_ids = [];
-		outputs_names = [];
-		nextflow_tags = [];
-		dependency_id = None;
-
+		count_workflows = 0
+		workflow_filenames = []
+		processes_ids = []
+		workflows_ids = []
+		outputs_names = []
+		nextflow_tags = []
+		dependency_id = None
 
 		task_ids = []
 		processIDs = []
@@ -105,6 +104,7 @@ class Queue_Processor:
 		INNUca_dependency = False
 
 		random_pip_name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8)) + ".nf"
+
 
 		for workflow in job_parameters:
 
@@ -119,6 +119,7 @@ class Queue_Processor:
 			project_id = workflow['project_id']
 			pipeline_id = workflow['pipeline_id']
 			process_id = workflow['process_id']
+			process_to_run = workflow['process_to_run']
 
 			nexflow_user_dir = os.path.join(homedir,"jobs", pipeline_id)
 
@@ -133,6 +134,10 @@ class Queue_Processor:
 
 			array_of_files = []
 
+			if not os.path.exists(os.path.join(nexflow_user_dir, "platform.config")):
+				with open(os.path.join(nexflow_user_dir, "platform.config"), "w") as nextflow_cache_file:
+					nextflow_cache_file.write("process {{ ${}.cache = false}}".format)
+
 			for x in files:
 				array_of_files.append(os.path.join(strain_submitter, config['FTP_FILES_FOLDER'],files[x]))
 
@@ -145,14 +150,16 @@ class Queue_Processor:
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
 
-		print stdout, stderr
+		if stderr != "":
+			return {'message': stderr}, 500
 
 		#RUN NEXTFLOW
 		commands = ['sh', 'job_processing/bash_scripts/nextflow_executor.sh', nexflow_user_dir, nextflow_file_location, project_id, pipeline_id, config["JOBS_ROOT_SET_OUTPUT"], sampleName, array_of_files[0], array_of_files[1], config["JOBS_ROOT_SET_REPORT"], current_user_name, current_user_id, current_specie, config["species_expected_genome_size"][current_specie], config["NEXTFLOW_PROFILE"]]
 		print commands
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-		return {'task_ids':task_ids, 'process_ids': processIDs}, 200
+
+		return {'task_ids':task_ids, 'process_ids': processIDs, 'subproc_id': proc.pid}, 200
 
 	
 
