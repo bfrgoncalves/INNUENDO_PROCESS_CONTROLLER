@@ -136,7 +136,7 @@ class Queue_Processor:
 
 			if not os.path.exists(os.path.join(nexflow_user_dir, "platform.config")):
 				with open(os.path.join(nexflow_user_dir, "platform.config"), "w") as nextflow_cache_file:
-					nextflow_cache_file.write("process {{ ${}.cache = false}}".format)
+					nextflow_cache_file.write("process {{ ${}.cache = false}}".format(nextflow_tag))
 
 			for x in files:
 				array_of_files.append(os.path.join(strain_submitter, config['FTP_FILES_FOLDER'],files[x]))
