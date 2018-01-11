@@ -103,8 +103,7 @@ class Queue_Processor:
 
 		INNUca_dependency = False
 
-		random_pip_name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8)) + ".nf"
-
+		random_pip_name = job_parameters[0]['project_id']+'_'+job_parameters[0]['pipeline_id']+ ".nf"
 
 		for workflow in job_parameters:
 
@@ -133,8 +132,8 @@ class Queue_Processor:
 			array_of_files = []
 			
 			print process_to_run
-			
-			if process_to_run == True:
+
+			if process_to_run == "true":
 				task_ids.append(random_tag)
 				processIDs.append(process_id)
 
