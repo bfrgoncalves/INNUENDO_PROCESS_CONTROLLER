@@ -134,7 +134,8 @@ class Queue_Processor:
 
 			array_of_files = []
 
-			if not os.path.exists(os.path.join(nexflow_user_dir, "platform.config")):
+			print process_to_run
+			if not os.path.exists(os.path.join(nexflow_user_dir, "platform.config")) and process_to_run == True:
 				with open(os.path.join(nexflow_user_dir, "platform.config"), "w") as nextflow_cache_file:
 					nextflow_cache_file.write("process {{ ${}.cache = false}}".format(nextflow_tag))
 
