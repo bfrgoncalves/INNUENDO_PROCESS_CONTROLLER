@@ -94,6 +94,7 @@ class Queue_Processor:
 		dependency_id = None
 		writeCacheFile = True
 
+
 		task_ids = []
 		processIDs = []
 
@@ -137,6 +138,9 @@ class Queue_Processor:
 			if process_to_run == "true":
 				task_ids.append(random_tag)
 				processIDs.append(process_id)
+
+				if os.path.exists(os.path.join(nexflow_user_dir, "platform.config")):
+					os.remove(os.path.join(nexflow_user_dir, "platform.config"))
 
 				if writeCacheFile:
 					with open(os.path.join(nexflow_user_dir, "platform.config"), "w") as nextflow_cache_file:
