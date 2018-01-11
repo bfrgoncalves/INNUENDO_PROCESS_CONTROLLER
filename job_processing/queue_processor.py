@@ -129,15 +129,18 @@ class Queue_Processor:
 			random_tag = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
 
 			nextflow_tags.append(nextflow_tag+":"+process_id)
-			task_ids.append(random_tag)
-			processIDs.append(process_id)
 
 			array_of_files = []
-
+			
 			print process_to_run
-			if not os.path.exists(os.path.join(nexflow_user_dir, "platform.config")) and process_to_run == True:
-				with open(os.path.join(nexflow_user_dir, "platform.config"), "w") as nextflow_cache_file:
-					nextflow_cache_file.write("process {{ ${}.cache = false}}".format(nextflow_tag))
+			
+			if process_to_run == True:
+				task_ids.append(random_tag)
+				processIDs.append(process_id)
+
+				if not os.path.exists(os.path.join(nexflow_user_dir, "platform.config")):
+					with open(os.path.join(nexflow_user_dir, "platform.config"), "w") as nextflow_cache_file:
+						nextflow_cache_file.write("process {{ ${}.cache = false}}".format(nextflow_tag))
 
 			for x in files:
 				array_of_files.append(os.path.join(strain_submitter, config['FTP_FILES_FOLDER'],files[x]))
