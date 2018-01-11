@@ -92,6 +92,7 @@ class Queue_Processor:
 		outputs_names = []
 		nextflow_tags = []
 		dependency_id = None
+		writeCacheFile = True
 
 		task_ids = []
 		processIDs = []
@@ -137,9 +138,11 @@ class Queue_Processor:
 				task_ids.append(random_tag)
 				processIDs.append(process_id)
 
-				if not os.path.exists(os.path.join(nexflow_user_dir, "platform.config")):
+				if writeCacheFile:
 					with open(os.path.join(nexflow_user_dir, "platform.config"), "w") as nextflow_cache_file:
 						nextflow_cache_file.write("process {{ ${}.cache = false}}".format(nextflow_tag))
+
+					writeCacheFile = False
 
 			for x in files:
 				array_of_files.append(os.path.join(strain_submitter, config['FTP_FILES_FOLDER'],files[x]))
