@@ -155,7 +155,7 @@ class Queue_Processor:
 		nextflow_file_location = os.path.join(nexflow_user_dir, random_pip_name)
 		cwd = os.getcwd()
 		
-		commands = ['python3', config["NEXTFLOW_GENERATOR_PATH"]] + ["-t"] + nextflow_tags + ["-o", os.path.join(nexflow_user_dir, nextflow_file_location), "--include-templates"]
+		commands = ['python3', config["NEXTFLOW_GENERATOR_PATH"]] + ["-t"] + nextflow_tags + ["-o", os.path.join(nexflow_user_dir, nextflow_file_location), "--include-templates", "--debug"]
 		print commands
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
@@ -163,13 +163,18 @@ class Queue_Processor:
 		if stderr != "":
 			return {'message': stderr}, 500
 
+		with open(os.path.join(nexflow_user_dir, "nextflow_generator.log"), "w") as next_gen_log:
+			next_gen_log.write(" ".join(commands) +"\n")
+			next_gen_log.write(stdout +"\n")
+
+
 		#RUN NEXTFLOW
 		commands = ['sh', 'job_processing/bash_scripts/nextflow_executor.sh', nexflow_user_dir, nextflow_file_location, project_id, pipeline_id, config["JOBS_ROOT_SET_OUTPUT"], sampleName, array_of_files[0], array_of_files[1], config["JOBS_ROOT_SET_REPORT"], current_user_name, current_user_id, current_specie, config["species_expected_genome_size"][current_specie], config["NEXTFLOW_PROFILE"]]
 		print commands
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 
-		return {'task_ids':task_ids, 'process_ids': processIDs, 'subproc_id': proc.pid, 'gen_stdout': stdout, 'path_nextflow_log': os.path.join(nexflow_user_dir, "nextflow_log.txt")}, 200
+		return {'task_ids':task_ids, 'process_ids': processIDs}, 200
 
 	
 
