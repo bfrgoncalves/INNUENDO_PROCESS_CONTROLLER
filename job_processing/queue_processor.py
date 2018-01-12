@@ -136,13 +136,13 @@ class Queue_Processor:
 			print process_to_run
 
 			if process_to_run == "true":
-				task_ids.append(random_tag)
+				task_ids.append(project_id + pipeline_id + process_id)
 				processIDs.append(process_id)
 
 				if writeCacheFile:
 					if os.path.exists(os.path.join(nexflow_user_dir, "platform.config")):
 						os.remove(os.path.join(nexflow_user_dir, "platform.config"))
-						
+
 					with open(os.path.join(nexflow_user_dir, "platform.config"), "w") as nextflow_cache_file:
 						nextflow_cache_file.write("process {{ ${}.cache = false}}".format(nextflow_tag))
 
@@ -169,7 +169,7 @@ class Queue_Processor:
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 
-		return {'task_ids':task_ids, 'process_ids': processIDs, 'subproc_id': proc.pid}, 200
+		return {'task_ids':task_ids, 'process_ids': processIDs, 'subproc_id': proc.pid, 'gen_stdout': stdout, 'path_nextflow_log': os.path.join(nexflow_user_dir, "nextflow_log.txt")}, 200
 
 	
 
