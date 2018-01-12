@@ -122,7 +122,7 @@ class Queue_Processor:
 			process_id = workflow['process_id']
 			process_to_run = workflow['process_to_run']
 
-			nexflow_user_dir = os.path.join(homedir,"jobs", pipeline_id)
+			nexflow_user_dir = os.path.join(homedir,"jobs", project_id+"-"+pipeline_id)
 
 			if not os.path.exists(nexflow_user_dir):
 				os.makedirs(nexflow_user_dir)
