@@ -155,7 +155,7 @@ class Queue_Processor:
 		nextflow_file_location = os.path.join(nexflow_user_dir, random_pip_name)
 		cwd = os.getcwd()
 		
-		commands = ['python3', config["NEXTFLOW_GENERATOR_PATH"]] + ["-t"] + nextflow_tags + ["-o", os.path.join(nexflow_user_dir, nextflow_file_location), "--include-templates", "--debug"]
+		commands = ['python3', config["NEXTFLOW_GENERATOR_PATH"]] + ["-t"] + nextflow_tags + ["-o", os.path.join(nexflow_user_dir, nextflow_file_location), "--include-templates"]
 		print commands
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
