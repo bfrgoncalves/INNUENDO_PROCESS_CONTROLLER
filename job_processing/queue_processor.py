@@ -144,7 +144,8 @@ class Queue_Processor:
 						os.remove(os.path.join(nexflow_user_dir, "platform.config"))
 
 					with open(os.path.join(nexflow_user_dir, "platform.config"), "w") as nextflow_cache_file:
-						nextflow_cache_file.write("process {{ ${}.cache = false}}".format(nextflow_tag))
+						#nextflow_cache_file.write("process {{ ${}.cache = false }}".format(nextflow_tag))
+						nextflow_cache_file.write("")
 
 					writeCacheFile = False
 
