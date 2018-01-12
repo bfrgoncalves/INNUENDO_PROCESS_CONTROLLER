@@ -139,10 +139,10 @@ class Queue_Processor:
 				task_ids.append(random_tag)
 				processIDs.append(process_id)
 
-				if os.path.exists(os.path.join(nexflow_user_dir, "platform.config")):
-					os.remove(os.path.join(nexflow_user_dir, "platform.config"))
-
 				if writeCacheFile:
+					if os.path.exists(os.path.join(nexflow_user_dir, "platform.config")):
+						os.remove(os.path.join(nexflow_user_dir, "platform.config"))
+						
 					with open(os.path.join(nexflow_user_dir, "platform.config"), "w") as nextflow_cache_file:
 						nextflow_cache_file.write("process {{ ${}.cache = false}}".format(nextflow_tag))
 
