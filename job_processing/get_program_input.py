@@ -166,7 +166,7 @@ def set_process_output(project_id, pipeline_id, process_id, run_info, run_stats,
 		#Agraph
 		processURI = dbconAg.createURI(namespace=localNSpace+"projects/", localname=str(project_id)+"/pipelines/"+str(pipeline_id)+"/processes/"+str(process_id))
 
-		print processURI
+		sys.stdout.write(processURI)
 
 		#get output URI from process
 		hasOutput = dbconAg.createURI(namespace=obo, localname="RO_0002234")
