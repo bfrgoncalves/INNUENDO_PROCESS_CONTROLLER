@@ -118,6 +118,7 @@ class Queue_Processor:
 			username = workflow['username']
 			strain_submitter = workflow['strain_submitter']
 			workflow_name = json.loads(workflow['parameters'])['name']
+			used_software = json.loads(workflow['parameters'])['used Software']
 			nextflow_tag = json.loads(workflow['parameters'])['Nextflow Tag']
 			project_id = workflow['project_id']
 			pipeline_id = workflow['pipeline_id']
@@ -126,7 +127,11 @@ class Queue_Processor:
 
 			nexflow_user_dir = os.path.join(homedir,"jobs", project_id+"-"+pipeline_id)
 
-			if "chewBBACA" in workflow_name:
+			print used_software
+			print json.loads(workflow['parameters'])
+			print parameters
+
+			if "chewBBACA" in used_software:
 				print "HAS CHEWBBACA"
 				chewbbaca_schema_path = os.path.join(config["CHEWBBACA_SCHEMAS_PATH"], parameters["schema"])
 				chewbbaca_list_genes = os.path.join(config["CHEWBBACA_SCHEMAS_PATH"], parameters["schema"], "listGenes.txt")
