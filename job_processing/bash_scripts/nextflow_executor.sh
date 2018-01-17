@@ -44,6 +44,6 @@ ln -s $8 ${1}/data/sample_2.fastq.gz
 
 echo "\nincludeConfig 'platform.config'" >> nextflow.config
 
-nextflow run $2 --projectId=$3  --pipelineId=$4 --platformHTTP=$5 --sampleName=$6 --reportHTTP=$9 --currentUserName=$10 --currentUserId=$11 --species=$12 -profile $14 --genomeSize=$13 --schemaPath=$14 --schemaSelectedLoci=$15 -resume -with-trace > nextflow_log.txt 2>&1 &
+nextflow run $2 --projectId=$3  --pipelineId=$4 --platformHTTP=$5 --sampleName=$6 --reportHTTP=$9 --currentUserName=$10 --currentUserId=$11 --species=$12 -profile $14 --genomeSize=$13 --schemaPath=$15 --schemaSelectedLoci=$16 -resume -with-trace > nextflow_log.txt 2>&1 &
 
 echo $! > process.id
