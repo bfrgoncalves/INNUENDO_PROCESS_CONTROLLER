@@ -102,6 +102,8 @@ class Queue_Processor:
 		project_id = ""
 		pipeline_id = ""
 		nexflow_user_dir = ""
+		chewbbaca_schema_path = ""
+		chewbbaca_list_genes = ""
 
 		INNUca_dependency = False
 
@@ -124,6 +126,12 @@ class Queue_Processor:
 
 			nexflow_user_dir = os.path.join(homedir,"jobs", project_id+"-"+pipeline_id)
 
+			if "chewBBACA" in workflow_name:
+				print "HAS CHEWBBACA"
+				chewbbaca_schema_path = os.path.join(config["CHEWBBACA_SCHEMAS_PATH"], parameters["schema"])
+				chewbbaca_list_genes = os.path.join(config["CHEWBBACA_SCHEMAS_PATH"], parameters["schema"], "listGenes.txt")
+				print chewbbaca_schema_path
+
 			if not os.path.exists(nexflow_user_dir):
 				os.makedirs(nexflow_user_dir)
 
@@ -133,7 +141,6 @@ class Queue_Processor:
 
 			array_of_files = []
 			
-			print process_to_run
 
 			if process_to_run == "true":
 				task_ids.append(project_id + pipeline_id + process_id)
@@ -170,7 +177,7 @@ class Queue_Processor:
 
 
 		#RUN NEXTFLOW
-		commands = ['sh', 'job_processing/bash_scripts/nextflow_executor.sh', nexflow_user_dir, nextflow_file_location, project_id, pipeline_id, config["JOBS_ROOT_SET_OUTPUT"], sampleName, array_of_files[0], array_of_files[1], config["JOBS_ROOT_SET_REPORT"], current_user_name, current_user_id, current_specie, config["species_expected_genome_size"][current_specie], config["NEXTFLOW_PROFILE"]]
+		commands = ['sh', 'job_processing/bash_scripts/nextflow_executor.sh', nexflow_user_dir, nextflow_file_location, project_id, pipeline_id, config["JOBS_ROOT_SET_OUTPUT"], sampleName, array_of_files[0], array_of_files[1], config["JOBS_ROOT_SET_REPORT"], current_user_name, current_user_id, current_specie, config["species_expected_genome_size"][current_specie], config["NEXTFLOW_PROFILE"], chewbbaca_schema_path, chewbbaca_list_genes]
 		print commands
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 

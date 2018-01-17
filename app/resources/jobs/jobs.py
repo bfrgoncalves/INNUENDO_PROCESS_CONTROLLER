@@ -64,20 +64,8 @@ config = {}
 execfile("config.py", config)
 
 def load_results_from_file(job_id, homedir):
-	print homedir
+
 	user_folder = os.path.join(homedir, job_id.split('_')[0] + '/*_' + job_id.split('_')[0] + "_" + str(int(job_id.split('_')[1]) + 1) + '/*.*')
-	print user_folder
-
-	onlyfiles = [f for f in glob.glob(user_folder)]
-
-	'''for i in onlyfiles:
-		if 'chewBBACA' in i:
-			user_folder += '/*'
-			break
-
-		elif 'INNUca' in i:
-			user_folder += '/*'
-			break'''
 
 	onlyfiles = [f for f in glob.glob(user_folder)]
 
@@ -86,9 +74,6 @@ def load_results_from_file(job_id, homedir):
 	array_of_results = {}
 	array_of_paths = {}
 	
-	print onlyfiles
-	print "##################################################"
-
 	for i in onlyfiles:
 		try:
 			data = open(i).read()
@@ -147,7 +132,6 @@ class Job_queue(Resource):
 			job_id = job_ids[k]
 			process_id = process_ids[k]
 			from_process_controller = args.from_process_controller
-			print "JOB", job_id
 
 			go_to_pending = False
 
@@ -158,7 +142,6 @@ class Job_queue(Resource):
 			commands = 'python job_processing/get_program_input.py --project ' + args.project_id + ' --pipeline ' + args.pipeline_id + ' --process ' + process_id + ' -t status'
 			proc1 = subprocess.Popen(commands.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 			stdout, stderr = proc1.communicate()
-			print stdout, stderr
 
 			stdout = job_id + '\t' + stdout
 
@@ -167,7 +150,7 @@ class Job_queue(Resource):
 			all_results.append(results[0])
 			all_paths.append(results[1])
 
-		print len(all_std_out), len(store_jobs_in_db), len(all_results), len(all_paths)
+		#print len(all_std_out), len(store_jobs_in_db), len(all_results), len(all_paths)
 
 		return {'stdout':all_std_out, 'store_in_db':store_jobs_in_db, 'results':all_results, 'paths':all_paths, 'job_id': job_ids}
 		#return {'stdout':stdout, 'store_in_db':','.join(store_jobs_in_db), 'results':results[0], 'paths':results[1], 'job_id': ",".join(job_ids)}
@@ -194,14 +177,14 @@ class DownloadFilesResource(Resource):
 		args = download_file_get_parser.parse_args()
 		innuendo_processor = Queue_Processor()
 		output = innuendo_processor.download_accessions(download_parameters=args)
-		print "OUTPUT", output
+
 		return output, 200
 
 	def get(self):
 		args = download_file_get_parser.parse_args()
 		file_array = []
 		file_folder = os.path.join('/home/users/', args.username, config['FTP_FILES_FOLDER'], args.accession_numbers)
-		print file_folder
+
 		with open(file_folder, 'r') as file_to_send:
 			for line in file_to_send:
 				file_array.append(line)
@@ -214,17 +197,17 @@ class CopyChewSchema(Resource):
 	def get(self):
 		args = copy_schema_get_parser.parse_args()
 		cwd = os.getcwd()
-		print cwd
+
 		commands = ['cp', '-r', './dependencies/chewBBACA/chewBBACA_schemas_on_compute/'+args.schema_to_copy, './dependencies/chewBBACA/chewBBACA_schemas/'+args.schema_to_copy+'_new']
-		print commands
+
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
 		commands = ['rm','-rf', './dependencies/chewBBACA/chewBBACA_schemas/'+args.schema_to_copy]
-		print commands
+
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
 		commands = ['mv','./dependencies/chewBBACA/chewBBACA_schemas/'+args.schema_to_copy+'_new', './dependencies/chewBBACA/chewBBACA_schemas/'+args.schema_to_copy]
-		print commands
+
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
 		return 200
@@ -236,23 +219,23 @@ class SetNGSOntoOutput(Resource):
 
 		parameters = request.json
 		parameters_json = json.loads(parameters.replace("'", '"'))
-		print parameters_json
+
 		commands = ["python", "job_processing/get_program_input.py", "--project", parameters_json["project_id"], "--pipeline", parameters_json["pipeline_id"], "--process", parameters_json["process_id"], "-v1", parameters_json["run_info"], "-v2", parameters_json["warnings"], "-v3", parameters_json["run_output"], "-v4", parameters_json["log_file"], "-v5", parameters_json["status"], "-t", parameters_json["type"]]
-		print commands
+
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
-		print stdout
+
 		return 200
 
 	def put(self):
 		parameters = request.json
 		parameters_json = json.loads(parameters.replace("'", '"'))
-		print parameters_json
+
 		commands = ["python", "job_processing/get_program_input.py", "--project", parameters_json["project_id"], "--pipeline", parameters_json["pipeline_id"], "--process", parameters_json["process_id"], "-u", parameters_json["run_property"], "-v1", parameters_json["run_property_value"], "-t", parameters_json["type"]]
-		print commands
+
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
-		print stdout
+
 		return 200
 
 		project_id, pipeline_id, process_id, run_property, run_property_value, type
