@@ -1,8 +1,25 @@
-from app import app
+from app import app, dbconAg,dedicateddbconAg
 from flask.ext.restful import Api, Resource, reqparse, abort, fields, marshal_with #filters data according to some fields
 from flask import jsonify, request
 
 from job_processing.queue_processor import Queue_Processor
+
+from job_processing.queryParse2Json import parseAgraphStatementsRes,parseAgraphQueryRes
+
+from franz.openrdf.vocabulary.rdf import RDF
+from franz.openrdf.vocabulary.xmlschema import XMLSchema
+from franz.openrdf.query.query import QueryLanguage
+from franz.openrdf.model import URI
+
+#READ CONFIG FILE
+config = {}
+execfile("config.py", config)
+
+obo = config["obo"]
+localNSpace = config["localNSpace"]
+protocolsTypes = config["protocolsTypes"]
+processTypes = config["processTypes"]
+processMessages = config["processMessages"]
 
 import datetime
 import json
@@ -220,9 +237,67 @@ class SetNGSOntoOutput(Resource):
 		parameters = request.json
 		parameters_json = json.loads(parameters.replace("'", '"'))
 
-		commands = ["python", "job_processing/get_program_input.py", "--project", parameters_json["project_id"], "--pipeline", parameters_json["pipeline_id"], "--process", parameters_json["process_id"], "-v1", parameters_json["run_info"], "-v2", parameters_json["warnings"], "-v3", parameters_json["run_output"], "-v4", parameters_json["log_file"], "-v5", parameters_json["status"], "-t", parameters_json["type"]]
 
-		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		def set_process_output(project_id, pipeline_id, process_id, run_info, run_stats, output, log_file, status):
+
+			try:
+				#Agraph
+				processURI = dbconAg.createURI(namespace=localNSpace+"projects/", localname=str(project_id)+"/pipelines/"+str(pipeline_id)+"/processes/"+str(process_id))
+
+				#get output URI from process
+				hasOutput = dbconAg.createURI(namespace=obo, localname="RO_0002234")
+				statements = dbconAg.getStatements(processURI, hasOutput, None)
+				outputURI=parseAgraphStatementsRes(statements)
+				statements.close()
+
+				outputURI = dbconAg.createURI(outputURI[0]['obj'])
+
+				runInfo = dbconAg.createLiteral((run_info), datatype=XMLSchema.STRING)
+				runInfoProp = dbconAg.createURI(namespace=obo, localname="NGS_0000092")
+
+				runStats = dbconAg.createLiteral((run_stats), datatype=XMLSchema.STRING)
+				runStatsProp = dbconAg.createURI(namespace=obo, localname="NGS_0000093")
+
+				runFile = dbconAg.createLiteral((output), datatype=XMLSchema.STRING)
+				runFileProp = dbconAg.createURI(namespace=obo, localname="NGS_0000094")
+
+				logFile = dbconAg.createLiteral((log_file), datatype=XMLSchema.STRING)
+				logFileProp = dbconAg.createURI(namespace=obo, localname="NGS_0000096")
+
+				runStatus = dbconAg.createLiteral((status), datatype=XMLSchema.STRING)
+				runStatusProp = dbconAg.createURI(namespace=obo, localname="NGS_0000097")
+
+				dbconAg.remove(outputURI, runInfoProp, None)
+				dbconAg.remove(outputURI, runStatsProp, None)
+				dbconAg.remove(outputURI, runFileProp, None)
+				#dbconAg.remove(outputURI, logFileProp, None)
+				dbconAg.remove(outputURI, runStatusProp, None)
+				#dbconAg.remove(processURI, hasOutput, None)
+
+				#add outputs paths to process
+				stmt1 = dbconAg.createStatement(outputURI, runInfoProp, runInfo)
+				stmt2 = dbconAg.createStatement(outputURI, runStatsProp, runStats)
+				stmt3 = dbconAg.createStatement(outputURI, runFileProp, runFile)
+				stmt4 = dbconAg.createStatement(outputURI, logFileProp, logFile)
+				stmt5 = dbconAg.createStatement(outputURI, runStatusProp, runStatus)
+
+				#send to allegro
+				dbconAg.add(stmt1)
+				dbconAg.add(stmt2)
+				dbconAg.add(stmt3)
+				dbconAg.add(stmt4)
+				dbconAg.add(stmt5)
+				
+			except Exception as e:
+				print "ERROR", e
+				sys.stdout.write("404")
+
+		set_process_output(parameters_json["project_id"], parameters_json["pipeline_id"], parameters_json["process_id"], parameters_json["run_info"], parameters_json["warnings"], parameters_json["run_output"], parameters_json["log_file"], parameters_json["status"])
+
+
+		#commands = ["python", "job_processing/get_program_input.py", "--project", parameters_json["project_id"], "--pipeline", parameters_json["pipeline_id"], "--process", parameters_json["process_id"], "-v1", parameters_json["run_info"], "-v2", parameters_json["warnings"], "-v3", parameters_json["run_output"], "-v4", parameters_json["log_file"], "-v5", parameters_json["status"], "-t", parameters_json["type"]]
+
+		#proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		#stdout, stderr = proc.communicate()
 
 		return 200
@@ -231,12 +306,49 @@ class SetNGSOntoOutput(Resource):
 		parameters = request.json
 		parameters_json = json.loads(parameters.replace("'", '"'))
 
-		commands = ["python", "job_processing/get_program_input.py", "--project", parameters_json["project_id"], "--pipeline", parameters_json["pipeline_id"], "--process", parameters_json["process_id"], "-u", parameters_json["run_property"], "-v1", parameters_json["run_property_value"], "-t", parameters_json["type"]]
+		def set_unique_prop_output(project_id, pipeline_id, process_id, property_type, property_value):
 
-		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+			output_prop_to_type = {"run_info":"NGS_0000092", "run_output":"NGS_0000093", "warnings":"NGS_0000094", "log_file":"NGS_0000096", "status":"NGS_0000097"}
+
+			property_types = property_type.split(",")
+			property_values = property_value.split(",")
+			
+			try:
+				for p,v in zip(property_types, property_values):
+					#Agraph
+					processURI = dbconAg.createURI(namespace=localNSpace+"projects/", localname=str(project_id)+"/pipelines/"+str(pipeline_id)+"/processes/"+str(process_id))
+
+					#get output URI from process
+					hasOutput = dbconAg.createURI(namespace=obo, localname="RO_0002234")
+					statements = dbconAg.getStatements(processURI, hasOutput, None)
+					outputURI=parseAgraphStatementsRes(statements)
+					statements.close()
+
+					outputURI = dbconAg.createURI(outputURI[0]['obj'])
+
+					runInfo = dbconAg.createLiteral((v), datatype=XMLSchema.STRING)
+					runInfoProp = dbconAg.createURI(namespace=obo, localname=output_prop_to_type[p])
+
+
+					if p != "log_file":
+						dbconAg.remove(outputURI, runInfoProp, None)
+
+					#add outputs paths to process
+					stmt1 = dbconAg.createStatement(outputURI, runInfoProp, runInfo)
+
+					#send to allegro
+					dbconAg.add(stmt1)
+
+			except Exception as e:
+				sys.stdout.write("404")
+
+		
+		set_unique_prop_output(parameters_json["project_id"], parameters_json["pipeline_id"], parameters_json["process_id"], parameters_json["run_property"], parameters_json["run_property_value"])
+
+		#commands = ["python", "job_processing/get_program_input.py", "--project", parameters_json["project_id"], "--pipeline", parameters_json["pipeline_id"], "--process", parameters_json["process_id"], "-u", parameters_json["run_property"], "-v1", parameters_json["run_property_value"], "-t", parameters_json["type"]]
+
+		#proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		#stdout, stderr = proc.communicate()
 
 		return 200
-
-		project_id, pipeline_id, process_id, run_property, run_property_value, type
 
