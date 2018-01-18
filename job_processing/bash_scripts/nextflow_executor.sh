@@ -32,6 +32,8 @@ echo $14
 echo $15
 #nextflow chewbbaca list genes
 echo $16
+#nextflow chewbbaca list core genes
+echo $17
 
 cd $1
 
@@ -44,6 +46,6 @@ ln -s $8 ${1}/data/sample_2.fastq.gz
 
 echo "\nincludeConfig 'platform.config'" >> nextflow.config
 
-nextflow run $2 --projectId=$3  --pipelineId=$4 --platformHTTP=$5 --sampleName=$6 --reportHTTP=$9 --currentUserName=$10 --currentUserId=$11 --species=$12 -profile $14 --genomeSize=$13 --schemaPath=$15 --schemaSelectedLoci=$16 -resume > nextflow_log.txt 2>&1 &
+nextflow run $2 --projectId=$3  --pipelineId=$4 --platformHTTP=$5 --sampleName=$6 --reportHTTP=$9 --currentUserName=$10 --currentUserId=$11 --species=$12 -profile $14 --genomeSize=$13 --schemaPath=$15 --schemaSelectedLoci=$16 --schemaCore=$17 -resume > nextflow_log.txt 2>&1 &
 
 echo $! > process.id
