@@ -131,23 +131,25 @@ class Queue_Processor:
 			print json.loads(workflow['parameters'])
 			print parameters
 
+			if "chewBBACA" in used_software and process_to_run == "false":
+				continue
+
 			if "chewBBACA" in used_software:
-				print "HAS CHEWBBACA"
 				chewbbaca_schema_path = os.path.join(config["CHEWBBACA_SCHEMAS_PATH"], parameters["schema"])
 				chewbbaca_list_genes = os.path.join(config["CHEWBBACA_SCHEMAS_PATH"], parameters["schema"], "listGenes.txt")
-				print chewbbaca_schema_path
 
 			if not os.path.exists(nexflow_user_dir):
 				os.makedirs(nexflow_user_dir)
 
 			random_tag = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
 
-			nextflow_tags.append(nextflow_tag+":"+process_id)
-
 			array_of_files = []
+
+			nextflow_tags.append(nextflow_tag+":"+process_id)
 			
 
 			if process_to_run == "true":
+
 				task_ids.append(project_id + pipeline_id + process_id)
 				processIDs.append(process_id)
 
