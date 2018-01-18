@@ -330,7 +330,7 @@ class SetNGSOntoOutput(Resource):
 					runInfoProp = dbconAg.createURI(namespace=obo, localname=output_prop_to_type[p])
 
 
-					if p != "log_file":
+					if p != "log_file" and p != "warnings":
 						dbconAg.remove(outputURI, runInfoProp, None)
 
 					#add outputs paths to process
