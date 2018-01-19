@@ -106,6 +106,11 @@ class Queue_Processor:
 		chewbbaca_list_genes = ""
 		chewbbaca_core_genes_path = ""
 		chewbbaca_species = ""
+		seqtyping_ref_o = ""
+		seqtyping_ref_h = ""
+		patho_species = ""
+
+
 
 		INNUca_dependency = False
 
@@ -137,6 +142,13 @@ class Queue_Processor:
 				chewbbaca_schema_path = os.path.join(config["CHEWBBACA_SCHEMAS_PATH"], parameters["schema"])
 				chewbbaca_list_genes = os.path.join(config["CHEWBBACA_SCHEMAS_PATH"], parameters["schema"], "listGenes.txt")
 				chewbbaca_core_genes_path = config["core_headers_correspondece"][current_specie]
+
+			if "seq_typing" in used_software:
+				seqtyping_ref_o = config["SEQ_FILE_O"][current_specie]
+				seqtyping_ref_h = config["SEQ_FILE_H"][current_specie]
+
+			if "patho_typing" in used_software:
+				patho_species = config["CHEWBBACA_CORRESPONDENCE"][current_specie]
 
 			if not os.path.exists(nexflow_user_dir):
 				os.makedirs(nexflow_user_dir)
@@ -184,7 +196,7 @@ class Queue_Processor:
 
 
 		#RUN NEXTFLOW
-		commands = ['sh', 'job_processing/bash_scripts/nextflow_executor.sh', nexflow_user_dir, nextflow_file_location, project_id, pipeline_id, config["JOBS_ROOT_SET_OUTPUT"], sampleName, array_of_files[0], array_of_files[1], config["JOBS_ROOT_SET_REPORT"], current_user_name, current_user_id, current_specie, config["species_expected_genome_size"][current_specie], config["NEXTFLOW_PROFILE"], chewbbaca_schema_path, chewbbaca_list_genes, chewbbaca_core_genes_path, chewbbaca_species]
+		commands = ['sh', 'job_processing/bash_scripts/nextflow_executor.sh', nexflow_user_dir, nextflow_file_location, project_id, pipeline_id, config["JOBS_ROOT_SET_OUTPUT"], sampleName, array_of_files[0], array_of_files[1], config["JOBS_ROOT_SET_REPORT"], current_user_name, current_user_id, current_specie, config["species_expected_genome_size"][current_specie], config["NEXTFLOW_PROFILE"], chewbbaca_schema_path, chewbbaca_list_genes, chewbbaca_core_genes_path, chewbbaca_species, seqtyping_ref_o, seqtyping_ref_h, patho_species]
 		print commands
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
