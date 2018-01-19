@@ -104,7 +104,7 @@ class Queue_Processor:
 		nexflow_user_dir = ""
 		chewbbaca_schema_path = ""
 		chewbbaca_list_genes = ""
-		chewbbaca_core_genes = ""
+		chewbbaca_core_genes_path = ""
 
 		INNUca_dependency = False
 
@@ -172,8 +172,6 @@ class Queue_Processor:
 		print commands
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
-
-		print stdout, stderr
 
 		if stderr != "":
 			return {'message': stderr}, 500
