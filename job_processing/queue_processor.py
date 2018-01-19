@@ -173,6 +173,8 @@ class Queue_Processor:
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
 
+		print stdout, stderr
+
 		if stderr != "":
 			return {'message': stderr}, 500
 
