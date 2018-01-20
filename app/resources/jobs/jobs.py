@@ -340,6 +340,7 @@ class SetNGSOntoOutput(Resource):
 					dbconAg.add(stmt1)
 
 			except Exception as e:
+				print e
 				#sys.stdout.write("404")
 
 		
