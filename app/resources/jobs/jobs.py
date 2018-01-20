@@ -290,7 +290,7 @@ class SetNGSOntoOutput(Resource):
 				
 			except Exception as e:
 				print "ERROR", e
-				sys.stdout.write("404")
+				#sys.stdout.write("404")
 
 		set_process_output(parameters_json["project_id"], parameters_json["pipeline_id"], parameters_json["process_id"], parameters_json["run_info"], parameters_json["warnings"], parameters_json["run_output"], parameters_json["log_file"], parameters_json["status"])
 
@@ -340,7 +340,7 @@ class SetNGSOntoOutput(Resource):
 					dbconAg.add(stmt1)
 
 			except Exception as e:
-				sys.stdout.write("404")
+				#sys.stdout.write("404")
 
 		
 		set_unique_prop_output(parameters_json["project_id"], parameters_json["pipeline_id"], parameters_json["process_id"], parameters_json["run_property"], parameters_json["run_property_value"])
