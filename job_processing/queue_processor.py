@@ -139,7 +139,7 @@ class Queue_Processor:
 
 			if "chewBBACA" in used_software:
 				chewbbaca_species = config["CHEWBBACA_CORRESPONDENCE"][current_specie]
-				chewbbaca_schema_path = os.path.join(config["CHEWBBACA_SCHEMAS_PATH"], parameters["chewbbaca_schema_path"])
+				chewbbaca_schema_path = os.path.join(config["CHEWBBACA_SCHEMAS_PATH"], parameters["schema"])
 				chewbbaca_list_genes = os.path.join(config["CHEWBBACA_SCHEMAS_PATH"], parameters["schema"], "listGenes.txt")
 				chewbbaca_core_genes_path = config["core_headers_correspondece"][current_specie]
 
