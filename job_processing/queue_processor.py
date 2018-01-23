@@ -139,7 +139,7 @@ class Queue_Processor:
 
 			if "chewBBACA" in used_software:
 				chewbbaca_species = config["CHEWBBACA_CORRESPONDENCE"][current_specie]
-				chewbbaca_schema_path = os.path.join(config["CHEWBBACA_SCHEMAS_PATH"], parameters["schema"])
+				chewbbaca_schema_path = os.path.join(config["CHEWBBACA_SCHEMAS_PATH"], parameters["chewbbaca_schema_path"])
 				chewbbaca_list_genes = os.path.join(config["CHEWBBACA_SCHEMAS_PATH"], parameters["schema"], "listGenes.txt")
 				chewbbaca_core_genes_path = config["core_headers_correspondece"][current_specie]
 
@@ -161,8 +161,7 @@ class Queue_Processor:
 			
 
 			if process_to_run == "true":
-
-				task_ids.append(project_id + pipeline_id + process_id)
+				task_ids.append("project{}pipeline{}process{}".format(project_id, pipeline_id, process_id))
 				processIDs.append(process_id)
 
 				if writeCacheFile:
