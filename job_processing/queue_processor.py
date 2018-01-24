@@ -206,6 +206,8 @@ class Queue_Processor:
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
 
+		with open(os.path.join(nexflow_user_dir, "executor_command.txt"), "w") as r:
+			r.write(" ".join(commands))
 
 		return {'task_ids':task_ids, 'process_ids': processIDs}, 200
 
