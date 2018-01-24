@@ -207,7 +207,7 @@ class Queue_Processor:
 		stdout, stderr = proc.communicate()
 
 		with open(os.path.join(nexflow_user_dir, "executor_command.txt"), "w") as r:
-			commands = commands[:4] + ['"{x}"' for x in commands[4:]]
+			commands = commands[:4] + ['"{}"'.format(x) for x in commands[4:]]
 			r.write(" ".join(commands))
 
 		return {'task_ids':task_ids, 'process_ids': processIDs}, 200
