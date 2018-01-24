@@ -1,5 +1,10 @@
 #!/bin/sh
 
+#SBATCH -s
+#SBATCH --partition=nextflow
+#SBATCH --mem-per-cpu=400
+
+
 #Path to user job dir
 echo $1
 #File location
@@ -42,6 +47,8 @@ echo $19
 echo $20
 #netflow pathotyping file 1
 echo $21
+#mlst species
+echo $22
 
 cd $1
 
@@ -54,6 +61,4 @@ ln -s $8 ${1}/data/sample_2.fastq.gz
 
 echo "\nincludeConfig 'platform.config'" >> nextflow.config
 
-nextflow run $2 --projectId=$3  --pipelineId=$4 --platformHTTP=$5 --sampleName=$6 --reportHTTP=$9 --currentUserName=$10 --currentUserId=$11 --species=$12 -profile $14 --genomeSize=$13 --schemaPath=$15 --schemaSelectedLoci=$16 --schemaCore=$17 --chewbbacaSpecies="$18" --referenceFileO=$19 --referenceFileH=$20 --pathoSpecies="$21" -resume > nextflow_log.txt 2>&1 &
-
-echo $! > process.id
+srun nextflow run $2 --projectId=$3  --pipelineId=$4 --platformHTTP=$5 --sampleName=$6 --reportHTTP=$9 --currentUserName=$10 --currentUserId=$11 --species=$12 -profile $14 --genomeSize=$13 --schemaPath=$15 --schemaSelectedLoci=$16 --schemaCore=$17 --chewbbacaSpecies="$18" --referenceFileO=$19 --referenceFileH=$20 --pathoSpecies="$21" --mlstSpecies=$22 -resume > nextflow_log.txt 2>&1

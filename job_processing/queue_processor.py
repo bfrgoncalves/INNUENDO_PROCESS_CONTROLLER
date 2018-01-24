@@ -109,6 +109,7 @@ class Queue_Processor:
 		seqtyping_ref_o = ""
 		seqtyping_ref_h = ""
 		patho_species = ""
+		mlstSpecies = ""
 
 
 
@@ -136,6 +137,9 @@ class Queue_Processor:
 
 			if "chewBBACA" in used_software and process_to_run == "false":
 				continue
+
+			if "mlst" in used_software:
+				mlstSpecies = config["MLST_CORRESPONDENCE"][current_specie]
 
 			if "chewBBACA" in used_software:
 				chewbbaca_species = config["CHEWBBACA_CORRESPONDENCE"][current_specie]
@@ -195,7 +199,7 @@ class Queue_Processor:
 
 
 		#RUN NEXTFLOW
-		commands = ['sh', 'job_processing/bash_scripts/nextflow_executor.sh', nexflow_user_dir, nextflow_file_location, project_id, pipeline_id, config["JOBS_ROOT_SET_OUTPUT"], sampleName, array_of_files[0], array_of_files[1], config["JOBS_ROOT_SET_REPORT"], current_user_name, current_user_id, current_specie, config["species_expected_genome_size"][current_specie], config["NEXTFLOW_PROFILE"], chewbbaca_schema_path, chewbbaca_list_genes, chewbbaca_core_genes_path, chewbbaca_species, seqtyping_ref_o, seqtyping_ref_h, patho_species]
+		commands = ['sbatch', 'job_processing/bash_scripts/nextflow_executor.sh', nexflow_user_dir, nextflow_file_location, project_id, pipeline_id, config["JOBS_ROOT_SET_OUTPUT"], sampleName, array_of_files[0], array_of_files[1], config["JOBS_ROOT_SET_REPORT"], current_user_name, current_user_id, current_specie, config["species_expected_genome_size"][current_specie], config["NEXTFLOW_PROFILE"], chewbbaca_schema_path, chewbbaca_list_genes, chewbbaca_core_genes_path, chewbbaca_species, seqtyping_ref_o, seqtyping_ref_h, patho_species, mlstSpecies]
 		print commands
 		proc = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
