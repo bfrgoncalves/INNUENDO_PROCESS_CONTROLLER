@@ -6,13 +6,6 @@ from job_processing.queryParse2Json import parseAgraphStatementsRes
 
 from franz.openrdf.vocabulary.xmlschema import XMLSchema
 
-
-obo = config["obo"]
-localNSpace = config["localNSpace"]
-protocolsTypes = config["protocolsTypes"]
-processTypes = config["processTypes"]
-processMessages = config["processMessages"]
-
 import json
 import subprocess
 import os
@@ -60,6 +53,12 @@ copy_schema_get_parser.add_argument('schema_to_copy', dest='schema_to_copy', typ
 # READ CONFIG FILE
 config = {}
 execfile("config.py", config)
+
+obo = config["obo"]
+localNSpace = config["localNSpace"]
+protocolsTypes = config["protocolsTypes"]
+processTypes = config["processTypes"]
+processMessages = config["processMessages"]
 
 
 # DEPRECATED ########
