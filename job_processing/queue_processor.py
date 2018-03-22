@@ -31,10 +31,9 @@ def write_config_file(file_instance, write_object):
     file_instance.write("params {\n")
 
     for key, val in write_object.items():
-        file_instance.write('{}:"{}"\n'.format(key, val))
+        file_instance.write('{}="{}"\n'.format(key, val))
 
     file_instance.write("}")
-
 
 
 def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows,
@@ -197,23 +196,23 @@ class Queue_Processor:
 
             # Object to write in the nexflow config
             to_write = {
-                "--projectId": project_id,
-                "--pipelineId": pipeline_id,
-                "--platformHTTP": config["JOBS_ROOT_SET_OUTPUT"],
-                "--sampleName": sampleName,
-                "--reportHTTP": config["JOBS_ROOT_SET_REPORT"],
-                "--currentUserName": current_user_name,
-                "--currentUserId": current_user_id,
-                "--species": current_specie,
-                "--genomeSize": config["species_expected_genome_size"][
+                "projectId": project_id,
+                "pipelineId": pipeline_id,
+                "platformHTTP": config["JOBS_ROOT_SET_OUTPUT"],
+                "sampleName": sampleName,
+                "reportHTTP": config["JOBS_ROOT_SET_REPORT"],
+                "currentUserName": current_user_name,
+                "currentUserId": current_user_id,
+                "species": current_specie,
+                "genomeSize": config["species_expected_genome_size"][
                     current_specie],
-                "--schemaPath": chewbbaca_schema_path,
-                "--schemaSelectedLoci": chewbbaca_list_genes,
-                "--schemaCore": chewbbaca_core_genes_path,
-                "--chewbbacaSpecies":"{}".format(chewbbaca_species),
-                "--referenceFileO": seqtyping_ref_o,
-                "--referenceFileH": seqtyping_ref_h,
-                "--pathoSpecies": patho_species
+                "schemaPath": chewbbaca_schema_path,
+                "schemaSelectedLoci": chewbbaca_list_genes,
+                "schemaCore": chewbbaca_core_genes_path,
+                "chewbbacaSpecies":"{}".format(chewbbaca_species),
+                "referenceFileO": seqtyping_ref_o,
+                "referenceFileH": seqtyping_ref_h,
+                "pathoSpecies": patho_species
 
             }
 
