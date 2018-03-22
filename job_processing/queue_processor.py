@@ -28,10 +28,10 @@ def setFilesByProgram(key_value_args, workflow):
 
 def write_config_file(file_instance, write_object):
 
-    file_instance.write("params {")
+    file_instance.write("params {\n")
 
     for key, val in write_object.items():
-        file_instance.write("{}:{}".format(key, val))
+        file_instance.write('{}:"{}"\n'.format(key, val))
 
     file_instance.write("}")
 
