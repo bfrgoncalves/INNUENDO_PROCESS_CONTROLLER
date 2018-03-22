@@ -226,7 +226,7 @@ class Queue_Processor:
         nextflow_file_location = os.path.join(nexflow_user_dir, random_pip_name)
 
         commands = ['python3', config["NEXTFLOW_GENERATOR_PATH"]] + ["-t"] + \
-                   ['"'+" ".join(nextflow_tags)+'"'] + \
+                   [" ".join(nextflow_tags)] + \
                    ["-o", os.path.join(nexflow_user_dir,
                                        nextflow_file_location),
                     "--include-templates", "-r",
