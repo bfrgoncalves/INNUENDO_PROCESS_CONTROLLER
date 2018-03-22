@@ -50,7 +50,9 @@ def validate_innuca(procedure, file_path):
 
 def validate_chewbbaca(procedure, file_path, specie):
 
-    allele_classes_to_ignore = {'LNF': '0', 'INF-': '', 'NIPHEM': '0', 'NIPH': '0', 'LOTSC': '0', 'PLOT3': '0', 'PLOT5': '0', 'ALM': '0', 'ASM': '0'}
+    allele_classes_to_ignore = {'LNF': '0', 'INF-': '', 'NIPHEM': '0',
+                                'NIPH': '0', 'LOTSC': '0', 'PLOT3': '0',
+                                'PLOT5': '0', 'ALM': '0', 'ASM': '0'}
 
     core_profile = []
     count_core = 0
@@ -90,11 +92,18 @@ def validate_chewbbaca(procedure, file_path, specie):
 
 def main():
 
-    parser = argparse.ArgumentParser(prog='final_validation.py', description='Validates the programs outputs and set warnings or not')
+    parser = argparse.ArgumentParser(
+        prog='final_validation.py',
+        description='Validates the programs outputs and set warnings or not')
 
-    parser.add_argument('--file_path_to_validate', type=str, help='File to be used as validation', required=True)
-    parser.add_argument('--procedure', type=str, help='File to be used as validation', required=True)
-    parser.add_argument('--specie', type=str, help='Species to apply and make correpondence with chewbbaca core gene list', required=False)
+    parser.add_argument('--file_path_to_validate', type=str,
+                        help='File to be used as validation', required=True)
+    parser.add_argument('--procedure', type=str,
+                        help='File to be used as validation', required=True)
+    parser.add_argument(
+        '--specie', type=str,
+        help='Species to apply and make correpondence with chewbbaca core gene'
+             ' list', required=False)
 
     args = parser.parse_args()
 
@@ -107,13 +116,17 @@ def main():
         elif str(status) == "FAIL":
             sys.stdout.write("FAILED")
     elif args.procedure == 'chewBBACA' and args.specie:
-        status = validate_chewbbaca(args.procedure, args.file_path_to_validate, args.specie)
+        status = validate_chewbbaca(args.procedure, args.file_path_to_validate,
+                                    args.specie)
+
         if str(status) == str("True"):
             sys.stdout.write("True")
         else:
             sys.stdout.write("WARNING")
+
     elif args.procedure == 'PathoTyping':
-        status = validate_pathotyping(args.procedure, args.file_path_to_validate)
+        status = validate_pathotyping(args.procedure,
+                                      args.file_path_to_validate)
 
 
 if __name__ == "__main__":
