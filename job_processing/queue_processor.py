@@ -212,7 +212,8 @@ class Queue_Processor:
                 "chewbbacaSpecies":"{}".format(chewbbaca_species),
                 "referenceFileO": seqtyping_ref_o,
                 "referenceFileH": seqtyping_ref_h,
-                "pathoSpecies": patho_species
+                "pathoSpecies": patho_species,
+                "mlstSpecies": mlstSpecies
 
             }
 
