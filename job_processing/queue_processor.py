@@ -151,8 +151,9 @@ class Queue_Processor:
             if "mlst" in used_software:
                 mlstSpecies = config["MLST_CORRESPONDENCE"][current_specie]
 
+
             if "chewBBACA" in used_software:
-                chewbbaca_species = config["CHEWBBACA_CORRESPONDENCE"][
+                chewbbaca_training_file = config["CHEWBBACA_TRAINING_FILE"][
                     current_specie]
                 chewbbaca_schema_path = os.path.join(
                     config["CHEWBBACA_SCHEMAS_PATH"], parameters["schema"])
@@ -166,8 +167,9 @@ class Queue_Processor:
                 seqtyping_ref_o = config["SEQ_FILE_O"][current_specie]
                 seqtyping_ref_h = config["SEQ_FILE_H"][current_specie]
 
-            if "patho_typing" in used_software:
-                patho_species = config["CHEWBBACA_CORRESPONDENCE"][
+            if "patho_typing" in used_software or "true_coverage" in \
+                    used_software:
+                specie = config["CHEWBBACA_CORRESPONDENCE"][
                     current_specie]
 
             if not os.path.exists(nexflow_user_dir):
@@ -203,18 +205,19 @@ class Queue_Processor:
                 "reportHTTP": config["JOBS_ROOT_SET_REPORT"],
                 "currentUserName": current_user_name,
                 "currentUserId": current_user_id,
-                "species": current_specie,
+                "platformSpecies": current_specie,
                 "genomeSize": config["species_expected_genome_size"][
                     current_specie],
                 "schemaPath": chewbbaca_schema_path,
                 "schemaSelectedLoci": chewbbaca_list_genes,
                 "schemaCore": chewbbaca_core_genes_path,
-                "chewbbacaSpecies": "{}".format(chewbbaca_species),
+                "chewbbacaTraining": chewbbaca_training_file,
                 "chewbbacaJson": "true",
                 "referenceFileO": seqtyping_ref_o,
                 "referenceFileH": seqtyping_ref_h,
-                "pathoSpecies": patho_species,
-                "mlstSpecies": mlstSpecies
+                "mlstSpecies": mlstSpecies,
+                "species": "{}".format(specie),
+
 
             }
 
