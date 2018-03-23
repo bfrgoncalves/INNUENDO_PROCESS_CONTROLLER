@@ -176,10 +176,10 @@ class Queue_Processor:
             array_of_files = []
 
             if "chewBBACA" in used_software:
-                assemblerflow_attr = "={'pid': {}, 'queue': '{}'}".format(
+                assemblerflow_attr = "={'pid':{},'queue':'{}'}".format(
                     process_id, config["CHEWBBACA_PARTITION"])
             else:
-                assemblerflow_attr = "={'pid': {}}".format(process_id)
+                assemblerflow_attr = "={'pid':{}}".format(process_id)
 
             nextflow_tags.append(nextflow_tag+assemblerflow_attr)
 
