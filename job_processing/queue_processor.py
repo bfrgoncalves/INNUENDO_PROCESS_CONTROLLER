@@ -31,7 +31,14 @@ def write_config_file(file_instance, write_object):
     file_instance.write("params {\n")
 
     for key, val in write_object.items():
-        file_instance.write('{}="{}"\n'.format(key, val))
+        to_write = ""
+
+        if val == "true":
+            to_write = '{}={}\n'
+        else:
+            to_write = '{}="{}"\n'
+
+        file_instance.write(to_write.format(key, val))
 
     file_instance.write("}")
 
