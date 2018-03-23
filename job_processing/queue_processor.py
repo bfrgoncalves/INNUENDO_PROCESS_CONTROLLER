@@ -116,6 +116,7 @@ class Queue_Processor:
         pipeline_id = ""
         nexflow_user_dir = ""
         chewbbaca_schema_path = ""
+        chewbbac_training_file = ""
         chewbbaca_list_genes = ""
         chewbbaca_core_genes_path = ""
         chewbbaca_species = ""
@@ -123,6 +124,7 @@ class Queue_Processor:
         seqtyping_ref_h = ""
         patho_species = ""
         mlstSpecies = ""
+        specie = ""
 
         random_pip_name = job_parameters[0]['project_id']+'_'+ \
                           job_parameters[0]['pipeline_id']+ ".nf"
