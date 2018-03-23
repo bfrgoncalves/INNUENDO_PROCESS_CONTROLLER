@@ -116,7 +116,7 @@ class Queue_Processor:
         pipeline_id = ""
         nexflow_user_dir = ""
         chewbbaca_schema_path = ""
-        chewbbac_training_file = ""
+        chewbbaca_training_file = ""
         chewbbaca_list_genes = ""
         chewbbaca_core_genes_path = ""
         chewbbaca_species = ""
