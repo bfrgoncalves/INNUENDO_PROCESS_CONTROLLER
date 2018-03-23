@@ -119,10 +119,8 @@ class Queue_Processor:
         chewbbaca_training_file = ""
         chewbbaca_list_genes = ""
         chewbbaca_core_genes_path = ""
-        chewbbaca_species = ""
         seqtyping_ref_o = ""
         seqtyping_ref_h = ""
-        patho_species = ""
         mlstSpecies = ""
         specie = ""
 
@@ -134,9 +132,7 @@ class Queue_Processor:
             count_workflows += 1
             parameters = json.loads(workflow['parameters'])['used Parameter']
             files = json.loads(workflow['files'])
-            # username = workflow['username']
             strain_submitter = workflow['strain_submitter']
-            # workflow_name = json.loads(workflow['parameters'])['name']
             used_software = json.loads(workflow['parameters'])['used Software']
             nextflow_tag = json.loads(workflow['parameters'])['Nextflow Tag']
             project_id = workflow['project_id']
@@ -179,7 +175,13 @@ class Queue_Processor:
 
             array_of_files = []
 
-            nextflow_tags.append(nextflow_tag+":"+process_id)
+            if "chewBBACA" in used_software:
+                assemblerflow_attr = "={'pid': {}, 'queue': '{}'}".format(
+                    process_id, config["CHEWBBACA_PARTITION"])
+            else:
+                assemblerflow_attr = "={'pid': {}}".format(process_id)
+
+            nextflow_tags.append(nextflow_tag+assemblerflow_attr)
 
             if process_to_run == "true":
                 task_ids.append("project{}pipeline{}process{}"
