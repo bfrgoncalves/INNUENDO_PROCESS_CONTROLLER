@@ -185,6 +185,9 @@ class Queue_Processor:
             if "chewBBACA" in used_software:
                 assemblerflow_attr = "={{'pid':{},'queue':'{}'}}".format(
                     process_id, config["CHEWBBACA_PARTITION"])
+            elif "mlst" in used_software:
+                assemblerflow_attr = "={{'pid':{},'version':'{}'}}".format(
+                    process_id, config["MLST_VERSION"])
             else:
                 assemblerflow_attr = "={{'pid':{}}}".format(process_id)
 
