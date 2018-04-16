@@ -1,8 +1,10 @@
-from flask.ext.restful import Api, Resource, reqparse, abort, fields, marshal_with
+from flask.ext.restful import Api, Resource, reqparse, abort, fields, \
+    marshal_with
 from flask import jsonify, send_file
 
 file_get_parser = reqparse.RequestParser()
-file_get_parser.add_argument('file_path', dest='file_path', type=str, required=True, help="File_path")
+file_get_parser.add_argument('file_path', dest='file_path', type=str,
+                             required=True, help="File_path")
 
 # READ CONFIG FILE
 config = {}

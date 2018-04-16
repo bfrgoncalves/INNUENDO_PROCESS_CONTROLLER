@@ -37,10 +37,12 @@ from franz.openrdf.query.query import QueryLanguage
 def get_process_input(project_id, pipeline_id, process_id):
 
     try:
-        procStr = localNSpace + "projects/" + str(project_id) + "/pipelines/" + str(pipeline_id) + "/processes/" + str(process_id)
+        procStr = localNSpace + "projects/" + str(project_id) + "/pipelines/" +\
+                  str(pipeline_id) + "/processes/" + str(process_id)
 
         queryString = "SELECT (str(?typelabel) as ?label) (str(?file1) as ?file_1) (str(?file2) as ?file_2) (str(?file3) as ?file_3) (str(?status) as ?statusStr) WHERE{<"+procStr+"> obo:RO_0002233 ?in. ?in a ?type.?type rdfs:label ?typelabel. OPTIONAL { ?in obo:NGS_0000092 ?file1; obo:NGS_0000093 ?file2; obo:NGS_0000094 ?file3; } OPTIONAL { <"+procStr+"> obo:NGS_0000097 ?status.}}"
-        tupleQuery = dbconAg.prepareTupleQuery(QueryLanguage.SPARQL, queryString)
+        tupleQuery = dbconAg.prepareTupleQuery(QueryLanguage.SPARQL,
+                                               queryString)
         result = tupleQuery.evaluate()
 
         jsonResult=parseAgraphQueryRes(result,["file_3", "label", "statusStr"])
@@ -55,10 +57,14 @@ def get_process_input(project_id, pipeline_id, process_id):
         sys.stdout.write("404")
 
         # change output to false
-        processURI = dbconAg.createURI(namespace=localNSpace+"projects/", localname=str(project_id)+"/pipelines/"+str(pipeline_id)+"/processes/"+str(process_id))
+        processURI = dbconAg.createURI(
+            namespace=localNSpace+"projects/",
+            localname=str(project_id)+"/pipelines/"+str(
+                pipeline_id)+"/processes/"+str(process_id))
 
         runStatus = dbconAg.createLiteral(("false"), datatype=XMLSchema.STRING)
-        runStatusProp = dbconAg.createURI(namespace=obo, localname="NGS_0000097")
+        runStatusProp = dbconAg.createURI(namespace=obo,
+                                          localname="NGS_0000097")
 
         dbconAg.remove(processURI, runStatusProp, None)
 
@@ -70,10 +76,12 @@ def get_process_input(project_id, pipeline_id, process_id):
 def get_process_status(project_id, pipeline_id, process_id):
 
     try:
-        procStr = localNSpace + "projects/" + str(project_id) + "/pipelines/" + str(pipeline_id) + "/processes/" + str(process_id)
+        procStr = localNSpace + "projects/" + str(project_id) + "/pipelines/" +\
+                  str(pipeline_id) + "/processes/" + str(process_id)
         queryString = "SELECT (str(?typelabel) as ?label) (str(?file1) as ?file_1) (str(?file2) as ?file_2) (str(?file3) as ?file_3) (str(?status) as ?statusStr) WHERE{<"+procStr+"> obo:RO_0002234 ?in. ?in a ?type.?type rdfs:label ?typelabel. OPTIONAL { ?in obo:NGS_0000092 ?file1; obo:NGS_0000093 ?file2; obo:NGS_0000094 ?file3. } OPTIONAL {?in obo:NGS_0000097 ?status.} }"
 
-        tupleQuery = dbconAg.prepareTupleQuery(QueryLanguage.SPARQL, queryString)
+        tupleQuery = dbconAg.prepareTupleQuery(QueryLanguage.SPARQL,
+                                               queryString)
         result = tupleQuery.evaluate()
 
         jsonResult = parseAgraphQueryRes(result,["statusStr"])
@@ -98,9 +106,12 @@ def get_process_status(project_id, pipeline_id, process_id):
         sys.stdout.write("NEUTRAL")
 
 
-def set_unique_prop_output(project_id, pipeline_id, process_id, property_type, property_value):
+def set_unique_prop_output(project_id, pipeline_id, process_id, property_type,
+                           property_value):
 
-    output_prop_to_type = {"run_info":"NGS_0000092", "run_output":"NGS_0000093", "warnings":"NGS_0000094", "log_file":"NGS_0000096", "status":"NGS_0000097"}
+    output_prop_to_type = {"run_info":"NGS_0000092", "run_output":"NGS_0000093",
+                           "warnings":"NGS_0000094", "log_file":"NGS_0000096",
+                           "status":"NGS_0000097"}
 
     property_types = property_type.split(",")
     property_values = property_value.split(",")
@@ -108,7 +119,10 @@ def set_unique_prop_output(project_id, pipeline_id, process_id, property_type, p
     try:
         for p,v in zip(property_types, property_values):
             # Agraph
-            processURI = dbconAg.createURI(namespace=localNSpace+"projects/", localname=str(project_id)+"/pipelines/"+str(pipeline_id)+"/processes/"+str(process_id))
+            processURI = dbconAg.createURI(
+                namespace=localNSpace+"projects/",
+                localname=str(project_id)+"/pipelines/"+str(
+                    pipeline_id)+"/processes/"+str(process_id))
 
             # get output URI from process
             hasOutput = dbconAg.createURI(namespace=obo, localname="RO_0002234")
@@ -119,7 +133,8 @@ def set_unique_prop_output(project_id, pipeline_id, process_id, property_type, p
             outputURI = dbconAg.createURI(outputURI[0]['obj'])
 
             runInfo = dbconAg.createLiteral((v), datatype=XMLSchema.STRING)
-            runInfoProp = dbconAg.createURI(namespace=obo, localname=output_prop_to_type[p])
+            runInfoProp = dbconAg.createURI(namespace=obo,
+                                            localname=output_prop_to_type[p])
 
             if p != "log_file":
                 dbconAg.remove(outputURI, runInfoProp, None)
@@ -134,11 +149,15 @@ def set_unique_prop_output(project_id, pipeline_id, process_id, property_type, p
         sys.stdout.write("404")
 
 
-def set_process_output(project_id, pipeline_id, process_id, run_info, run_stats, output, log_file, status):
+def set_process_output(project_id, pipeline_id, process_id, run_info, run_stats,
+                       output, log_file, status):
 
     try:
         # Agraph
-        processURI = dbconAg.createURI(namespace=localNSpace+"projects/", localname=str(project_id)+"/pipelines/"+str(pipeline_id)+"/processes/"+str(process_id))
+        processURI = dbconAg.createURI(
+            namespace=localNSpace+"projects/",
+            localname=str(project_id)+"/pipelines/"+str(
+                pipeline_id)+"/processes/"+str(process_id))
 
         # get output URI from process
         hasOutput = dbconAg.createURI(namespace=obo, localname="RO_0002234")
@@ -189,7 +208,10 @@ def set_process_output(project_id, pipeline_id, process_id, run_info, run_stats,
 
 def set_process_pending(project_id, pipeline_id, process_id):
     # change output to false
-    processURI = dbconAg.createURI(namespace=localNSpace+"projects/", localname=str(project_id)+"/pipelines/"+str(pipeline_id)+"/processes/"+str(process_id))
+    processURI = dbconAg.createURI(
+        namespace=localNSpace+"projects/",
+        localname=str(project_id)+"/pipelines/"+str(
+            pipeline_id)+"/processes/"+str(process_id))
 
     runStatus = dbconAg.createLiteral(("pending"), datatype=XMLSchema.STRING)
     runStatusProp = dbconAg.createURI(namespace=obo, localname="NGS_0000097")
@@ -203,11 +225,17 @@ def set_process_pending(project_id, pipeline_id, process_id):
 
 def set_process_input(project_id, pipeline_id, process_id, input_to_use):
     # change output to false
-    pipelineURI = dbconAg.createURI(namespace=localNSpace+"projects/", localname=str(project_id)+"/pipelines/"+str(pipeline_id)+"/processes/"+str(process_id))
+    pipelineURI = dbconAg.createURI(
+        namespace=localNSpace+"projects/",
+        localname=str(project_id)+"/pipelines/"+str(
+            pipeline_id)+"/processes/"+str(process_id))
 
     queryString = "SELECT DISTINCT (STR(?in) as ?messageURI) WHERE {<http://ngsonto.net/api/v1.0/projects/50/pipelines/106> obo:BFO_0000051  ?proc. { ?proc obo:RO_0002233 ?in. ?in a <http://purl.obolibrary.org/obo/SO_0000150>. } UNION { ?proc obo:RO_0002234 ?in. ?in a input_to_use. }}"
 
-    processURI = dbconAg.createURI(namespace=localNSpace+"projects/", localname=str(project_id)+"/pipelines/"+str(pipeline_id)+"/processes/"+str(process_id))
+    processURI = dbconAg.createURI(
+        namespace=localNSpace+"projects/",
+        localname=str(project_id)+"/pipelines/"+str(
+            pipeline_id)+"/processes/"+str(process_id))
 
     runStatus = dbconAg.createLiteral((input_to_use), datatype=XMLSchema.STRING)
     runStatusProp = dbconAg.createURI(namespace=obo, localname="NGS_0000097")
@@ -221,18 +249,31 @@ def set_process_input(project_id, pipeline_id, process_id, input_to_use):
 
 def main():
 
-    parser = argparse.ArgumentParser(prog='get_program_input.py', description='Sets and Gets process inputs and outputs')
+    parser = argparse.ArgumentParser(
+        prog='get_program_input.py',
+        description='Sets and Gets process inputs and outputs')
 
-    parser.add_argument('--process', type=str, help='Process identifier', required=True)
-    parser.add_argument('--pipeline', type=str, help='Pipeline identifier', required=True)
-    parser.add_argument('--project', type=str, help='Project identifier', required=True)
-    parser.add_argument('-v1', type=str, help='path value for file1', required=False)
-    parser.add_argument('-v2', type=str, help='path value for file2', required=False)
-    parser.add_argument('-v3', type=str, help='path value for file3', required=False)
-    parser.add_argument('-v4', type=str, help='path value for file4', required=False)
-    parser.add_argument('-v5', type=str, help='path value for status', required=False)
+    parser.add_argument('--process', type=str, help='Process identifier',
+                        required=True)
+    parser.add_argument('--pipeline', type=str, help='Pipeline identifier',
+                        required=True)
+    parser.add_argument('--project', type=str, help='Project identifier',
+                        required=True)
+    parser.add_argument('-v1', type=str, help='path value for file1',
+                        required=False)
+    parser.add_argument('-v2', type=str, help='path value for file2',
+                        required=False)
+    parser.add_argument('-v3', type=str, help='path value for file3',
+                        required=False)
+    parser.add_argument('-v4', type=str, help='path value for file4',
+                        required=False)
+    parser.add_argument('-v5', type=str, help='path value for status',
+                        required=False)
     parser.add_argument('-i', type=str, help='input to set', required=False)
-    parser.add_argument('-t', type=str, help='type of set (input, output, status, set_pending, set_input)', required=True)
+    parser.add_argument('-t',
+                        type=str,
+                        help='type of set (input, output, status, set_pending,'
+                             ' set_input)', required=True)
     parser.add_argument('-u', type=str, help='set unique property')
 
     args = parser.parse_args()
@@ -240,9 +281,11 @@ def main():
     if args.t == 'input' and not args.v1:
         get_process_input(args.project, args.pipeline, args.process)
     elif args.t == 'output' and args.u:
-        set_unique_prop_output(args.project, args.pipeline, args.process, args.u, args.v1)
+        set_unique_prop_output(args.project, args.pipeline, args.process,
+                               args.u, args.v1)
     elif args.t == 'output' and args.v1:
-        set_process_output(args.project, args.pipeline, args.process, args.v1, args.v2, args.v3, args.v4, args.v5)
+        set_process_output(args.project, args.pipeline, args.process, args.v1,
+                           args.v2, args.v3, args.v4, args.v5)
     elif args.t == 'status':
         get_process_status(args.project, args.pipeline, args.process)
     elif args.t == 'set_pending':
