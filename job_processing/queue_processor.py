@@ -257,6 +257,8 @@ class Queue_Processor:
 
         stdout, stderr = proc.communicate()
 
+        print stderr
+
         if stderr != "":
             return {'message': stderr}, 500
 
