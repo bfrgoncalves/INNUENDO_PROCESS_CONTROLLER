@@ -42,22 +42,6 @@ def write_config_file(file_instance, write_object, general_settings):
 
     file_instance.write("}")
 
-    file_instance.write("process {\n")
-
-    for key, val in general_settings.items():
-        to_write = ""
-
-        if val == "true":
-            to_write = '{}={}\n'
-        else:
-            to_write = '{}="{}"\n'
-
-        file_instance.write(to_write.format(key, val))
-
-    file_instance.write("}")
-
-
-
 
 def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows,
                   array_of_files, software, dependency_id, slurm_cpus):
@@ -250,13 +234,13 @@ class Queue_Processor:
                 "fastq": config["FASTQPATH"]
             }
 
-            general_settings = {
+            '''general_settings = {
                 "memory": config["PROCESS_DEFAULT_MEMORY"]
-            }
+            }'''
 
             with open(os.path.join(nexflow_user_dir, "platform.config"),
                       "w") as nextflow_cache_file:
-                write_config_file(nextflow_cache_file, to_write, general_settings)
+                write_config_file(nextflow_cache_file, to_write)
 
             writeCacheFile = False
 
