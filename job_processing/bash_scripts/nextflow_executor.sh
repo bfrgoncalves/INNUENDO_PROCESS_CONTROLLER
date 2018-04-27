@@ -25,6 +25,6 @@ fi
 ln -s $3 ${1}/data/sample_1.fastq.gz
 ln -s $4 ${1}/data/sample_2.fastq.gz
 
-echo "\nincludeConfig 'platform.config'" >> nextflow.config
+echo -e "\nincludeConfig 'platform.config'" >> nextflow.config
 
 srun nextflow run $2 -profile $5 -resume > nextflow_log.txt 2>&1

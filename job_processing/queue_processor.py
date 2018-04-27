@@ -231,6 +231,7 @@ class Queue_Processor:
                 "referenceFileH": seqtyping_ref_h,
                 "mlstSpecies": mlstSpecies,
                 "species": "{}".format(specie),
+                "fastq": config["FASTQPATH"]
 
 
             }
