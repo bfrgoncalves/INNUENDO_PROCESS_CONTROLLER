@@ -26,7 +26,7 @@ def setFilesByProgram(key_value_args, workflow):
         return False, False
 
 
-def write_config_file(file_instance, write_object, general_settings):
+def write_config_file(file_instance, write_object):
 
     file_instance.write("params {\n")
 
