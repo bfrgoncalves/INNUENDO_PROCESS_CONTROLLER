@@ -26,7 +26,7 @@ def setFilesByProgram(key_value_args, workflow):
         return False, False
 
 
-def write_config_file(file_instance, write_object):
+def write_config_file(file_instance, write_object, general_settings):
 
     file_instance.write("params {\n")
 
@@ -41,6 +41,22 @@ def write_config_file(file_instance, write_object):
         file_instance.write(to_write.format(key, val))
 
     file_instance.write("}")
+
+    file_instance.write("process {\n")
+
+    for key, val in general_settings.items():
+        to_write = ""
+
+        if val == "true":
+            to_write = '{}={}\n'
+        else:
+            to_write = '{}="{}"\n'
+
+        file_instance.write(to_write.format(key, val))
+
+    file_instance.write("}")
+
+
 
 
 def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows,
@@ -232,13 +248,15 @@ class Queue_Processor:
                 "mlstSpecies": mlstSpecies,
                 "species": "{}".format(specie),
                 "fastq": config["FASTQPATH"]
+            }
 
-
+            general_settings = {
+                "memory": config["PROCESS_DEFAULT_MEMORY"]
             }
 
             with open(os.path.join(nexflow_user_dir, "platform.config"),
                       "w") as nextflow_cache_file:
-                write_config_file(nextflow_cache_file, to_write)
+                write_config_file(nextflow_cache_file, to_write, general_settings)
 
             writeCacheFile = False
 
