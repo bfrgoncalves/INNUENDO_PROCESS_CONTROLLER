@@ -150,14 +150,14 @@ class Queue_Processor:
             nexflow_user_dir = os.path.join(homedir, "jobs", project_id+"-"+
                                             pipeline_id)
 
-            if "chewBBACA" in used_software and process_to_run == "false":
+            if "chewbbaca" in nextflow_tag and process_to_run == "false":
                 continue
 
-            if "mlst" in used_software:
+            if "mlst" in nextflow_tag:
                 mlstSpecies = config["MLST_CORRESPONDENCE"][current_specie]
 
 
-            if "chewBBACA" in used_software:
+            if "chewbbaca" in nextflow_tag:
                 chewbbaca_training_file = config["CHEWBBACA_TRAINING_FILE"][
                     current_specie]
                 chewbbaca_schema_path = os.path.join(
@@ -168,12 +168,12 @@ class Queue_Processor:
                 chewbbaca_core_genes_path = config[
                     "core_headers_correspondece"][current_specie]
 
-            if "seq_typing" in used_software:
+            if "seq_typing" in nextflow_tag:
                 seqtyping_ref_o = config["SEQ_FILE_O"][current_specie]
                 seqtyping_ref_h = config["SEQ_FILE_H"][current_specie]
 
-            if "patho_typing" in used_software or "true_coverage" in \
-                    used_software:
+            if "patho_typing" in nextflow_tag or "true_coverage" in \
+                    nextflow_tag:
                 specie = config["CHEWBBACA_CORRESPONDENCE"][
                     current_specie]
 
@@ -182,14 +182,16 @@ class Queue_Processor:
 
             array_of_files = []
 
-            if "chewBBACA" in used_software:
-                assemblerflow_attr = "={{'pid':{},'queue':'{}'}}".format(
-                    process_id, config["CHEWBBACA_PARTITION"])
-            elif "mlst" in used_software:
-                assemblerflow_attr = "={{'pid':{},'version':'{}'}}".format(
-                    process_id, config["MLST_VERSION"])
-            else:
-                assemblerflow_attr = "={{'pid':{}}}".format(process_id)
+            nextflow_resources = config["NEXTFLOW_RESOURCES"]
+
+            # Additional parameters to change directives of assemblerflow
+            additional_params = []
+
+            for key, val in nextflow_resources[nextflow_tag].items():
+                additional_params.append("'{}':'{}'".format(key, val))
+
+            assemblerflow_attr = "={{'pid':{},".format(process_id) + ","\
+                .join(additional_params) + "}"
 
             nextflow_tags.append(nextflow_tag+assemblerflow_attr)
 
@@ -270,7 +272,6 @@ class Queue_Processor:
             next_gen_log.write(" ".join(commands) + "\n")
             next_gen_log.write(stdout + "\n")
 
-
         # RUN NEXTFLOW
         commands = ['sbatch',
                     os.path.abspath(
@@ -281,6 +282,7 @@ class Queue_Processor:
         print commands
         proc = subprocess.Popen(commands, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
+
         stdout, stderr = proc.communicate()
 
         with open(os.path.join(nexflow_user_dir, "executor_command.txt"), "w")\
