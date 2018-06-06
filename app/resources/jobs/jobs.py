@@ -10,6 +10,7 @@ import json
 import subprocess
 import os
 import glob
+import sys
 
 job_post_parser = reqparse.RequestParser()
 job_post_parser.add_argument('data', dest='data', type=str, required=True,
@@ -76,6 +77,22 @@ copy_schema_get_parser.add_argument('schema_to_copy', dest='schema_to_copy',
                                     type=str, required=True,
                                     help="chewBBACA schema to copy")
 
+inspect_get_parser = reqparse.RequestParser()
+inspect_get_parser.add_argument('pipeline_id', dest='pipeline_id',
+                                      type=str, required=True,
+                                      help="pipeline_id")
+inspect_get_parser.add_argument('project_id', dest='project_id',
+                                      type=str, required=True,
+                                      help="project_id")
+inspect_get_parser.add_argument('homedir', dest='homedir',
+                                      type=str, required=True,
+                                      help="homedir")
+
+inspect_put_parser = reqparse.RequestParser()
+inspect_put_parser.add_argument('pid', dest='pid',
+                                      type=str, required=True,
+                                      help="pid")
+
 
 # READ CONFIG FILE
 config = {}
@@ -89,6 +106,7 @@ processMessages = config["processMessages"]
 
 
 # DEPRECATED ########
+'''
 def load_results_from_file(job_id, homedir):
 
     user_folder = os.path.join(homedir, job_id.split('_')[0] + '/*_' +
@@ -125,6 +143,7 @@ def load_results_from_file(job_id, homedir):
             array_of_paths["run_info"] = i
 
     return [array_of_results, array_of_paths]
+'''
 
 
 class Job_queue(Resource):
@@ -255,7 +274,7 @@ class CopyChewSchema(Resource):
                     args.schema_to_copy]
 
         proc = subprocess.Popen(commands, stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE)
+                                sastderr=subprocess.PIPE)
 
         stdout, stderr = proc.communicate()
 
@@ -417,3 +436,57 @@ class SetNGSOntoOutput(Resource):
                                parameters_json["run_property_value"])
 
         return 200
+
+
+class FlowcraftInspect(Resource):
+
+    def get(self):
+
+        args = inspect_get_parser.parse_args()
+
+        commands = ['sh',
+                    './job_processing/bash_scripts/trigger_inspect.sh',
+                    args.homedir,
+                    args.project_id,
+                    args.pipeline_id,
+                    config["INSPECT_ROUTE"]
+                    ]
+
+        log_loc = os.path.join(args.homedir, "job",
+                               args.project_id+"-"+args.pipeline_id,
+                  "inspect_log.txt")
+
+        link = ""
+        pid = ""
+
+        process = subprocess.Popen(commands, stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE)
+
+        count = 0
+
+        for line in iter(process.stdout.readline, ''):
+            sys.stdout.write(line)
+
+            if "http" in line:
+                link = line
+                count += 1
+            if "pid:" in line:
+                pid = line
+                count += 1
+
+            if count == 2:
+                return {"link": link, "pid": pid}
+
+    def put(self):
+
+        args = inspect_put_parser.parse_args()
+
+        commands = ['sh',
+                    './job_processing/bash_scripts/kill_inspect.sh',
+                    args.pid
+                    ]
+
+        process = subprocess.Popen(commands, stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE)
+
+        return True

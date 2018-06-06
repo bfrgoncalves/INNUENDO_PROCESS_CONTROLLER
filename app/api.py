@@ -1,13 +1,17 @@
 from app import app
 from flask.ext.restful import Api
 
-from resources.jobs.jobs import Job_queue, FilesResource, DownloadFilesResource, CopyChewSchema, SetNGSOntoOutput
+from resources.jobs.jobs import Job_queue, FilesResource, \
+    DownloadFilesResource, CopyChewSchema, SetNGSOntoOutput, FlowcraftInspect
 from resources.downloads.downloads import DownloadResults
 
 # Setup API
 api = Api(app)
 
 api.add_resource(Job_queue, '/jobs/')
+
+# trigger flocraft inspect
+api.add_resource(FlowcraftInspect, '/jobs/inspect/')
 
 # get files from user
 api.add_resource(FilesResource, '/jobs/fastqs/')

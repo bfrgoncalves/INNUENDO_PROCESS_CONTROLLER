@@ -130,6 +130,8 @@ class Queue_Processor:
         seqtyping_ref_h = ""
         mlstSpecies = ""
         specie = ""
+        asperaKey = ""
+        accessionsPath = ""
 
         random_pip_name = job_parameters[0]['project_id']+'_'+ \
                           job_parameters[0]['pipeline_id']+ ".nf"
@@ -150,12 +152,17 @@ class Queue_Processor:
             nexflow_user_dir = os.path.join(homedir, "jobs", project_id+"-"+
                                             pipeline_id)
 
+            print json.loads(workflow["accession"])
+
             if "chewbbaca" in nextflow_tag and process_to_run == "false":
                 continue
 
             if "mlst" in nextflow_tag:
                 mlstSpecies = config["MLST_CORRESPONDENCE"][current_specie]
 
+            if "reads_download" in nextflow_tag:
+                asperaKey = config["ASPERAKEY"]
+                accessionsPath = os.path.join(nexflow_user_dir, "accessions.txt")
 
             if "chewbbaca" in nextflow_tag:
                 chewbbaca_training_file = config["CHEWBBACA_TRAINING_FILE"][
@@ -212,8 +219,10 @@ class Queue_Processor:
                 os.remove(os.path.join(nexflow_user_dir,
                                        "platform.config"))
 
+
             # Object to write in the nexflow config
             to_write = {
+                "asperaKey": asperaKey,
                 "projectId": project_id,
                 "pipelineId": pipeline_id,
                 "platformHTTP": config["JOBS_ROOT_SET_OUTPUT"],
@@ -232,13 +241,13 @@ class Queue_Processor:
                 "referenceFileO": seqtyping_ref_o,
                 "referenceFileH": seqtyping_ref_h,
                 "mlstSpecies": mlstSpecies,
-                "species": "{}".format(specie),
-                "fastq": config["FASTQPATH"]
+                "species": "{}".format(specie)
             }
 
-            '''general_settings = {
-                "memory": config["PROCESS_DEFAULT_MEMORY"]
-            }'''
+            if accessionsPath != "":
+                to_write["accessions"] = accessionsPath
+            else:
+                to_write["fastq"] = config["FASTQPATH"]
 
             with open(os.path.join(nexflow_user_dir, "platform.config"),
                       "w") as nextflow_cache_file:
@@ -267,10 +276,16 @@ class Queue_Processor:
         if stderr != "":
             return {'message': stderr}, 500
 
+        # Write generator log
         with open(os.path.join(nexflow_user_dir, "nextflow_generator.log"),
                   "w") as next_gen_log:
             next_gen_log.write(" ".join(commands) + "\n")
             next_gen_log.write(stdout + "\n")
+
+        # Write accessions
+        if accessionsPath != "":
+            with open(accessionsPath, "w") as accessions:
+                accessions.write(json.loads(workflow['accession']))
 
         # RUN NEXTFLOW
         commands = ['sbatch',
