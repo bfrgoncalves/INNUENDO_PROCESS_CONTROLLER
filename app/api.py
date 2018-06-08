@@ -11,7 +11,7 @@ api = Api(app)
 api.add_resource(Job_queue, '/jobs/')
 
 # trigger flocraft inspect
-api.add_resource(FlowcraftInspect, '/jobs/inspect/')
+api.add_resource(FlowcraftInspect, '/jobs/inspect')
 
 # get files from user
 api.add_resource(FilesResource, '/jobs/fastqs/')

@@ -88,6 +88,17 @@ inspect_get_parser.add_argument('homedir', dest='homedir',
                                       type=str, required=True,
                                       help="homedir")
 
+inspect_post_parser = reqparse.RequestParser()
+inspect_post_parser.add_argument('pipeline_id', dest='pipeline_id',
+                                      type=str, required=True,
+                                      help="pipeline_id")
+inspect_post_parser.add_argument('project_id', dest='project_id',
+                                      type=str, required=True,
+                                      help="project_id")
+inspect_post_parser.add_argument('homedir', dest='homedir',
+                                      type=str, required=True,
+                                      help="homedir")
+
 inspect_put_parser = reqparse.RequestParser()
 inspect_put_parser.add_argument('pid', dest='pid',
                                       type=str, required=True,
@@ -452,10 +463,6 @@ class FlowcraftInspect(Resource):
                     config["INSPECT_ROUTE"]
                     ]
 
-        log_loc = os.path.join(args.homedir, "job",
-                               args.project_id+"-"+args.pipeline_id,
-                  "inspect_log.txt")
-
         link = ""
         pid = ""
 
@@ -488,5 +495,27 @@ class FlowcraftInspect(Resource):
 
         process = subprocess.Popen(commands, stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE)
+
+        return True
+
+    def post(self):
+
+        args = inspect_post_parser.parse_args()
+
+        executor_path = os.path.join(args.homedir, "jobs",
+                               args.project_id + "-" + args.pipeline_id,
+                               "executor_command.txt")
+
+        commands = ['sh',
+                    './job_processing/bash_scripts/retry_pipeline.sh',
+                    executor_path
+                    ]
+
+        process = subprocess.Popen(commands, stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE)
+
+        stdout, stderr = process.communicate()
+
+        print stdout, stderr
 
         return True
