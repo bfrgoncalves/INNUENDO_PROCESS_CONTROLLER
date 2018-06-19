@@ -130,6 +130,8 @@ class Queue_Processor:
         seqtyping_ref_h = ""
         mlstSpecies = ""
         specie = ""
+        asperaKey = ""
+        accessionsPath = ""
 
         random_pip_name = job_parameters[0]['project_id']+'_'+ \
                           job_parameters[0]['pipeline_id']+ ".nf"
@@ -150,14 +152,19 @@ class Queue_Processor:
             nexflow_user_dir = os.path.join(homedir, "jobs", project_id+"-"+
                                             pipeline_id)
 
-            if "chewBBACA" in used_software and process_to_run == "false":
+            print json.loads(workflow["accession"])
+
+            if "chewbbaca" in nextflow_tag and process_to_run == "false":
                 continue
 
-            if "mlst" in used_software:
+            if "mlst" in nextflow_tag:
                 mlstSpecies = config["MLST_CORRESPONDENCE"][current_specie]
 
+            if "reads_download" in nextflow_tag:
+                asperaKey = config["ASPERAKEY"]
+                accessionsPath = os.path.join(nexflow_user_dir, "accessions.txt")
 
-            if "chewBBACA" in used_software:
+            if "chewbbaca" in nextflow_tag:
                 chewbbaca_training_file = config["CHEWBBACA_TRAINING_FILE"][
                     current_specie]
                 chewbbaca_schema_path = os.path.join(
@@ -168,12 +175,12 @@ class Queue_Processor:
                 chewbbaca_core_genes_path = config[
                     "core_headers_correspondece"][current_specie]
 
-            if "seq_typing" in used_software:
+            if "seq_typing" in nextflow_tag:
                 seqtyping_ref_o = config["SEQ_FILE_O"][current_specie]
                 seqtyping_ref_h = config["SEQ_FILE_H"][current_specie]
 
-            if "patho_typing" in used_software or "true_coverage" in \
-                    used_software:
+            if "patho_typing" in nextflow_tag or "true_coverage" in \
+                    nextflow_tag:
                 specie = config["CHEWBBACA_CORRESPONDENCE"][
                     current_specie]
 
@@ -182,14 +189,16 @@ class Queue_Processor:
 
             array_of_files = []
 
-            if "chewBBACA" in used_software:
-                assemblerflow_attr = "={{'pid':{},'queue':'{}'}}".format(
-                    process_id, config["CHEWBBACA_PARTITION"])
-            elif "mlst" in used_software:
-                assemblerflow_attr = "={{'pid':{},'version':'{}'}}".format(
-                    process_id, config["MLST_VERSION"])
-            else:
-                assemblerflow_attr = "={{'pid':{}}}".format(process_id)
+            nextflow_resources = config["NEXTFLOW_RESOURCES"]
+
+            # Additional parameters to change directives of assemblerflow
+            additional_params = []
+
+            for key, val in nextflow_resources[nextflow_tag].items():
+                additional_params.append("'{}':'{}'".format(key, val))
+
+            assemblerflow_attr = "={{'pid':{},".format(process_id) + ","\
+                .join(additional_params) + "}"
 
             nextflow_tags.append(nextflow_tag+assemblerflow_attr)
 
@@ -210,8 +219,10 @@ class Queue_Processor:
                 os.remove(os.path.join(nexflow_user_dir,
                                        "platform.config"))
 
+
             # Object to write in the nexflow config
             to_write = {
+                "asperaKey": asperaKey,
                 "projectId": project_id,
                 "pipelineId": pipeline_id,
                 "platformHTTP": config["JOBS_ROOT_SET_OUTPUT"],
@@ -230,10 +241,13 @@ class Queue_Processor:
                 "referenceFileO": seqtyping_ref_o,
                 "referenceFileH": seqtyping_ref_h,
                 "mlstSpecies": mlstSpecies,
-                "species": "{}".format(specie),
-
-
+                "species": "{}".format(specie)
             }
+
+            if accessionsPath != "":
+                to_write["accessions"] = accessionsPath
+            else:
+                to_write["fastq"] = config["FASTQPATH"]
 
             with open(os.path.join(nexflow_user_dir, "platform.config"),
                       "w") as nextflow_cache_file:
@@ -244,12 +258,11 @@ class Queue_Processor:
         # RUN Nextflow GENERATOR
         nextflow_file_location = os.path.join(nexflow_user_dir, random_pip_name)
 
-        commands = ['python3', config["NEXTFLOW_GENERATOR_PATH"]] + ["-t"] + \
+        commands = ['python3', config["NEXTFLOW_GENERATOR_PATH"]] + ["build", "-t"] + \
                    [" ".join(nextflow_tags)] + \
                    ["-o", os.path.join(nexflow_user_dir,
                                        nextflow_file_location),
-                    "--include-templates", "-r",
-                    config["NEXTFLOW_GENERATOR_RECIPE"]]
+                    "-r", config["NEXTFLOW_GENERATOR_RECIPE"]]
 
         print commands
 
@@ -258,14 +271,21 @@ class Queue_Processor:
 
         stdout, stderr = proc.communicate()
 
+        print stderr
+
         if stderr != "":
             return {'message': stderr}, 500
 
+        # Write generator log
         with open(os.path.join(nexflow_user_dir, "nextflow_generator.log"),
                   "w") as next_gen_log:
             next_gen_log.write(" ".join(commands) + "\n")
             next_gen_log.write(stdout + "\n")
 
+        # Write accessions
+        if accessionsPath != "":
+            with open(accessionsPath, "w") as accessions:
+                accessions.write(json.loads(workflow['accession']))
 
         # RUN NEXTFLOW
         commands = ['sbatch',
@@ -277,6 +297,7 @@ class Queue_Processor:
         print commands
         proc = subprocess.Popen(commands, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
+
         stdout, stderr = proc.communicate()
 
         with open(os.path.join(nexflow_user_dir, "executor_command.txt"), "w")\
