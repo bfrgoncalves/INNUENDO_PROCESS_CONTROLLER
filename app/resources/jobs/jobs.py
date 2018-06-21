@@ -116,45 +116,11 @@ processTypes = config["processTypes"]
 processMessages = config["processMessages"]
 
 
-# DEPRECATED ########
-'''
-def load_results_from_file(job_id, homedir):
+class CheckControllerResource(Resource):
 
-    user_folder = os.path.join(homedir, job_id.split('_')[0] + '/*_' +
-                               job_id.split('_')[0] + "_" +
-                               str(int(job_id.split('_')[1]) + 1) + '/*.*')
+    def get(self):
 
-    onlyfiles = [f for f in glob.glob(user_folder)]
-
-    array_of_results = {}
-    array_of_paths = {}
-
-    for i in onlyfiles:
-        try:
-            data = open(i).read()
-            json_data = json.loads(data)
-        except Exception:
-            if "PathoTyping" in i or "Pathotyping" in i:
-                try:
-                    json_data = {}
-                    json_data["result"] = data
-                except Exception:
-                    json_data = {"stats": "Not JSON"}
-            else:
-                json_data = {"stats": "Not JSON"}
-
-        if "run_output" in i:
-            array_of_results["run_output"] = json_data
-            array_of_paths["run_output"] = i
-        elif "run_stats" in i:
-            array_of_results["run_stats"] = json_data
-            array_of_paths["run_stats"] = i
-        elif "run_info" in i:
-            array_of_results["run_info"] = json_data
-            array_of_paths["run_info"] = i
-
-    return [array_of_results, array_of_paths]
-'''
+        return True
 
 
 class Job_queue(Resource):
