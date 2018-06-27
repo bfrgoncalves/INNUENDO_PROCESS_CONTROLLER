@@ -104,6 +104,11 @@ inspect_put_parser.add_argument('pid', dest='pid',
                                       type=str, required=True,
                                       help="pid")
 
+params_get_parser = reqparse.RequestParser()
+params_get_parser.add_argument('selected_param', dest='selected_param',
+                                      type=str, required=True,
+                                      help="selected_param")
+
 
 # READ CONFIG FILE
 config = {}
@@ -485,3 +490,25 @@ class FlowcraftInspect(Resource):
         print stdout, stderr
 
         return True
+
+
+class FlowcraftParams(Resource):
+
+    def get(self):
+
+        args = params_get_parser.parse_args()
+
+        commands = ['sh',
+                    './job_processing/bash_scripts/check_flowcraft_params.sh',
+                    args.selected_param
+                    ]
+
+        link = ""
+        pid = ""
+
+        process = subprocess.Popen(commands, stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE)
+
+        stdout, stderr = process.communicate()
+
+        print stdout, stderr
