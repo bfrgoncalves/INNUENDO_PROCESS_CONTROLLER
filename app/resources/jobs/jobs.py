@@ -513,4 +513,4 @@ class FlowcraftParams(Resource):
 
         print stdout, stderr
 
-        return {stdout: stdout}
+        return {"stdout": str(stdout)}
