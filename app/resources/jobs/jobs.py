@@ -512,3 +512,5 @@ class FlowcraftParams(Resource):
         stdout, stderr = process.communicate()
 
         print stdout, stderr
+
+        return {stdout: stdout}
