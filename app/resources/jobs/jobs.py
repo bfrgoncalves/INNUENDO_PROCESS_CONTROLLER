@@ -109,6 +109,11 @@ params_get_parser.add_argument('selected_param', dest='selected_param',
                                       type=str, required=True,
                                       help="selected_param")
 
+workflow_test_post_parser = reqparse.RequestParser()
+workflow_test_post_parser.add_argument('protocols', dest='protocols',
+                                      type=str, required=True,
+                                      help="protocols")
+
 
 # READ CONFIG FILE
 config = {}
@@ -503,14 +508,28 @@ class FlowcraftParams(Resource):
                     args.selected_param
                     ]
 
-        link = ""
-        pid = ""
-
         process = subprocess.Popen(commands, stdout=subprocess.PIPE,
                             stderr=subprocess.PIPE)
 
         stdout, stderr = process.communicate()
 
-        print stdout, stderr
+        return {"stdout": str(stdout)}
+
+
+class FlowcraftBuildTest(Resource):
+
+    def post(self):
+        args = workflow_test_post_parser.parse_args()
+
+        commands = ['sh',
+                    './job_processing/bash_scripts/test_flowcraft_build.sh',
+                    " ".join(args.protocols.split(","))
+                    ]
+
+        process = subprocess.Popen(commands, stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE)
+
+        stdout, stderr = process.communicate()
 
         return {"stdout": str(stdout)}
+

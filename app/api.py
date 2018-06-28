@@ -3,7 +3,8 @@ from flask.ext.restful import Api
 
 from resources.jobs.jobs import Job_queue, FilesResource, \
     DownloadFilesResource, CopyChewSchema, SetNGSOntoOutput, \
-    FlowcraftInspect, CheckControllerResource, FlowcraftParams
+    FlowcraftInspect, CheckControllerResource, FlowcraftParams, \
+    FlowcraftBuildTest
 from resources.downloads.downloads import DownloadResults
 
 # Setup API
@@ -19,6 +20,9 @@ api.add_resource(FlowcraftInspect, '/jobs/inspect')
 
 # check flowcraft tags params
 api.add_resource(FlowcraftParams, '/jobs/protocols/params/')
+
+# test flowcraft build on workflow
+api.add_resource(FlowcraftBuildTest, '/jobs/workflow/test/')
 
 # get files from user
 api.add_resource(FilesResource, '/jobs/fastqs/')
