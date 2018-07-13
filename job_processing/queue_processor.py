@@ -305,6 +305,9 @@ class Queue_Processor:
             commands = commands[:4] + ['"{}"'.format(x) for x in commands[4:]]
             r.write(" ".join(commands))
 
+        if stderr != "":
+            return {'message': stderr}, 500
+
         return {'task_ids': task_ids, 'process_ids': processIDs}, 200
 
     def process_download_accessions(self, download_parameters):
@@ -337,7 +340,7 @@ class Queue_Processor:
         jobID, code = self.process_job(job_parameters, current_specie,
                                        sampleName, current_user_name,
                                        current_user_id, homedir)
-        return jobID
+        return jobID, code
 
     def download_accessions(self, download_parameters):
         # Insert jobs in queue

@@ -104,6 +104,16 @@ inspect_put_parser.add_argument('pid', dest='pid',
                                       type=str, required=True,
                                       help="pid")
 
+params_get_parser = reqparse.RequestParser()
+params_get_parser.add_argument('selected_param', dest='selected_param',
+                                      type=str, required=True,
+                                      help="selected_param")
+
+workflow_test_post_parser = reqparse.RequestParser()
+workflow_test_post_parser.add_argument('protocols', dest='protocols',
+                                      type=str, required=True,
+                                      help="protocols")
+
 
 # READ CONFIG FILE
 config = {}
@@ -116,45 +126,11 @@ processTypes = config["processTypes"]
 processMessages = config["processMessages"]
 
 
-# DEPRECATED ########
-'''
-def load_results_from_file(job_id, homedir):
+class CheckControllerResource(Resource):
 
-    user_folder = os.path.join(homedir, job_id.split('_')[0] + '/*_' +
-                               job_id.split('_')[0] + "_" +
-                               str(int(job_id.split('_')[1]) + 1) + '/*.*')
+    def get(self):
 
-    onlyfiles = [f for f in glob.glob(user_folder)]
-
-    array_of_results = {}
-    array_of_paths = {}
-
-    for i in onlyfiles:
-        try:
-            data = open(i).read()
-            json_data = json.loads(data)
-        except Exception:
-            if "PathoTyping" in i or "Pathotyping" in i:
-                try:
-                    json_data = {}
-                    json_data["result"] = data
-                except Exception:
-                    json_data = {"stats": "Not JSON"}
-            else:
-                json_data = {"stats": "Not JSON"}
-
-        if "run_output" in i:
-            array_of_results["run_output"] = json_data
-            array_of_paths["run_output"] = i
-        elif "run_stats" in i:
-            array_of_results["run_stats"] = json_data
-            array_of_paths["run_stats"] = i
-        elif "run_info" in i:
-            array_of_results["run_info"] = json_data
-            array_of_paths["run_info"] = i
-
-    return [array_of_results, array_of_paths]
-'''
+        return True
 
 
 class Job_queue(Resource):
@@ -168,12 +144,12 @@ class Job_queue(Resource):
         current_user_id = args.current_user_id
 
         innuendo_processor = Queue_Processor()
-        jobID = innuendo_processor.insert_job(
+        jobID, code = innuendo_processor.insert_job(
             job_parameters=job_parameters, current_specie=current_specie,
             sampleName=sampleName, current_user_name=current_user_name,
             current_user_id=current_user_id, homedir=args.homedir)
 
-        return {'jobID': jobID}, 200
+        return {'jobID': jobID, 'code': code}, 200
 
     def get(self):
 
@@ -519,3 +495,41 @@ class FlowcraftInspect(Resource):
         print stdout, stderr
 
         return True
+
+
+class FlowcraftParams(Resource):
+
+    def get(self):
+
+        args = params_get_parser.parse_args()
+
+        commands = ['sh',
+                    './job_processing/bash_scripts/check_flowcraft_params.sh',
+                    args.selected_param
+                    ]
+
+        process = subprocess.Popen(commands, stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE)
+
+        stdout, stderr = process.communicate()
+
+        return {"stdout": str(stdout)}
+
+
+class FlowcraftBuildTest(Resource):
+
+    def post(self):
+        args = workflow_test_post_parser.parse_args()
+
+        commands = ['sh',
+                    './job_processing/bash_scripts/test_flowcraft_build.sh',
+                    " ".join(args.protocols.split(","))
+                    ]
+
+        process = subprocess.Popen(commands, stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE)
+
+        stdout, stderr = process.communicate()
+
+        return {"stdout": str(stdout)}
+
