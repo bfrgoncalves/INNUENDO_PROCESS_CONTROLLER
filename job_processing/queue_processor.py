@@ -118,6 +118,9 @@ class Queue_Processor:
         task_ids = []
         processIDs = []
 
+        # Dictionary with params associated with a process
+        processToParams = {};
+
         # To send to nextflow generator
         project_id = ""
         pipeline_id = ""
@@ -138,6 +141,7 @@ class Queue_Processor:
 
         for workflow in job_parameters:
 
+
             count_workflows += 1
             parameters = json.loads(workflow['parameters'])['used Parameter']
             files = json.loads(workflow['files'])
@@ -152,36 +156,49 @@ class Queue_Processor:
             nexflow_user_dir = os.path.join(homedir, "jobs", project_id+"-"+
                                             pipeline_id)
 
-            print json.loads(workflow["accession"])
+            process_identifier = nextflow_tag + "_" + process_id
+
+            # Check if key not already in params dict
+            if process_identifier not in processToParams.keys():
+                processToParams[process_identifier] = {}
 
             if "chewbbaca" in nextflow_tag and process_to_run == "false":
                 continue
 
             if "mlst" in nextflow_tag:
-                mlstSpecies = config["MLST_CORRESPONDENCE"][current_specie]
+                processToParams[process_identifier]['mlstSpecies'] = config[
+                    "MLST_CORRESPONDENCE"][current_specie]
 
             if "reads_download" in nextflow_tag:
                 asperaKey = config["ASPERAKEY"]
-                accessionsPath = os.path.join(nexflow_user_dir, "accessions.txt")
+                accessionsPath = os.path.join(
+                    nexflow_user_dir, "accessions.txt")
 
             if "chewbbaca" in nextflow_tag:
-                chewbbaca_training_file = config["CHEWBBACA_TRAINING_FILE"][
-                    current_specie]
-                chewbbaca_schema_path = os.path.join(
+                processToParams[process_identifier]['chewbbacaTraining'] = \
+                    config["CHEWBBACA_TRAINING_FILE"][current_specie]
+                processToParams[process_identifier]['schemaPath'] = \
+                    os.path.join(
                     config["CHEWBBACA_SCHEMAS_PATH"], parameters["schema"])
-                chewbbaca_list_genes = os.path.join(
+                processToParams[process_identifier]['schemaSelectedLoci'] = \
+                    os.path.join(
                     config["CHEWBBACA_SCHEMAS_PATH"], parameters["schema"],
                     "listGenes.txt")
-                chewbbaca_core_genes_path = config[
+                processToParams[process_identifier]['schemaCore'] = \
+                    config[
                     "core_headers_correspondece"][current_specie]
+                processToParams[process_identifier]['chewbbacaJson'] = 'true'
 
             if "seq_typing" in nextflow_tag:
-                seqtyping_ref_o = config["SEQ_FILE_O"][current_specie]
-                seqtyping_ref_h = config["SEQ_FILE_H"][current_specie]
+                processToParams[process_identifier]['referenceFileO'] = config[
+                    "SEQ_FILE_O"][current_specie]
+                processToParams[process_identifier]['referenceFileH'] = config[
+                    "SEQ_FILE_H"][current_specie]
 
             if "patho_typing" in nextflow_tag or "true_coverage" in \
                     nextflow_tag:
-                specie = config["CHEWBBACA_CORRESPONDENCE"][
+                processToParams[process_identifier]['species'] = config[
+                    "CHEWBBACA_CORRESPONDENCE"][
                     current_specie]
 
             if not os.path.exists(nexflow_user_dir):
@@ -195,7 +212,8 @@ class Queue_Processor:
             additional_params = []
 
             for key, val in nextflow_resources[nextflow_tag].items():
-                additional_params.append("'{}':'{}'".format(key, val))
+                if key not in processToParams[process_identifier].keys():
+                    additional_params.append("'{}':'{}'".format(key, val))
 
             assemblerflow_attr = "={{'pid':{},".format(process_id) + ","\
                 .join(additional_params) + "}"
@@ -218,10 +236,30 @@ class Queue_Processor:
                                            "platform.config")):
                 os.remove(os.path.join(nexflow_user_dir,
                                        "platform.config"))
+            to_write = {}
+
+            # Create platform.config dictionary
+            for identifier, params in processToParams.items():
+                for param, value in params.items():
+                    paramIdentifier = identifier + "." + param
+                    to_write[paramIdentifier] = value
+
+            to_write["asperaKey"] = asperaKey
+            to_write["projectId"] = project_id
+            to_write["pipelineId"] = pipeline_id
+            to_write["platformHTTP"] = config["JOBS_ROOT_SET_OUTPUT"]
+            to_write["sampleName"] = sampleName
+            to_write["reportHTTP"] = config["JOBS_ROOT_SET_REPORT"]
+            to_write["currentUserName"] = current_user_name
+            to_write["currentUserId"] = current_user_id
+            to_write["platformSpecies"] = current_specie
+            to_write["genomeSize"] = config["species_expected_genome_size"][
+                              current_specie]
+            #to_write["species"] = "{}".format(specie)
 
 
             # Object to write in the nexflow config
-            to_write = {
+            '''to_write = {
                 "asperaKey": asperaKey,
                 "projectId": project_id,
                 "pipelineId": pipeline_id,
@@ -243,6 +281,7 @@ class Queue_Processor:
                 "mlstSpecies": mlstSpecies,
                 "species": "{}".format(specie)
             }
+            '''
 
             if accessionsPath != "":
                 to_write["accessions"] = accessionsPath
