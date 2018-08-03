@@ -119,34 +119,25 @@ class Queue_Processor:
         processIDs = []
 
         # Dictionary with params associated with a process
-        processToParams = {};
+        processToParams = {}
 
         # To send to nextflow generator
         project_id = ""
         pipeline_id = ""
         nexflow_user_dir = ""
-        chewbbaca_schema_path = ""
-        chewbbaca_training_file = ""
-        chewbbaca_list_genes = ""
-        chewbbaca_core_genes_path = ""
-        seqtyping_ref_o = ""
-        seqtyping_ref_h = ""
-        mlstSpecies = ""
-        specie = ""
         asperaKey = ""
         accessionsPath = ""
 
-        random_pip_name = job_parameters[0]['project_id']+'_'+ \
-                          job_parameters[0]['pipeline_id']+ ".nf"
+        random_pip_name = job_parameters[0]['project_id']+'_' + \
+                          job_parameters[0]['pipeline_id'] + ".nf"
 
         for workflow in job_parameters:
 
-
+            # Load data fretrieved from the queue process
             count_workflows += 1
             parameters = json.loads(workflow['parameters'])['used Parameter']
             files = json.loads(workflow['files'])
             strain_submitter = workflow['strain_submitter']
-            used_software = json.loads(workflow['parameters'])['used Software']
             nextflow_tag = json.loads(workflow['parameters'])['Nextflow Tag']
             project_id = workflow['project_id']
             pipeline_id = workflow['pipeline_id']
@@ -162,44 +153,58 @@ class Queue_Processor:
             if process_identifier not in processToParams.keys():
                 processToParams[process_identifier] = {}
 
+            # Case failed on previous chewbbaca steps
             if "chewbbaca" in nextflow_tag and process_to_run == "false":
                 continue
 
+            # Case process is mlst, needs to get the species correspondence
+            # from the configuration file if not added by the user upon
+            # protocol creation
             if "mlst" in nextflow_tag:
                 processToParams[process_identifier]['mlstSpecies'] = config[
                     "MLST_CORRESPONDENCE"][current_specie]
 
+            # Case downloading reads, it requires the aspera key if not
+            # provided by the user upon protocol creation and the path
+            # to the file with the accession numbers
             if "reads_download" in nextflow_tag:
-                asperaKey = config["ASPERAKEY"]
-                accessionsPath = os.path.join(
-                    nexflow_user_dir, "accessions.txt")
+                processToParams[process_identifier]['asperaKey'] = config["ASPERAKEY"]
+                processToParams[process_identifier]['accessions'] = \
+                    os.path.join(nexflow_user_dir, "accessions.txt")
+                accessionsPath = os.path.join(nexflow_user_dir, "accessions.txt")
 
+            # Case the process is chewbbaca, it requires training files,
+            # schema, loci list if not provided by the admin upon protocol
+            # creation
             if "chewbbaca" in nextflow_tag:
                 processToParams[process_identifier]['chewbbacaTraining'] = \
                     config["CHEWBBACA_TRAINING_FILE"][current_specie]
                 processToParams[process_identifier]['schemaPath'] = \
                     os.path.join(
-                    config["CHEWBBACA_SCHEMAS_PATH"], parameters["schema"])
+                    config["CHEWBBACA_SCHEMAS_PATH"], parameters["schemaPath"])
                 processToParams[process_identifier]['schemaSelectedLoci'] = \
                     os.path.join(
-                    config["CHEWBBACA_SCHEMAS_PATH"], parameters["schema"],
+                    config["CHEWBBACA_SCHEMAS_PATH"], parameters["schemaPath"],
                     "listGenes.txt")
                 processToParams[process_identifier]['schemaCore'] = \
                     config[
                     "core_headers_correspondece"][current_specie]
                 processToParams[process_identifier]['chewbbacaJson'] = 'true'
 
+            # Case process is seq_typing, it requires the reference files or
+            # target finding if not provided by the admin upon protocol creation
             if "seq_typing" in nextflow_tag:
                 processToParams[process_identifier]['referenceFileO'] = config[
                     "SEQ_FILE_O"][current_specie]
                 processToParams[process_identifier]['referenceFileH'] = config[
                     "SEQ_FILE_H"][current_specie]
 
-            if "patho_typing" in nextflow_tag or "true_coverage" in \
-                    nextflow_tag:
+            # If patho_typing or true_coverage, it requires the name of the
+            # species as input if not provided by the admin upon protocol
+            # creation
+            if "patho_typing" in nextflow_tag or "true_coverage" in nextflow_tag:
                 processToParams[process_identifier]['species'] = config[
-                    "CHEWBBACA_CORRESPONDENCE"][
-                    current_specie]
+                    "CHEWBBACA_CORRESPONDENCE"][current_specie]
 
             if not os.path.exists(nexflow_user_dir):
                 os.makedirs(nexflow_user_dir)
@@ -215,22 +220,42 @@ class Queue_Processor:
                 if key not in processToParams[process_identifier].keys():
                     additional_params.append("'{}':'{}'".format(key, val))
 
-            assemblerflow_attr = "={{'pid':{},".format(process_id) + ","\
+            # Add or replace protocol params by the ones provided by the user
+            for key, val in parameters.items():
+                processToParams[process_identifier][key] = val
+
+            # Add pid to parameters
+            newProcessToParams = {}
+
+            for key, val in processToParams[process_identifier].items():
+                newProcessToParams['{}_{}'.format(key, process_id)] = val
+
+            processToParams[process_identifier] = newProcessToParams
+
+            # Add pid and additional parameters to flowcraft pipeline string
+            assemblerflow_attr = "={{'pid':'{}',".format(process_id) + ","\
                 .join(additional_params) + "}"
 
+            # Merge all nextflow tags into an array
             nextflow_tags.append(nextflow_tag+assemblerflow_attr)
 
+            # Case a process is the be run, ad it to the ids array to send to
+            #  the frontend and change the status
             if process_to_run == "true":
                 task_ids.append("project{}pipeline{}process{}"
                                 .format(project_id, pipeline_id, process_id))
 
                 processIDs.append(process_id)
 
+            # Get the files to use as input if exist
             for x in files:
                 array_of_files.append(
                     os.path.join(strain_submitter, config['FTP_FILES_FOLDER'],
                                  files[x]))
 
+        # If no errors occur when getting the required variables, it writes
+        # the platform.config file that is passed as input for nextflow and
+        # runs flowcraft to build the pipeline and run it.
         if writeCacheFile:
             if os.path.exists(os.path.join(nexflow_user_dir,
                                            "platform.config")):
@@ -241,10 +266,10 @@ class Queue_Processor:
             # Create platform.config dictionary
             for identifier, params in processToParams.items():
                 for param, value in params.items():
-                    paramIdentifier = identifier + "." + param
+                    paramIdentifier = param
                     to_write[paramIdentifier] = value
 
-            to_write["asperaKey"] = asperaKey
+            #to_write["asperaKey"] = asperaKey
             to_write["projectId"] = project_id
             to_write["pipelineId"] = pipeline_id
             to_write["platformHTTP"] = config["JOBS_ROOT_SET_OUTPUT"]
@@ -253,8 +278,7 @@ class Queue_Processor:
             to_write["currentUserName"] = current_user_name
             to_write["currentUserId"] = current_user_id
             to_write["platformSpecies"] = current_specie
-            to_write["genomeSize"] = config["species_expected_genome_size"][
-                              current_specie]
+            #to_write["genomeSize"] = config["species_expected_genome_size"][current_specie]
             #to_write["species"] = "{}".format(specie)
 
 
@@ -282,11 +306,23 @@ class Queue_Processor:
                 "species": "{}".format(specie)
             }
             '''
+            # Case input is accessions, pass that argument to the
+            # configuration file else, pass the fastq files path
+            objKeys = to_write.keys()
+            hasAccession = False
 
-            if accessionsPath != "":
-                to_write["accessions"] = accessionsPath
-            else:
+            for s in objKeys:
+                print s
+                if "accessions" in s:
+                    hasAccession = True
+
+            print hasAccession
+
+            if not hasAccession:
                 to_write["fastq"] = config["FASTQPATH"]
+            else:
+                to_write["accessions"] = accessionsPath
+
 
             with open(os.path.join(nexflow_user_dir, "platform.config"),
                       "w") as nextflow_cache_file:
@@ -294,7 +330,7 @@ class Queue_Processor:
 
             writeCacheFile = False
 
-        # RUN Nextflow GENERATOR
+        # RUN FLOWCRAFT
         nextflow_file_location = os.path.join(nexflow_user_dir, random_pip_name)
 
         commands = ['python3', config["NEXTFLOW_GENERATOR_PATH"]] + ["build", "-t"] + \
@@ -312,6 +348,7 @@ class Queue_Processor:
 
         print stderr
 
+        # Parse for errors in the flowcraft build
         if stderr != "":
             return {'message': stderr}, 500
 

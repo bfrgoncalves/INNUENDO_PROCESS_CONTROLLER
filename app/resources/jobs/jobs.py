@@ -1,5 +1,6 @@
 from app import dbconAg
-from flask.ext.restful import Api, Resource, reqparse, abort, fields, marshal_with
+from flask.ext.restful import Api, Resource, reqparse, abort, fields, \
+    marshal_with
 from flask import jsonify, request
 from job_processing.queue_processor import Queue_Processor
 from job_processing.queryParse2Json import parseAgraphStatementsRes
@@ -26,7 +27,6 @@ job_post_parser.add_argument('current_user_id', dest='current_user_id',
 job_post_parser.add_argument('homedir', dest='homedir', type=str, required=True,
                              help="home dir")
 
-
 job_get_parser = reqparse.RequestParser()
 job_get_parser.add_argument('job_id', dest='job_id', type=str, required=True,
                             help="Job ID")
@@ -43,7 +43,6 @@ job_get_parser.add_argument('homedir', dest='homedir', type=str, required=True,
 job_get_parser.add_argument('from_process_controller',
                             dest='from_process_controller', type=str,
                             required=True, help="from_process_controller")
-
 
 job_put_parser = reqparse.RequestParser()
 job_put_parser.add_argument('project_id', dest='project_id', type=str,
@@ -79,41 +78,40 @@ copy_schema_get_parser.add_argument('schema_to_copy', dest='schema_to_copy',
 
 inspect_get_parser = reqparse.RequestParser()
 inspect_get_parser.add_argument('pipeline_id', dest='pipeline_id',
-                                      type=str, required=True,
-                                      help="pipeline_id")
+                                type=str, required=True,
+                                help="pipeline_id")
 inspect_get_parser.add_argument('project_id', dest='project_id',
-                                      type=str, required=True,
-                                      help="project_id")
+                                type=str, required=True,
+                                help="project_id")
 inspect_get_parser.add_argument('homedir', dest='homedir',
-                                      type=str, required=True,
-                                      help="homedir")
+                                type=str, required=True,
+                                help="homedir")
 
 inspect_post_parser = reqparse.RequestParser()
 inspect_post_parser.add_argument('pipeline_id', dest='pipeline_id',
-                                      type=str, required=True,
-                                      help="pipeline_id")
+                                 type=str, required=True,
+                                 help="pipeline_id")
 inspect_post_parser.add_argument('project_id', dest='project_id',
-                                      type=str, required=True,
-                                      help="project_id")
+                                 type=str, required=True,
+                                 help="project_id")
 inspect_post_parser.add_argument('homedir', dest='homedir',
-                                      type=str, required=True,
-                                      help="homedir")
+                                 type=str, required=True,
+                                 help="homedir")
 
 inspect_put_parser = reqparse.RequestParser()
 inspect_put_parser.add_argument('pid', dest='pid',
-                                      type=str, required=True,
-                                      help="pid")
+                                type=str, required=True,
+                                help="pid")
 
 params_get_parser = reqparse.RequestParser()
 params_get_parser.add_argument('selected_param', dest='selected_param',
-                                      type=str, required=True,
-                                      help="selected_param")
+                               type=str, required=True,
+                               help="selected_param")
 
 workflow_test_post_parser = reqparse.RequestParser()
 workflow_test_post_parser.add_argument('protocols', dest='protocols',
-                                      type=str, required=True,
-                                      help="protocols")
-
+                                       type=str, required=True,
+                                       help="protocols")
 
 # READ CONFIG FILE
 config = {}
@@ -127,14 +125,11 @@ processMessages = config["processMessages"]
 
 
 class CheckControllerResource(Resource):
-
     def get(self):
-
         return True
 
 
 class Job_queue(Resource):
-
     def post(self):
         args = job_post_parser.parse_args()
         job_parameters = args.data
@@ -152,7 +147,6 @@ class Job_queue(Resource):
         return {'jobID': jobID, 'code': code}, 200
 
     def get(self):
-
         args = job_get_parser.parse_args()
 
         job_ids = args.job_id.split(",")
@@ -163,7 +157,6 @@ class Job_queue(Resource):
         all_paths = []
 
         for k in range(0, len(job_ids)):
-
             job_id = job_ids[k]
             process_id = process_ids[k]
 
@@ -173,8 +166,8 @@ class Job_queue(Resource):
             print '--project ' + args.project_id + ' --pipeline ' + \
                   args.pipeline_id + ' --process ' + process_id + ' -t status'
 
-            commands = 'python job_processing/get_program_input.py --project '\
-                       + args.project_id + ' --pipeline ' + args.pipeline_id +\
+            commands = 'python job_processing/get_program_input.py --project ' \
+                       + args.project_id + ' --pipeline ' + args.pipeline_id + \
                        ' --process ' + process_id + ' -t status'
 
             proc1 = subprocess.Popen(commands.split(' '),
@@ -195,9 +188,7 @@ class Job_queue(Resource):
 
 
 class FilesResource(Resource):
-
     def get(self):
-
         args = file_get_parser.parse_args()
         files_folder = os.path.join(args.homedir, config['FTP_FILES_FOLDER'],
                                     '*.gz')
@@ -209,7 +200,6 @@ class FilesResource(Resource):
 
 
 class DownloadFilesResource(Resource):
-
     def post(self):
         args = download_file_get_parser.parse_args()
         innuendo_processor = Queue_Processor()
@@ -234,7 +224,6 @@ class DownloadFilesResource(Resource):
 
 # DEPRECATED ###############
 class CopyChewSchema(Resource):
-
     def get(self):
         args = copy_schema_get_parser.parse_args()
 
@@ -242,7 +231,7 @@ class CopyChewSchema(Resource):
                     './dependencies/chewBBACA/chewBBACA_schemas_on_compute/' +
                     args.schema_to_copy,
                     './dependencies/chewBBACA/chewBBACA_schemas/' +
-                    args.schema_to_copy+'_new']
+                    args.schema_to_copy + '_new']
 
         proc = subprocess.Popen(commands, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
@@ -256,7 +245,7 @@ class CopyChewSchema(Resource):
 
         stdout, stderr = proc.communicate()
         commands = ['mv', './dependencies/chewBBACA/chewBBACA_schemas/' +
-                    args.schema_to_copy+'_new',
+                    args.schema_to_copy + '_new',
                     './dependencies/chewBBACA/chewBBACA_schemas/' +
                     args.schema_to_copy]
 
@@ -269,7 +258,6 @@ class CopyChewSchema(Resource):
 
 
 class SetNGSOntoOutput(Resource):
-
     def post(self):
 
         parameters = request.json
@@ -281,9 +269,9 @@ class SetNGSOntoOutput(Resource):
             try:
                 # Agraph
                 processURI = dbconAg.createURI(
-                    namespace=localNSpace+"projects/",
-                    localname=str(project_id)+"/pipelines/"+str(
-                        pipeline_id)+"/processes/"+str(process_id))
+                    namespace=localNSpace + "projects/",
+                    localname=str(project_id) + "/pipelines/" + str(
+                        pipeline_id) + "/processes/" + str(process_id))
 
                 # get output URI from process
                 hasOutput = dbconAg.createURI(namespace=obo,
@@ -383,16 +371,16 @@ class SetNGSOntoOutput(Resource):
                 for p, v in zip(property_types, property_values):
                     # Agraph
                     processURI = dbconAg.createURI(
-                        namespace=localNSpace+"projects/",
-                        localname=str(project_id)+"/pipelines/"+str(
-                            pipeline_id)+"/processes/"+str(process_id))
+                        namespace=localNSpace + "projects/",
+                        localname=str(project_id) + "/pipelines/" + str(
+                            pipeline_id) + "/processes/" + str(process_id))
 
                     # get output URI from process
                     hasOutput = dbconAg.createURI(namespace=obo,
                                                   localname="RO_0002234")
                     statements = dbconAg.getStatements(processURI,
                                                        hasOutput, None)
-                    outputURI=parseAgraphStatementsRes(statements)
+                    outputURI = parseAgraphStatementsRes(statements)
                     statements.close()
 
                     outputURI = dbconAg.createURI(outputURI[0]['obj'])
@@ -426,7 +414,6 @@ class SetNGSOntoOutput(Resource):
 
 
 class FlowcraftInspect(Resource):
-
     def get(self):
 
         args = inspect_get_parser.parse_args()
@@ -443,7 +430,7 @@ class FlowcraftInspect(Resource):
         pid = ""
 
         process = subprocess.Popen(commands, stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE)
+                                   stderr=subprocess.PIPE)
 
         count = 0
 
@@ -479,8 +466,8 @@ class FlowcraftInspect(Resource):
         args = inspect_post_parser.parse_args()
 
         executor_path = os.path.join(args.homedir, "jobs",
-                               args.project_id + "-" + args.pipeline_id,
-                               "executor_command.txt")
+                                     args.project_id + "-" + args.pipeline_id,
+                                     "executor_command.txt")
 
         commands = ['sh',
                     './job_processing/bash_scripts/retry_pipeline.sh',
@@ -498,9 +485,7 @@ class FlowcraftInspect(Resource):
 
 
 class FlowcraftParams(Resource):
-
     def get(self):
-
         args = params_get_parser.parse_args()
 
         commands = ['sh',
@@ -509,15 +494,22 @@ class FlowcraftParams(Resource):
                     ]
 
         process = subprocess.Popen(commands, stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE)
+                                   stderr=subprocess.PIPE)
+
+        tosend = False
 
         stdout, stderr = process.communicate()
 
-        return {"stdout": str(stdout)}
+        print stdout
+        print stderr
+
+        if stderr == "":
+            tosend = stdout
+
+        return {"stdout": str(tosend)}
 
 
 class FlowcraftBuildTest(Resource):
-
     def post(self):
         args = workflow_test_post_parser.parse_args()
 
@@ -532,4 +524,3 @@ class FlowcraftBuildTest(Resource):
         stdout, stderr = process.communicate()
 
         return {"stdout": str(stdout)}
-
