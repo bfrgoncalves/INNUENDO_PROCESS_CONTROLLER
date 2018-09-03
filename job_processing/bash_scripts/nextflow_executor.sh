@@ -15,6 +15,8 @@ echo $3
 echo $4
 #nextflow profile
 echo $5
+#sample name
+echo $6
 
 cd $1
 
@@ -22,8 +24,8 @@ if [ ! -d "data" ]; then
 	mkdir data
 fi
 
-ln -s $3 ${1}/data/sample_1.fastq.gz
-ln -s $4 ${1}/data/sample_2.fastq.gz
+ln -s $3 ${1}/data/${6}_1.fastq.gz
+ln -s $4 ${1}/data/${6}_2.fastq.gz
 
 printf "\nincludeConfig 'platform.config'" >> nextflow.config
 

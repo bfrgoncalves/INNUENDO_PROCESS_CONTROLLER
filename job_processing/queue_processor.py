@@ -33,7 +33,7 @@ def write_config_file(file_instance, write_object):
     for key, val in write_object.items():
         to_write = ""
 
-        if val == "true":
+        if val == "true" or val == "false":
             to_write = '{}={}\n'
         else:
             to_write = '{}="{}"\n'
@@ -132,8 +132,7 @@ class Queue_Processor:
                           job_parameters[0]['pipeline_id'] + ".nf"
 
         for workflow in job_parameters:
-
-            # Load data fretrieved from the queue process
+            # Load data retrieved from the queue process
             count_workflows += 1
             parameters = json.loads(workflow['parameters'])['used Parameter']
             files = json.loads(workflow['files'])
@@ -143,6 +142,11 @@ class Queue_Processor:
             pipeline_id = workflow['pipeline_id']
             process_id = workflow['process_id']
             process_to_run = workflow['process_to_run']
+            image = json.loads(workflow['parameters'])['Image']
+            cpus = json.loads(workflow['parameters'])['CPUs']
+            memory = json.loads(workflow['parameters'])['Memory']
+
+            print image, cpus, memory
 
             nexflow_user_dir = os.path.join(homedir, "jobs", project_id+"-"+
                                             pipeline_id)
@@ -218,7 +222,17 @@ class Queue_Processor:
 
             for key, val in nextflow_resources[nextflow_tag].items():
                 if key not in processToParams[process_identifier].keys():
-                    additional_params.append("'{}':'{}'".format(key, val))
+                    if key == 'cpus' and cpus != '':
+                        additional_params.append("'{}':'{}'".format(key, cpus))
+                    elif key == 'memory' and memory != '':
+                        memoryString = "\\\'{}GB\\\'".format(memory)
+                        additional_params.append("'{}':'{}'".format(key, memoryString))
+                    else:
+                        additional_params.append("'{}':'{}'".format(key, val))
+
+            # Add image directive if available
+            if image != "":
+                additional_params.append("'{}':'{}'".format("container", image))
 
             # Add or replace protocol params by the ones provided by the user
             for key, val in parameters.items():
@@ -269,7 +283,6 @@ class Queue_Processor:
                     paramIdentifier = param
                     to_write[paramIdentifier] = value
 
-            #to_write["asperaKey"] = asperaKey
             to_write["projectId"] = project_id
             to_write["pipelineId"] = pipeline_id
             to_write["platformHTTP"] = config["JOBS_ROOT_SET_OUTPUT"]
@@ -278,9 +291,6 @@ class Queue_Processor:
             to_write["currentUserName"] = current_user_name
             to_write["currentUserId"] = current_user_id
             to_write["platformSpecies"] = current_specie
-            #to_write["genomeSize"] = config["species_expected_genome_size"][current_specie]
-            #to_write["species"] = "{}".format(specie)
-
 
             # Object to write in the nexflow config
             '''to_write = {
@@ -306,13 +316,13 @@ class Queue_Processor:
                 "species": "{}".format(specie)
             }
             '''
+
             # Case input is accessions, pass that argument to the
             # configuration file else, pass the fastq files path
             objKeys = to_write.keys()
             hasAccession = False
 
             for s in objKeys:
-                print s
                 if "accessions" in s:
                     hasAccession = True
 
@@ -346,8 +356,6 @@ class Queue_Processor:
 
         stdout, stderr = proc.communicate()
 
-        print stderr
-
         # Parse for errors in the flowcraft build
         if stderr != "":
             return {'message': stderr}, 500
@@ -361,14 +369,27 @@ class Queue_Processor:
         # Write accessions
         if accessionsPath != "":
             with open(accessionsPath, "w") as accessions:
-                accessions.write(json.loads(workflow['accession']))
+                accessions.write(json.loads(workflow['accession']) + "\t" + sampleName)
+
+        # Remove previous nextflow log if exists
+        try:
+            log_location = os.path.join(os.path.join(homedir, "jobs", "{}-{}".format(
+                job_parameters[0]['project_id'],
+                job_parameters[0]['pipeline_id']
+            )))
+        except Exception as e:
+            print e
+            log_location = ""
+
+        if os.path.isfile(os.path.join(log_location, ".nextflow.log")):
+            os.remove(os.path.join(log_location, ".nextflow.log"))
 
         # RUN NEXTFLOW
         commands = ['sbatch',
                     os.path.abspath(
                         'job_processing/bash_scripts/nextflow_executor.sh'),
                     nexflow_user_dir, nextflow_file_location, array_of_files[0],
-                    array_of_files[1], config["NEXTFLOW_PROFILE"]]
+                    array_of_files[1], config["NEXTFLOW_PROFILE"], sampleName]
 
         print commands
         proc = subprocess.Popen(commands, stdout=subprocess.PIPE,
