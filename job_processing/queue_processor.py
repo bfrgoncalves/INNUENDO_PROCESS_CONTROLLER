@@ -192,7 +192,7 @@ class Queue_Processor:
                     "listGenes.txt")
                 processToParams[process_identifier]['schemaCore'] = \
                     config[
-                    "core_headers_correspondece"][current_specie]
+                    "core_headers_correspondece"][parameters["schemaVersion"]][current_specie]
                 processToParams[process_identifier]['chewbbacaJson'] = 'true'
 
             # Case process is seq_typing, it requires the reference files or
