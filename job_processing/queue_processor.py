@@ -5,6 +5,7 @@ import os
 import json
 import string
 import random
+import ast
 
 # READ CONFIG FILE
 config = {}
@@ -36,13 +37,9 @@ def write_config_file(file_instance, write_object):
         isArray = False
 
         try:
-            print eval(val)
-            print type(eval(val))
-            if type(eval(val)) is list:
+            if type(ast.literal_eval(val)) is list:
                 isArray = True
         except Exception:
-            print val
-            print type(val)
             isArray = False
 
         if val == "true" or val == "false" or val == "null" or isArray:
