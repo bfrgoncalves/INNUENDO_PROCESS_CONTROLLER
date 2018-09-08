@@ -37,8 +37,8 @@ def write_config_file(file_instance, write_object):
         isArray = False
 
         try:
-            print ast.literal_eval(val)
-            if type(ast.literal_eval(val)) is list:
+            print ast.literal_eval(str(val))
+            if type(ast.literal_eval(str(val))) is list:
                 isArray = True
         except Exception:
             isArray = False
