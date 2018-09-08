@@ -31,15 +31,21 @@ def write_config_file(file_instance, write_object):
 
     file_instance.write("params {\n")
 
+    def addQuotes(string):
+        return '"{}"'.format(string)
+
     for key, val in write_object.items():
         to_write = ""
 
         isArray = False
 
         try:
-            print ast.literal_eval(str(val))
-            if type(ast.literal_eval(str(val))) is list:
+            if val.startswith("[") and val.endswith("]"):
                 isArray = True
+                val = val[1:-1]
+                val = val.split(",")
+                val = map(addQuotes, val)
+                val = "[{}]".format(",".join(val)).replace(" ", "")
         except Exception:
             isArray = False
 
