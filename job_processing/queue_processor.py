@@ -33,7 +33,15 @@ def write_config_file(file_instance, write_object):
     for key, val in write_object.items():
         to_write = ""
 
-        if val == "true" or val == "false":
+        isArray = False
+
+        try:
+            if type(eval(val)) is list:
+                isArray = True
+        except Exception:
+            isArray = False
+
+        if val == "true" or val == "false" or val == "null" or isArray:
             to_write = '{}={}\n'
         else:
             to_write = '{}="{}"\n'
