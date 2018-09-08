@@ -41,6 +41,8 @@ def write_config_file(file_instance, write_object):
             if type(eval(val)) is list:
                 isArray = True
         except Exception:
+            print val
+            print type(val)
             isArray = False
 
         if val == "true" or val == "false" or val == "null" or isArray:
