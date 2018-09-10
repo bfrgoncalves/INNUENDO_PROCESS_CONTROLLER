@@ -1,5 +1,4 @@
-from flask.ext.restful import Resource, reqparse, abort, \
-    marshal_with
+from flask.ext.restful import Resource, reqparse
 from flask import send_file
 
 file_get_parser = reqparse.RequestParser()

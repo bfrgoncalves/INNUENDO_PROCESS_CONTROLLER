@@ -105,6 +105,7 @@ def get_process_status(project_id, pipeline_id, process_id):
         elif "error" in jsonResult[0]["statusStr"]:
             sys.stdout.write("FAILED")
     except Exception as e:
+        print e
         sys.stdout.write("NEUTRAL")
 
 

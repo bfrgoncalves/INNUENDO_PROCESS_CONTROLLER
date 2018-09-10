@@ -1,6 +1,5 @@
 from app import dbconAg
-from flask.ext.restful import Resource, reqparse, abort, \
-    marshal_with
+from flask.ext.restful import Resource, reqparse
 from flask import request
 from job_processing.queue_processor import Queue_Processor
 from job_processing.queryParse2Json import parseAgraphStatementsRes
@@ -239,7 +238,7 @@ class CopyChewSchema(Resource):
         proc = subprocess.Popen(commands, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
 
-        stdout, stderr = proc.communicate()
+        proc.communicate()
 
         commands = ['rm', '-rf',
                     './dependencies/chewBBACA/chewBBACA_schemas/' +
