@@ -1,7 +1,7 @@
 from app import dbconAg
-from flask.ext.restful import Api, Resource, reqparse, abort, fields, \
+from flask.ext.restful import Api, Resource, reqparse, abort, \
     marshal_with
-from flask import jsonify, request
+from flask import request
 from job_processing.queue_processor import Queue_Processor
 from job_processing.queryParse2Json import parseAgraphStatementsRes
 
@@ -176,6 +176,9 @@ class Job_queue(Resource):
 
             stdout, stderr = proc1.communicate()
 
+            if stderr:
+                print stderr
+
             stdout = job_id + '\t' + stdout
 
             all_std_out.append(stdout)
@@ -235,7 +238,9 @@ class CopyChewSchema(Resource):
 
         proc = subprocess.Popen(commands, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
+
         stdout, stderr = proc.communicate()
+
         commands = ['rm', '-rf',
                     './dependencies/chewBBACA/chewBBACA_schemas/' +
                     args.schema_to_copy]
@@ -243,16 +248,17 @@ class CopyChewSchema(Resource):
         proc = subprocess.Popen(commands, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
 
-        stdout, stderr = proc.communicate()
+        proc.communicate()
+
         commands = ['mv', './dependencies/chewBBACA/chewBBACA_schemas/' +
                     args.schema_to_copy + '_new',
                     './dependencies/chewBBACA/chewBBACA_schemas/' +
                     args.schema_to_copy]
 
         proc = subprocess.Popen(commands, stdout=subprocess.PIPE,
-                                sastderr=subprocess.PIPE)
+                                stderr=subprocess.PIPE)
 
-        stdout, stderr = proc.communicate()
+        proc.communicate()
 
         return 200
 
@@ -522,5 +528,8 @@ class FlowcraftBuildTest(Resource):
                                    stderr=subprocess.PIPE)
 
         stdout, stderr = process.communicate()
+
+        if stderr:
+            print stderr
 
         return {"stdout": str(stdout)}

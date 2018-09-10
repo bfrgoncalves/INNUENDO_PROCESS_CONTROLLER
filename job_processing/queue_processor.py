@@ -5,7 +5,6 @@ import os
 import json
 import string
 import random
-import ast
 
 # READ CONFIG FILE
 config = {}
@@ -98,6 +97,10 @@ def submitToSLURM(user_folder, workflow_path_array, numberOfWorkflows,
                             stderr=subprocess.PIPE)
 
     stdout, stderr = proc.communicate()
+
+    if stderr:
+        print stderr
+
     jobID = stdout.split(' ')
     jobID = jobID[-1].strip('\n')
 
@@ -141,7 +144,6 @@ class Queue_Processor:
         project_id = ""
         pipeline_id = ""
         nexflow_user_dir = ""
-        asperaKey = ""
         accessionsPath = ""
 
         random_pip_name = job_parameters[0]['project_id']+'_' + \
@@ -330,8 +332,7 @@ class Queue_Processor:
                 "referenceFileH": seqtyping_ref_h,
                 "mlstSpecies": mlstSpecies,
                 "species": "{}".format(specie)
-            }
-            '''
+            }'''
 
             # Case input is accessions, pass that argument to the
             # configuration file else, pass the fastq files path
@@ -445,6 +446,8 @@ class Queue_Processor:
 
         proc1 = subprocess.Popen(commands.split(' '), stdout=f)
 
+        print proc1
+
         return {'output_file_id': output_id + '_download.txt'}, 200
 
     def insert_job(self, job_parameters, current_specie, sampleName,
@@ -458,4 +461,7 @@ class Queue_Processor:
     def download_accessions(self, download_parameters):
         # Insert jobs in queue
         output, code = self.process_download_accessions(download_parameters)
+
+        print code
+
         return output

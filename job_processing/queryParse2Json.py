@@ -1,7 +1,7 @@
 import json
 
 
-#query parsers aux functions
+# query parsers aux functions
 def parseAgraphQueryRes(result,listValuesToGet):
     resultList = []
     for bindingSet in result:
@@ -11,7 +11,8 @@ def parseAgraphQueryRes(result,listValuesToGet):
 
                 try:
                     auxDict[elem] = str(bindingSet.getValue(elem))
-                except:
+                except Exception as e:
+                    print e
                     pass
             resultList.append(auxDict)
     jsonObj=json.loads(json.dumps(resultList))

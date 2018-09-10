@@ -1,6 +1,6 @@
-from flask.ext.restful import Api, Resource, reqparse, abort, fields, \
+from flask.ext.restful import Resource, reqparse, abort, fields, \
     marshal_with
-from flask import jsonify, send_file
+from flask import send_file
 
 file_get_parser = reqparse.RequestParser()
 file_get_parser.add_argument('file_path', dest='file_path', type=str,
@@ -21,6 +21,7 @@ class DownloadResults(Resource):
             response.headers.add('Content-Type', 'application/force-download')
             return response
         except Exception as e:
+            print e
             return 404
 
 

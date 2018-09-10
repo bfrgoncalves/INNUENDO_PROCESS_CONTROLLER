@@ -2,7 +2,7 @@
 import os
 import redis
 from rq import Worker, Queue, Connection
-from config import REDIS_URL 
+from config import REDIS_URL
 
 listen = ['innuendo_jobs']
 
