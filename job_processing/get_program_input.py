@@ -149,6 +149,7 @@ def set_unique_prop_output(project_id, pipeline_id, process_id, property_type,
             dbconAg.add(stmt1)
 
     except Exception as e:
+        print e
         sys.stdout.write("404")
 
 
