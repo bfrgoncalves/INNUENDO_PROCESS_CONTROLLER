@@ -1,5 +1,5 @@
 from app import dbconAg
-from flask.ext.restful import Api, Resource, reqparse, abort, \
+from flask.ext.restful import Resource, reqparse, abort, \
     marshal_with
 from flask import request
 from job_processing.queue_processor import Queue_Processor

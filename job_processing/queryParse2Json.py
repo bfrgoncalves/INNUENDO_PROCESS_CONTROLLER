@@ -2,8 +2,9 @@ import json
 
 
 # query parsers aux functions
-def parseAgraphQueryRes(result,listValuesToGet):
+def parseAgraphQueryRes(result, listValuesToGet):
     resultList = []
+
     for bindingSet in result:
             auxDict = {}
 
@@ -13,14 +14,16 @@ def parseAgraphQueryRes(result,listValuesToGet):
                     auxDict[elem] = str(bindingSet.getValue(elem))
                 except Exception as e:
                     print e
-                    pass
             resultList.append(auxDict)
-    jsonObj=json.loads(json.dumps(resultList))
+
+    jsonObj = json.loads(json.dumps(resultList))
+
     return jsonObj
 
 
 def parseAgraphStatementsRes(statements):
     resultList = []
+
     for statem in statements:
         auxDict = {}
         auxDict["subj"] = str(statem.getSubject())
@@ -29,4 +32,5 @@ def parseAgraphStatementsRes(statements):
 
         resultList.append(auxDict)
     jsonObj = json.loads(json.dumps(resultList))
+
     return jsonObj

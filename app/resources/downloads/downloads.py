@@ -1,4 +1,4 @@
-from flask.ext.restful import Resource, reqparse, abort, fields, \
+from flask.ext.restful import Resource, reqparse, abort, \
     marshal_with
 from flask import send_file
 

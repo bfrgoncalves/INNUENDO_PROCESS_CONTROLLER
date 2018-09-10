@@ -310,30 +310,6 @@ class Queue_Processor:
             to_write["currentUserId"] = current_user_id
             to_write["platformSpecies"] = current_specie
 
-            # Object to write in the nexflow config
-            '''to_write = {
-                "asperaKey": asperaKey,
-                "projectId": project_id,
-                "pipelineId": pipeline_id,
-                "platformHTTP": config["JOBS_ROOT_SET_OUTPUT"],
-                "sampleName": sampleName,
-                "reportHTTP": config["JOBS_ROOT_SET_REPORT"],
-                "currentUserName": current_user_name,
-                "currentUserId": current_user_id,
-                "platformSpecies": current_specie,
-                "genomeSize": config["species_expected_genome_size"][
-                    current_specie],
-                "schemaPath": chewbbaca_schema_path,
-                "schemaSelectedLoci": chewbbaca_list_genes,
-                "schemaCore": chewbbaca_core_genes_path,
-                "chewbbacaTraining": chewbbaca_training_file,
-                "chewbbacaJson": "true",
-                "referenceFileO": seqtyping_ref_o,
-                "referenceFileH": seqtyping_ref_h,
-                "mlstSpecies": mlstSpecies,
-                "species": "{}".format(specie)
-            }'''
-
             # Case input is accessions, pass that argument to the
             # configuration file else, pass the fastq files path
             objKeys = to_write.keys()
