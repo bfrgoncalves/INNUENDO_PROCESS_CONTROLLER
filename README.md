@@ -19,7 +19,7 @@ a bridge to allow running analytical procedures on a laptop or in a High
 Performance Computer (HPC), with the help of SLURM process manager.
 
 In this repository you can find the source code regarding the **INNUENDO 
-frontend server** and its associated RESTful API.
+process controller** and its associated RESTful API.
   
 > **Installation**
 
