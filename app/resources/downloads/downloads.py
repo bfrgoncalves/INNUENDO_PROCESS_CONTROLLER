@@ -1,4 +1,4 @@
-from flask.ext.restful import Resource, reqparse
+from flask_restful import Resource, reqparse
 from flask import send_file
 
 file_get_parser = reqparse.RequestParser()

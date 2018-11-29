@@ -1,5 +1,5 @@
 from app import dbconAg
-from flask.ext.restful import Resource, reqparse
+from flask_restful import Resource, reqparse
 from flask import request
 from job_processing.queue_processor import Queue_Processor
 from job_processing.queryParse2Json import parseAgraphStatementsRes
