@@ -1,7 +1,7 @@
 # INNUENDO
 
 [![Documentation Status](https://readthedocs.org/projects/innuendo/badge/?version=latest)](https://innuendo.readthedocs.io/en/latest/?badge=latest)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/001937a1c6ad4a97a7a5b2cdd4684bfa)](https://app.codacy.com/app/bfrgoncalves/INNUENDO_PROCESS_CONTROLLER?utm_source=github.com&utm_medium=referral&utm_content=bfrgoncalves/INNUENDO_PROCESS_CONTROLLER&utm_campaign=Badge_Grade_Dashboard)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0fffb6e32a564841a1dfb9230616d5f6)](https://app.codacy.com/app/bfrgoncalves/INNUENDO_REST_API?utm_source=github.com&utm_medium=referral&utm_content=bfrgoncalves/INNUENDO_REST_API&utm_campaign=Badge_Grade_Dashboard)
 
 #### A novel cross-sectorial platform for the integration of genomics in surveillance of foodborne pathogens
 
@@ -19,11 +19,11 @@ a bridge to allow running analytical procedures on a laptop or in a High
 Performance Computer (HPC), with the help of SLURM process manager.
 
 In this repository you can find the source code regarding the **INNUENDO 
-process controller** and its associated RESTful API.
+frontend server** and its associated RESTful API.
   
 > **Installation**
 
-Information about the platform installation can be found at the documentation.
+Information about the platform installation can be found at the [documentation](https://innuendo.readthedocs.io/).
 
 > **Source code**
 
