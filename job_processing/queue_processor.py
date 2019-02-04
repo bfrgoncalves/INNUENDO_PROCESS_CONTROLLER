@@ -379,6 +379,8 @@ class Queue_Processor:
 
         # RUN NEXTFLOW
         commands = ['sbatch',
+                    "--partition={}".format(config["NEXTFLOW_PARTITION"]),
+                    "--mem-per-cpu={}".format(config["NEXTFLOW_JOB_MEM_PER_CPU"]),
                     os.path.abspath(
                         'job_processing/bash_scripts/nextflow_executor.sh'),
                     nexflow_user_dir, nextflow_file_location, array_of_files[0],

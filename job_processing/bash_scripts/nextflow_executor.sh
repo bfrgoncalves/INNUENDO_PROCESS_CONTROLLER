@@ -5,18 +5,20 @@
 #SBATCH --mem-per-cpu=1500
 
 
-#Path to user job dir
+# Path to user job dir
 echo $1
-#File location
+# File location
 echo $2
-#File 1
+# File 1
 echo $3
-#File 2
+# File 2
 echo $4
-#nextflow profile
+# nextflow profile
 echo $5
-#sample name
+# sample name
 echo $6
+# nextflow partition
+echo $7
 
 cd $1
 
